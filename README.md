@@ -2,23 +2,24 @@
 
 This repo is my place to organize and validate new and old contributions to the Fock expansion for two electron atoms.
 
-In 1954, Vladimir Fock propose solving the Schrodinger equation for helium via an asymptotic expansion of the form
-$
+In 1954, Vladimir Fock proposed solving the Schrodinger equation for helium via an asymptotic expansion of the form
+$$
 \Psi(\rho, \alpha, \theta) = \sum_{k=0}^{\infty} \rho^k \sum_{p=0}^{\lfloor k/2 \rfloor} \ln(\rho)^{p} \psi_{k,p}(\alpha, \theta)
-$
-where $\rho := \sqrt{r_1^2+r_2^2}$, $\theta$ is the angle between between electrons and $\alpha := 2 \mathrm{arctan}(r_2/r_1)$.
-Later, Morgan demonstrate that this was not merely an asymptotic result, but was indeed pointwise convergent everywhere.
+$$
+where $\rho := \sqrt{r_1^2+r_2^2}$, $\theta$ is the angle between electrons and $\alpha := 2 \mathrm{arctan}(r_2/r_1)$.
+Later, Morgan demonstrated that this was not merely an asymptotic result, but was indeed pointwise convergent everywhere.
 The "Fock coefficients" $\psi_{k,p}$ are related by a recurrence
-$
-(-\nabla^2 ...) \psi_{} = ...
-$
+$$
+\left(\Lambda^2 - k(k+4)\right)\psi_{k,p} = 2(k+2)(p+1)\psi_{k,p+1} + (p+1)(p+2)\psi_{k,p+2} - 2V\psi_{k-1,p} + 2E\psi_{k-2,p}
+$$
+where $\Lambda^2 = -4\Delta_{S^3}$ is the hyperspherical angular operator, $E$ is the energy, and $V = \rho\left(1/r_{12} - Z/r_1 - Z/r_2\right)$ depends only on the angles.
 By taking $\psi_{0,0}(0,0) = 1$ to establish the global scale, we can then begin to recover analytic forms for all subsequent coefficients.
 
-Fock was able to recover  the $\psi_{0,0}$ and ... term, at which point progress stalled.
-In the 80s, Abbott and Maslen used an early version of Mathematica to recover $\psi_{2,...}$.
+Fock was able to recover the $\psi_{1,0}$ and $\psi_{2,1}$ terms, at which point progress stalled.
+In the 80s, Abbott and Maslen used an early version of Mathematica to recover $\psi_{2,0}$.
 Recently, Liverts and coauthors managed to get $\psi_{3,1}$ as well as parts of $\psi_{3,0}$ computed.
 They also give an integral formula found via Green's functions techniques to represent $\psi_{3,0}$ explicitly.
-Langers thesis gave $\psi_{3,0}$ as a doubly-infinite sum over terms involving $_{3}F_{2}$.
+Langner's thesis gave $\psi_{3,0}$ as a doubly-infinite sum over terms involving $_{3}F_{2}$.
 
 Recently I set `claude` and `codex` on the problem of finding a simple representation of $\psi_{3,0}$.
 What we found cannot be considered _simple_, per se, but it is now represented as a finite sum of reasonably well-known special functions.
@@ -105,7 +106,12 @@ Verified locally with Julia 1.13.1: 128 assertions passed, and the CairoMakie ex
 
 ### References
 
-
+- V. A. Fock, On the Schrödinger equation of the helium atom, *Izv. Akad. Nauk SSSR Ser. Fiz.* **18**, 161 (1954).
+- J. D. Morgan III, Convergence properties of Fock's expansion for S-state eigenfunctions of the helium atom, *Theor. Chim. Acta* **69**, 181 (1986).
+- P. C. Abbott and E. N. Maslen, Coordinate systems and analytic expansions for three-body atomic wavefunctions: I. Partial summation for the Fock expansion in hyperspherical coordinates, *J. Phys. A* **20**, 2043 (1987).
+- E. Z. Liverts and N. Barnea, Angular Fock coefficients: Refinement and further development, *Phys. Rev. A* **92**, 042512 (2015), [arXiv:1505.02351](https://arxiv.org/abs/1505.02351).
+- E. Z. Liverts and N. Barnea, The Green's function approach to the Fock expansion calculations of two-electron atoms, *J. Phys. A* **51**, 085204 (2018), [arXiv:1705.09125](https://arxiv.org/abs/1705.09125).
+- J. Langner, *Towards an exact solution to the Schrödinger Equation of the Helium atom*, Ph.D. thesis, National Yang Ming Chiao Tung University (2022).
 
 
 ## ForwardDiff recurrence residual
