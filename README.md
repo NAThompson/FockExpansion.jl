@@ -23,7 +23,7 @@ Fock was able to recover the $\psi_{1,0}$ and $\psi_{2,1}$ terms, at which point
 In the 80s, Abbott and Maslen used an early version of Mathematica to recover $\psi_{2,0}$.
 Recently, Liverts and coauthors managed to get $\psi_{3,1}$ as well as parts of $\psi_{3,0}$ computed.
 They also give an integral formula found via Green's functions techniques to represent $\psi_{3,0}$ explicitly.
-Langner's thesis gave $\psi_{3,0}$ as a doubly-infinite sum over terms involving $_{3}F_{2}$.
+Langner's thesis gave $\psi_{3,0}$ as a doubly-infinite sum over terms involving ${}_{3}F_{2}$.
 
 Recently I set `claude` and `codex` on the problem of finding a simple representation of $\psi_{3,0}$.
 What we found cannot be considered _simple_, per se, but it is now represented as a finite sum of reasonably well-known special functions.
