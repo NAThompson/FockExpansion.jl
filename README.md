@@ -3,15 +3,19 @@
 This repo is my place to organize and validate new and old contributions to the Fock expansion for two electron atoms.
 
 In 1954, Vladimir Fock proposed solving the Schrodinger equation for helium via an asymptotic expansion of the form
-$$
+
+```math
 \Psi(\rho, \alpha, \theta) = \sum_{k=0}^{\infty} \rho^k \sum_{p=0}^{\lfloor k/2 \rfloor} \ln(\rho)^{p} \psi_{k,p}(\alpha, \theta)
-$$
+```
+
 where $\rho := \sqrt{r_1^2+r_2^2}$, $\theta$ is the angle between electrons and $\alpha := 2 \mathrm{arctan}(r_2/r_1)$.
 Later, Morgan demonstrated that this was not merely an asymptotic result, but was indeed pointwise convergent everywhere.
 The "Fock coefficients" $\psi_{k,p}$ are related by a recurrence
-$$
+
+```math
 \left(\Lambda^2 - k(k+4)\right)\psi_{k,p} = 2(k+2)(p+1)\psi_{k,p+1} + (p+1)(p+2)\psi_{k,p+2} - 2V\psi_{k-1,p} + 2E\psi_{k-2,p}
-$$
+```
+
 where $\Lambda^2 = -4\Delta_{S^3}$ is the hyperspherical angular operator, $E$ is the energy, and $V = \rho\left(1/r_{12} - Z/r_1 - Z/r_2\right)$ depends only on the angles.
 By taking $\psi_{0,0}(0,0) = 1$ to establish the global scale, we can then begin to recover analytic forms for all subsequent coefficients.
 
