@@ -1,0 +1,6 @@
+.julia/
+examples/*.log
+*.out
+*.aux
+*.log
+*.synctex.gz
