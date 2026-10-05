@@ -9,18 +9,22 @@ adnorm(x::ForwardDiff.Dual) =
 typedpi(x) = oftype(primal(float(x)), Base.MathConstants.pi)
 export psi00, psi10, psi20, psi21, psi31, psi30, psi30_parts
 
-L(u) = iszero(u) ? zero(u) : u*log(abs(2sin(u)))+cl2(2u)/2
-T(u) = -u*log(abs(2cos(u)))+cl2(typedpi(u)-2u)/2
-# Analytic scalar derivatives of the L and T primitives. Nested
+# L(u) = u log|2 sin u| + Cl₂(2u)/2 and T(u) = -u log|2 cos u| + Cl₂(π-2u)/2,
+# given s = sin u and c = cos u so that callers can share them.
+L(u, s, c) = iszero(u) ? zero(u) : u*log(abs(2s))+cl2(2u)/2
+T(u, s, c) = -u*log(abs(2c))+cl2(typedpi(u)-2u)/2
+L(u) = L(u, sincos(u)...)
+T(u) = T(u, sincos(u)...)
+# Analytic scalar derivatives L′ = u cot u and T′ = u tan u. Nested
 # duals propagate these rules to second derivatives without log(0) cancellation.
-function L(x::ForwardDiff.Dual{Tag}) where {Tag}
-    u=ForwardDiff.value(x)
-    derivative=iszero(primal(u)) ? one(u)-u*u/3 : u/tan(u)
-    ForwardDiff.Dual{Tag}(L(u), derivative*ForwardDiff.partials(x))
+function L(x::ForwardDiff.Dual{Tag}, s, c) where {Tag}
+    u, s, c=ForwardDiff.value(x), ForwardDiff.value(s), ForwardDiff.value(c)
+    derivative=iszero(primal(u)) ? one(u)-u*u/3 : u*c/s
+    ForwardDiff.Dual{Tag}(L(u, s, c), derivative*ForwardDiff.partials(x))
 end
-function T(x::ForwardDiff.Dual{Tag}) where {Tag}
-    u=ForwardDiff.value(x)
-    ForwardDiff.Dual{Tag}(T(u), u*tan(u)*ForwardDiff.partials(x))
+function T(x::ForwardDiff.Dual{Tag}, s, c) where {Tag}
+    u, s, c=ForwardDiff.value(x), ForwardDiff.value(s), ForwardDiff.value(c)
+    ForwardDiff.Dual{Tag}(T(u, s, c), u*s/c*ForwardDiff.partials(x))
 end
 function geometry(α, θ)
     α, θ=promote(float(α), float(θ))
@@ -105,22 +109,28 @@ function classical(α, p0, Z)
     π=typedpi(α)
     r1, r2=cos(α/2), sin(α/2)
     s, d=r1+r2, r1-r2
-    x, h0=sqrt(oftype(primal(α), 2))*sin(p0/2), sqrt(oftype(primal(α), 2))*cos(p0/2)
+    rt=1/sqrt(oftype(primal(α), 2))
+    sp0, cp0=sincos(p0/2)
+    x, h0=sp0/rt, cp0/rt
     a, p=α-π/2, p0-π
-    G=cl2(π/2)
+    G=oftype(primal(α), Base.MathConstants.catalan) # Cl₂(π/2)
     l2=log(oftype(primal(α), 2))
     v=0.0
     for sign in (1, -1)
         w=(a+sign*p)/4
         h=sign*h0
+        sw, cw=sincos(w)
+        # sin and cos of w ∓ π/4
+        sm, cm=(sw-cw)*rt, (cw+sw)*rt
+        sp, cp=(sw+cw)*rt, (cw-sw)*rt
         kk(m) = K(m, d, s, x, h, Z)+Z^2*Ncoef(m, d, s, x, h)
-        v+=sum(4kk(m)*L(w+m*π/4) for m in (-1, 0, 1))-4kk(2)*T(w)+elam(d, s, x, h, Z)*log(
-            abs(2cos(w)),
-        )
+        v+=4kk(-1)*L(w-π/4, sm, cm)+4kk(0)*L(w, sw, cw)+4kk(1)*L(w+π/4, sp, cp)
+        v+=-4kk(2)*T(w, sw, cw)+elam(d, s, x, h, Z)*log(abs(2cw))
     end
+    # sin(p/2) = -cos(p0/2), cos(p/2) = sin(p0/2), sin(α/2) = r2, cos(α/2) = r1
     c9=-h0*(Z*(2x^2-5)/(9π)-5Z^2*(x^2-1)/(2π))
-    v+=c9*L(p/2)/2
-    v+=2Z^2/(9π)*(r2*(8r2^2+x^2-5)*L(α/2)+r1*(8r1^2+x^2-5)*L((π-α)/2))
+    v+=c9*L(p/2, -cp0, sp0)/2
+    v+=2Z^2/(9π)*(r2*(8r2^2+x^2-5)*L(α/2, r2, r1)+r1*(8r1^2+x^2-5)*L((π-α)/2, r1, r2))
     qa2=Z*x*(2x^2+1)/(144π)-5Z^2*x*(x^2-1)/(32π)
     qa=7Z*x*d*s/144+Z^2*(x*d*s/64+d*(x^2-1)/(9π))
     qp2=Z^2*s*(4s^2+x^2-9)/(36π)
@@ -301,8 +311,15 @@ function panelmap(b, y)
         PanelMap(h, zero(t), asinh(u/t), zero(t), t, false, zero(t), -sfar)
     end
 end
-# Gauss–Legendre rules on [-1,1] with 1, …, 96 nodes.
-const PANEL_RULES=[gauss(n) for n = 1:96]
+# Gauss–Legendre rules on [-1,1] with 1, …, 96 nodes, padded with zero-weight
+# nodes at 0 to a multiple of 16 entries: the vectorized node loop handles 16
+# nodes per iteration and falls back to scalar code for any remainder.
+function padded_gauss(n)
+    x, w=gauss(n)
+    k=16cld(n, 16)-n
+    vcat(x, zeros(k)), vcat(w, zeros(k))
+end
+const PANEL_RULES=[padded_gauss(n) for n = 1:96]
 # Node count for z-range L and d=-log₁₀(rtol) requested digits: an upper
 # envelope of the nodes needed against 200-bit references over a 31×32 grid of
 # b∈[-0.9999,0.9999], y∈[-1,-1e-10]. Relative accuracy is limited to about
@@ -328,6 +345,68 @@ function panel_nodes_table(b, L, rtol)
     i=clamp(floor(Int, (β-β0)/(β1-β0)*nβ)+1, 1, nβ)
     j=clamp(floor(Int, (L-L0)/(L1-L0)*nL)+1, 1, nL)
     Int(PANEL_NODE_TABLE[k, i, j])
+end
+# Branch-free kernels for the Float64 node loop, so that it vectorizes.
+# @horner(x, c₀, c₁, …) expands c₀ + x(c₁ + x(…)) inline (evalpoly is a call).
+macro horner(x, cs...)
+    ex=esc(cs[end])
+    for c in reverse(cs[1:(end-1)])
+        ex=:(muladd(t, $ex, $(esc(c))))
+    end
+    :(let t=$(esc(x)); $ex; end)
+end
+# atan01 is fdlibm's atan (as in Base) restricted to 0 ≤ x ≤ 1, with the
+# reduction intervals [0,7/16), [7/16,11/16), [11/16,1] selected by ifelse.
+@inline function atan01(x::Float64)
+    lo=x<7/16
+    mid=!lo&(x<11/16)
+    num=ifelse(lo, x, ifelse(mid, 2x-1, x-1))
+    den=ifelse(lo, 1.0, ifelse(mid, 2+x, x+1))
+    hi=ifelse(lo, 0.0, ifelse(mid, 4.63647609000806093515e-01, 7.85398163397448278999e-01))
+    lo_=ifelse(lo, 0.0, ifelse(mid, 2.26987774529616870924e-17, 3.06161699786838301793e-17))
+    t=num/den
+    t2=t*t
+    t4=t2*t2
+    p=t2*@horner(t4, 3.33333333333329318027e-01, 1.42857142725034663711e-01,
+        9.09088713343650656196e-02, 6.66107313738753120669e-02,
+        4.97687799461593236017e-02, 1.62858201153657823623e-02)
+    q=t4*@horner(t4, -1.99999999998764832476e-01, -1.11111104054623557880e-01,
+        -7.69187620504482999495e-02, -5.83357013379057348645e-02,
+        -3.65315727442169155270e-02)
+    hi-((t*(p+q)-lo_)-t)
+end
+# exp(z) for |z| ≤ 700 without branches: z = k log 2 + r, |r| ≤ log(2)/2,
+# and the Taylor polynomial of degree 13 for exp(r) (error < 4e-18 relative).
+@inline function exp_nobranch(z::Float64)
+    k=round(z*1.4426950408889634)
+    r=fma(-k, 6.93147180369123816490e-01, z)
+    r=fma(-k, 1.90821492927058770002e-10, r)
+    e=@horner(r, 1.0, 1.0, 1/2, 1/6, 1/24, 1/120, 1/720, 1/5040, 1/40320, 1/362880,
+        1/3628800, 1/39916800, 1/479001600, 1/6227020800)
+    e*reinterpret(Float64, (unsafe_trunc(Int64, k)+1023)<<52)
+end
+# Float64 node loop: q = m + t sinh z (or m - t cosh z) via one exp, and
+# atan(1/q) = π/2 - atan(q) for 0 < q ≤ 1.
+function panel_fixed(b::Float64, y::Float64, c0::Float64, c2::Float64, map::PanelMap{Float64}, n)
+    (; h, za, zb, m, t, cosh_branch, f1, f0)=map
+    x, w=PANEL_RULES[n]
+    half=(zb-za)/2
+    mid=(zb+za)/2
+    ih=1/h
+    st=cosh_branch ? -t/2 : t/2      # q = m + st*(e ± 1/e)
+    sg=cosh_branch ? 1.0 : -1.0
+    acc=0.0
+    @inbounds @simd for i in eachindex(x)
+        e=exp_nobranch(mid+half*x[i])
+        q=m+st*(e+sg/e)
+        iq=1/q
+        a=1.5707963267948966-atan01(q)
+        d=atan01(q*ih)
+        numerator=c0*(a-d)*(a+d)+c2*((h*d*iq)^2-(q*a)^2)
+        # F(q)/(1-b) > 0; abs lets the compiler drop sqrt's domain check
+        acc+=w[i]*numerator/sqrt(abs(q*(q+f1)+f0))
+    end
+    (2/pi)*half*acc/sqrt(1-b)
 end
 function panel_fixed(b, y, c0, c2, map::PanelMap, n)
     π=typedpi(b)
