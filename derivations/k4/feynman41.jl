@@ -88,6 +88,56 @@ function zonal_I(kind, ρ, ω, γ, ℓ; atpi = false)
     end
     -I1/4, -I2/4
 end
+
+# --- Harmonic content of a zonal solution (Funk–Hecke): ⟨Y, U⟩ = (4π/3) M(ρ) Y(p̂),
+# M = ∫₀^π W sin3γ dγ in closed form; see harmonic_proj.jl for the derivation.
+# cos-series as Dict(m => coef); products with cos/sin factors
+cmul(a, b)=(d=Dict{Int,Any}(); for (i, x) in a, (j, y) in b; for k in (abs(i-j), i+j); d[k]=get(d, k, 0)+x*y/2; end; end; d)
+cpow_c(n)=n==0 ? Dict{Int,Any}(0=>1) : cmul(cpow_c(n-1), Dict{Int,Any}(1=>1))   # cos^n γ
+polyseries(coeffs)=(d=Dict{Int,Any}(); for (n, a) in enumerate(coeffs); for (k, v) in cpow_c(n-1); d[k]=get(d, k, 0)+a*v; end; end; d)
+# Fourier coefficients of f(cos γ) = F₀ + Σ F_m cos mγ, m ≤ N
+function fourier(kind, ρ, ω, N)
+    sω=sqrt(ω); z=(1-sω)/ρ
+    L=[log((1+sω)/2); [-2z^m/m for m in 1:N+1]]          # log ℓ, L[m+1]
+    if kind==:inv
+        return [1/sω; [2z^m/sω for m in 1:N]]
+    elseif kind==:log
+        return L[1:N+1]
+    else  # (1-ρ cos γ) log ℓ
+        X=similar(L, N+1)
+        for m in 0:N
+            cm=m==0 ? L[2]/2 : m==1 ? L[1]+L[3]/2 : (L[m]+L[m+2])/2   # coefficient of cos mγ in cosγ·logℓ
+            X[m+1]=L[m+1]-ρ*cm
+        end
+        return X
+    end
+end
+pairint(series, F)=sum((m==0 ? π*F[1] : π/2*F[m+1])*v for (m, v) in series)   # ∫₀^π series·f
+# coefficient polynomials in c (ascending powers) for ac and poly, from zonal_coeffs.py
+function ac_poly(kind, ρ)
+    kind==:inv && return ((3 * ρ ^ 2 - 4) / ρ ^ 4, [(4 - 3 * ρ ^ 2) / ρ ^ 4], [(5 * ρ ^ 2 - 6 * ρ - 12) / (3 * ρ ^ 3), -3 / ρ + 4 / ρ ^ 3, 2 / ρ ^ 2, (4 // 3) / ρ])
+    kind==:log && return (-(ρ - 1) * (ρ + 1) * (ρ ^ 2 - 2) / (2 * ρ ^ 4), [(2 - 3 * ρ ^ 2) / (2 * ρ ^ 4), 0, 3 // 2, 0, -1], [(3 * ρ ^ 3 + 7 * ρ ^ 2 - 3 * ρ - 6) / (6 * ρ ^ 3), -3 // 2 / ρ + ρ ^ (-3), -3 // 4 + 1 / (2 * ρ ^ 2), 1 / (3 * ρ), 1 // 4])
+    kind==:xlog && return ((ρ - 1) ^ 2 * (2 * ρ ^ 3 - ρ ^ 2 - 4 * ρ - 2) / (10 * ρ ^ 4), [(2 - 5 * ρ ^ 2) / (10 * ρ ^ 4), 0, 3 // 2, -ρ, -1, (4 // 5) * ρ], [(-26 * ρ ^ 4 + 30 * ρ ^ 3 + 65 * ρ ^ 2 - 15 * ρ - 30) / (150 * ρ ^ 3), (2 - 5 * ρ ^ 2) / (10 * ρ ^ 3), -1 // 4 + 1 / (10 * ρ ^ 2), ρ / 3 + 1 / (15 * ρ), 1 // 20, -4 // 25 * ρ])
+end
+
+const S_J2=cmul(Dict{Int,Any}(5=>1//2, 7=>-1//2), Dict{Int,Any}(3=>1))            # sin6γ sinγ cos3γ
+const S_J3=Dict{Int,Any}(2=>3//8, 4=>-3//8, 8=>-1//8, 10=>1//8)                   # sin³3γ sinγ
+function Mzonal(kind, ρ, ω)
+    F=fourier(kind, ρ, ω, 12)
+    Lg=fourier(:log, ρ, ω, 12)
+    a1, ac, pl=ac_poly(kind, ρ)
+    lg1=log(ω/(1+ρ))
+    evalp(cs, c)=sum(cs[n]*c^(n-1) for n in eachindex(cs))
+    I1π=-(a1*lg1+evalp(ac, -1)*log(1+ρ)+evalp(pl, -1))/4
+    intI1=-(π*a1*lg1+pairint(polyseries(ac), Lg)+pairint(polyseries(pl), [one(ρ); zeros(typeof(ρ), 12)]))/4
+    J1=π*I1π-intI1
+    J2=-pairint(S_J2, F)/4
+    J3=-pairint(S_J3, F)/4
+    I2π=zonal_I(kind, ρ, ω, oftype(ρ, π), 1+ρ; atpi=true)[2]
+    κ=-2I2π/π
+    ((π/2)*I1π+κ*π/8-J1/2+J2/12+J3/6)/3
+end
+
 # U_f at x for p = (p₁, p₂, 0, 0) inside the ball, with ω = 1-|p|² supplied accurately.
 function Uf(kind, p1, p2, ω, x)
     ρ=sqrt(p1^2+p2^2)
@@ -95,7 +145,9 @@ function Uf(kind, p1, p2, ω, x)
     ℓ=(d2+ω)/2                                 # 1 - p·x
     sγ2=(d2-(1-ρ)^2)/(4ρ)                      # sin²(γ/2) = (1-c)/2, c = p̂·x
     γ=2asin(sqrt(clamp(sγ2, zero(sγ2), one(sγ2))))
-    zonal(kind, ρ, ω, γ, ℓ)
+    c=1-2sγ2
+    # remove the degree-2 zonal harmonic U₂(c) = 4c²-1, so every per-t solution is pure
+    zonal(kind, ρ, ω, γ, ℓ)-(2/π)*Mzonal(kind, ρ, ω)*(4c^2-1)
 end
 
 const B41=(π-2)/(3π)
