@@ -148,3 +148,14 @@ Remaining core pieces: V₁F_r with matching centre is also two-dimensional; V�
 V₁F_a need one or two more Feynman parameters (three- and four-dimensional), and the
 Clausen part 𝒟 has no linear-form representation yet.
 
+### Status of the ψ₄₁ constants
+
+* Pure-Z harmonic coefficients (`harmonic41_exact.jl`): graded 128-bit tensor rules at two
+  resolutions agree with each other to 1e-13-1e-12 and with the stored Float64 values to
+  about 1e-15. The e-e coalescence corner limits the rule to algebraic convergence, so
+  30 digits needs a better rule there. PSLQ at 14 digits over {1, 1/π, 1/π², G/π, G/π²,
+  log 2, log 2/π} finds only noise-level relations.
+* Shift constants of ψ₄₁⁽²⁾: not needed at arbitrary precision, where the per-point
+  harmonic-free integrand is used directly (smooth in φ; 48 Gauss nodes give 4e-12 in
+  Float64, limited by cancellation in M's derivatives near ρ = 1).
+
