@@ -1,46 +1,18 @@
 module FockExpansion
 using QuadGK, SpecialFunctions, ForwardDiff
+using ClausenFunctions: cl2
 primal(x) = x
 primal(x::ForwardDiff.Dual) = primal(ForwardDiff.value(x))
 adnorm(x::Real) = abs(x)
 adnorm(x::ForwardDiff.Dual) =
     max(adnorm(ForwardDiff.value(x)), maximum(adnorm, ForwardDiff.partials(x)))
 typedpi(x) = oftype(primal(float(x)), Base.MathConstants.pi)
-export psi00, psi10, psi20, psi21, psi31, psi30, psi30_parts, clausen2
+export psi00, psi10, psi20, psi21, psi31, psi30, psi30_parts
 
-"""Real Clausen function Cl₂(x), evaluated by a convergent series after periodic reduction."""
-function clausen2(x::Real)
-    x = float(x)
-    π = typedpi(x)
-    u = x - round(x/(2π))*(2π)
-    iszero(u) && return zero(u)
-    q = (u/(2π))^2
-    ans = u*(1-log(abs(u)))
-    power = u*q
-    for n = 1:max(100, precision(x))
-        term = zeta(oftype(x, 2n))*power/(n*(2n+1))
-        ans += term
-        abs(term)<eps(x)*max(abs(ans), one(x))/4 && return ans
-        power *= q
-    end
-    error("Clausen series failed to converge")
-end
-# Fixed coefficients remove repeated zeta calls in the Float64 hot path.
-const CLAUSEN64 = ntuple(n -> zeta(Float64(2n))/(n*(2n+1)), 32)
-function clausen2(x::Float64)
-    u=rem2pi(x, RoundNearest)
-    iszero(u) && return zero(u)
-    q=(u/(2π))^2
-    u*(1-log(abs(u)))+u*q*evalpoly(q, CLAUSEN64)
-end
-L(u) = iszero(u) ? zero(u) : u*log(abs(2sin(u)))+clausen2(2u)/2
-T(u) = -u*log(abs(2cos(u)))+clausen2(typedpi(u)-2u)/2
-# Analytic scalar derivatives of the elementary/Clausen primitives. Nested
+L(u) = iszero(u) ? zero(u) : u*log(abs(2sin(u)))+cl2(2u)/2
+T(u) = -u*log(abs(2cos(u)))+cl2(typedpi(u)-2u)/2
+# Analytic scalar derivatives of the L and T primitives. Nested
 # duals propagate these rules to second derivatives without log(0) cancellation.
-function clausen2(x::ForwardDiff.Dual{Tag}) where {Tag}
-    u=ForwardDiff.value(x)
-    ForwardDiff.Dual{Tag}(clausen2(u), -log(abs(2sin(u/2)))*ForwardDiff.partials(x))
-end
 function L(x::ForwardDiff.Dual{Tag}) where {Tag}
     u=ForwardDiff.value(x)
     derivative=iszero(primal(u)) ? one(u)-u*u/3 : u/tan(u)
@@ -72,7 +44,7 @@ end
 function unit_dilog(z)
     π=typedpi(real(z))
     u=mod(angle(z), 2π)
-    complex(π^2/6-u*(2π-u)/4, clausen2(u))
+    complex(π^2/6-u*(2π-u)/4, cl2(u))
 end
 function chi(α, μ)
     π=typedpi(α)
@@ -83,14 +55,14 @@ function chi(α, μ)
     σ=sqrt(1+s)
     ξ=sqrt(1-v)
     g=sqrt(1-v^2)
-    h=-(3π+10-16clausen2(π/2))/(24π)
+    h=-(3π+10-16cl2(π/2))/(24π)
     if abs(c)<8eps(primal(float(α)))
         return (g+1-2sqrt(oftype(primal(α), 2))*ξ)/6-μ*log(sqrt(oftype(primal(α), 2))+ξ)/3+g*asin(
             μ,
         )/(3π)+h*μ
     end
     β=abs(μ)==1 ? μ*x : asin(v)
-    dl=clausen2(x-β)+clausen2(π+β-x)-clausen2(π-x-β)-clausen2(x+β)
+    dl=cl2(x-β)+cl2(π+β-x)-cl2(π-x-β)-cl2(x+β)
     logs=β*(2log(s)-2log(g+c))
     logs+=μ == -1 ? zero(β) : (β+x)*log1p(μ)
     logs+=μ == 1 ? zero(β) : (β-x)*log1p(-μ)
@@ -135,7 +107,7 @@ function classical(α, p0, Z)
     s, d=r1+r2, r1-r2
     x, h0=sqrt(oftype(primal(α), 2))*sin(p0/2), sqrt(oftype(primal(α), 2))*cos(p0/2)
     a, p=α-π/2, p0-π
-    G=clausen2(π/2)
+    G=cl2(π/2)
     l2=log(oftype(primal(α), 2))
     v=0.0
     for sign in (1, -1)

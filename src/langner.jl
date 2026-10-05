@@ -65,7 +65,7 @@ function langner_head(a, d, Z, E, a21, bm)
     s=r1+r2
     z=sqrt(2-d*d)
     w=1-d*d
-    c=a21+Z*(-oftype(a, 17)/72+(24clausen2(π/2)-31)/(36π))
+    c=a21+Z*(-oftype(a, 17)/72+(24cl2(π/2)-31)/(36π))
     aw=iszero(w) ? one(w) : asin(w)/w
     anglepart=aw/12+w*aw^2/(12π)-d*z*acos(d/sqrt(oftype(a, 2)))/(3π)
     ans=E*(Z*s*(2+r1*r2)/18-(6-d*d)*d/72)-Z^3*s*(1+5r1*r2)/18

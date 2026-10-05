@@ -12,8 +12,6 @@ using Test, FockExpansion
         @test psi30(α, θ; Z = 0, E, a21) ≈ exact atol=2e-13
         @test psi10(α, θ; Z = 2) ≈ ξ/2-2*(sin(α/2)+cos(α/2))
     end
-    @test clausen2(0.0) == 0
-    @test clausen2(π/2) ≈ 0.915965594177219015 atol=2e-15
     @test_throws DomainError psi30(0.0, 0.3; Z = 2, E = -2.9, a21 = 0.0)
 end
 @testset "Second order independent reference" begin

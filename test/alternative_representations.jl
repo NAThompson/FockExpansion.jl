@@ -34,14 +34,6 @@ end
         N = 61,
     )
 end
-@testset "Float64 Clausen against arbitrary precision" begin
-    for x in range(-4π, 4π, length = 201)
-        ref=setprecision(192) do ;
-            Float64(clausen2(BigFloat(x)))
-        end
-        @test clausen2(x) ≈ ref atol=3e-15
-    end
-end
 @testset "Endpoint source limits" begin
     for x in (0.3, 1.2), μ in (-1.0, 1.0)
         @test isfinite(FockExpansion.chi(x, μ))
