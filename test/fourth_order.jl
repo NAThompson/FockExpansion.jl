@@ -61,4 +61,10 @@ end
     z1 = (π-2)/(2880π)*(3*(32*E-15)-8*(12*E-5)*ξ(a, t)^2)
     @test psi41(a, t; Z, E, a21)-Z^2*F4.psi41_z2(a, t)-F4.psi41_harmonic(a, t; Z, E, a21) ≈
           Z*z1+Z^3*p3(a, t) atol=1e-15
+    # ψ₄₀ at Z = 0 against its closed form, and exchange symmetry.
+    let E = -2.9, a21 = 0.4
+        p40_0(a, t) = (12*E^2-11*E+6*a21+1)/1152-(72*E*a21+E-30*a21-2)*sin(a)*cos(t)/720
+        @test psi40(0.7, 1.1; Z = 0.0, E, a21) ≈ p40_0(0.7, 1.1) atol=1e-13
+        @test psi40(π-0.7, 1.1; Z = 2.0, E, a21, step = 0.125) ≈ psi40(0.7, 1.1; Z = 2.0, E, a21, step = 0.125) atol=1e-14
+    end
 end

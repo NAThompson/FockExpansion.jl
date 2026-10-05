@@ -90,3 +90,43 @@ function solve_k4(h, α, θ; n, levels, h2 = nothing)
     end
     rule_sum(a->sin(a)^2*rule_sum(t->point(a, t), T, rule), A, rule)
 end
+
+# Tanh-sinh rule on [a, b]: spectrally accurate for integrands singular at either end.
+function de_rule(a, b; h = 0.0625, N = 48)
+    xs=Float64[]
+    ws=Float64[]
+    for j = (-N):N
+        τ=j*h
+        s=π/2*sinh(τ)
+        push!(xs, (a+b)/2+(b-a)/2*tanh(s))
+        push!(ws, (b-a)/2*h*π/2*cosh(τ)/cosh(s)^2)
+    end
+    xs, ws
+end
+# Same solve for exchange-symmetric sources: the target is folded to α ≤ π/2, sources
+# live on α ∈ (0, π/2] with kernel K(x,y) + K(x,ȳ), ȳ the mirror α → π-α, and the domain
+# is split at the target. The logarithmic kernel singularity and the Coulomb corners at
+# (π/2, 0) and (π/2, π) then sit at rectangle corners, where tanh-sinh converges
+# exponentially (h = 0.0625 gives about 1e-14, h = 0.125 about 1e-10).
+function solve_k4_symmetric(h, α, θ; h2 = nothing, step = 0.0625)
+    α>π/2 && (α=π-α)
+    N=ceil(Int, 3/step)
+    rule2=gauss(8)
+    total=0.0
+    for (a0, a1) in ((0.0, α), (α, π/2)), (t0, t1) in ((0.0, θ), (θ, Float64(π)))
+        (a1>a0 && t1>t0) || continue
+        A=de_rule(a0, a1; h = step, N)
+        T=de_rule(t0, t1; h = step, N)
+        for (a, wa) in zip(A...), (t, wt) in zip(T...)
+            K=green_k4_azimuthal(α, θ, a, t)+green_k4_azimuthal(α, θ, π-a, t)
+            v=-h(a, t)*K/4
+            if h2!==nothing
+                K2=green2_k4_azimuthal(α, θ, a, t, rule2)+green2_k4_azimuthal(α, θ, π-a, t, rule2)
+                v+=h2(a, t)*K2/16
+            end
+            total+=wa*wt*sin(a)^2*sin(t)*v
+        end
+    end
+    total
+end
+

@@ -58,9 +58,10 @@ end
 
 """ψ₄₀, the R⁴ coefficient, at an interior angle: the solution with no Y₄₀, Y₄₂
 component plus `a40*Y₄₀ + a42*Y₄₂` (Y₄₀ = 4cos²α-1, Y₄₂ = sin²α P₂(cos θ)).
-a40 and a42 are not fixed by the Fock recurrence. Float64 only; one
-two-dimensional quadrature with ψ₃₀ at every node (a few seconds)."""
-function psi40(α, θ; Z, E, a21, a40 = 0.0, a42 = 0.0, n = 8, levels = 8)
+a40 and a42 are not fixed by the Fock recurrence. Float64 only; one two-dimensional
+tanh-sinh quadrature with ψ₃₀ at every node: `step = 0.0625` (default) gives about 1e-14
+in about a second, `step = 0.125` about 1e-10 in 0.3 s."""
+function psi40(α, θ; Z, E, a21, a40 = 0.0, a42 = 0.0, step = 0.0625)
     g=geometry(α, θ)
     α, θ=Float64(g.α), Float64(g.θ)
     # (Λ²-32)ψ₄₀ = 12ψ₄₁ + 2ψ₄₂ - 2Vψ₃₀ + 2Eψ₂₀. The harmonic parts of ψ₄₁ and ψ₄₂
@@ -75,7 +76,7 @@ function psi40(α, θ; Z, E, a21, a40 = 0.0, a42 = 0.0, n = 8, levels = 8)
         12*(Z*z1+Z^3*z3)-2V*psi30(a, t; Z, E, a21, rtol = 1e-12)+2E*psi20(a, t; Z, E, a21)
     end
     h2=iszero(Z) ? nothing : (a, t)->12Z^2*psi41_z2_source(a, t)
-    solve_k4(source, α, θ; n, levels, h2)+a40*harmonic40(α, θ)+a42*harmonic42(α, θ)
+    solve_k4_symmetric(source, α, θ; h2, step)+a40*harmonic40(α, θ)+a42*harmonic42(α, θ)
 end
 
 """ψ₄₁, the coefficient of R⁴log R, at an interior angle.

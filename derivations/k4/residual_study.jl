@@ -9,12 +9,12 @@
 using FockExpansion, Printf, Base.Threads
 const F=FockExpansion
 const Z, E, a21 = 2.0, -2.9037243770341195983, 0.47674787900
-function node(α, θ; n=8, levels=8)
+function node(α, θ; n=8, levels=8, step=0.125)
     ξ=F.xi_stable(α, θ); V=1/ξ-Z*(1/sin(α/2)+1/cos(α/2))
     p30=psi30(α, θ; Z, E, a21, rtol=1e-12); p31=psi31(α, θ; Z)
     s0=V*p30-E*psi20(α, θ; Z, E, a21); s1=V*p31-E*psi21(α, θ; Z)
     p42=psi42(α, θ; Z); p41=psi41(α, θ; Z, E, a21)
-    p40=psi40(α, θ; Z, E, a21, n, levels)
+    p40=psi40(α, θ; Z, E, a21, step)
     (; V, p30, p31, s0, s1, p42, p41, p40)
 end
 res3(c, R)=(L=log(R); R^2*(c.s0+c.s1*L)-E*R^3*(c.p30+c.p31*L))
