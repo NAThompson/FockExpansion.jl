@@ -52,4 +52,10 @@ end
         @test sphere_integral(f) ≈ 0 atol=1e-10
     end
     @test psi41(π-0.7, 1.1; Z, E, a21) ≈ psi41(0.7, 1.1; Z, E, a21) atol=1e-14
+    # psi41 assembles its components with the closed forms above.
+    let a = 0.7, t = 1.1, E = -2.9
+        p1(a, t) = (π-2)/(2880π)*(3*(32*E-15)-8*(12*E-5)*ξ(a, t)^2)
+        @test psi41(a, t; Z, E, a21)-Z^2*F4.psi41_z2(a, t)-F4.psi41_harmonic(a, t; Z, E, a21) ≈
+              Z*p1(a, t)+Z^3*p3(a, t) atol=1e-15
+    end
 end

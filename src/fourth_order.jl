@@ -43,15 +43,38 @@ end
 
 """Z² component of ψ₄₁ without Y₄ₗ admixture, by quadrature against the S³ Green's function."""
 function psi41_z2(α::Real, θ::Real; n = 8, levels = 8)
-    α, θ=Float64(α), Float64(θ)
+    solve_k4(psi41_z2_source, Float64(α), Float64(θ); n, levels)
+end
+
+# Source of ψ₄₁⁽²⁾ without its Y₄ part (which the Green's function removes anyway).
+function psi41_z2_source(a, t)
     B=(π-2)/(3π)
+    ξ=xi_stable(a, t)
+    ς=cos(a/2)+sin(a/2)
+    V1=1/sin(a/2)+1/cos(a/2)
+    B*(V1*(5ξ^3/6-ξ)+ς*(ξ-1/ξ))
+end
+
+"""ψ₄₀, the R⁴ coefficient, at an interior angle: the solution with no Y₄₀, Y₄₂
+component plus `a40*Y₄₀ + a42*Y₄₂` (Y₄₀ = 4cos²α-1, Y₄₂ = sin²α P₂(cos θ)).
+a40 and a42 are not fixed by the Fock recurrence. Float64 only; one
+two-dimensional quadrature with ψ₃₀ at every node (a few seconds)."""
+function psi40(α, θ; Z, E, a21, a40 = 0.0, a42 = 0.0, n = 8, levels = 8)
+    g=geometry(α, θ)
+    α, θ=Float64(g.α), Float64(g.θ)
+    # (Λ²-32)ψ₄₀ = 12ψ₄₁ + 2ψ₄₂ - 2Vψ₃₀ + 2Eψ₂₀. The harmonic parts of ψ₄₁ and ψ₄₂
+    # are annihilated by the pure inverse; 12Z²ψ₄₁⁽²⁾ = 12Z²(Λ²-32)⁺ h₄₁⁽²⁾ is applied
+    # through the iterated kernel.
     function source(a, t)
         ξ=xi_stable(a, t)
-        ς=cos(a/2)+sin(a/2)
-        V1=1/sin(a/2)+1/cos(a/2)
-        B*(V1*(5ξ^3/6-ξ)+ς*(ξ-1/ξ))
+        s, c=sin(a), cos(t)
+        V=1/ξ-Z*(1/sin(a/2)+1/cos(a/2))
+        z1=(π-2)/(2880π)*(3*(32*E-15)-8*(12*E-5)*ξ^2)
+        z3=-(π-2)/(120π)*(4+5s)*s*c
+        12*(Z*z1+Z^3*z3)-2V*psi30(a, t; Z, E, a21, rtol = 1e-12)+2E*psi20(a, t; Z, E, a21)
     end
-    solve_k4(source, α, θ; n, levels)
+    h2=iszero(Z) ? nothing : (a, t)->12Z^2*psi41_z2_source(a, t)
+    solve_k4(source, α, θ; n, levels, h2)+a40*harmonic40(α, θ)+a42*harmonic42(α, θ)
 end
 
 """ψ₄₁, the coefficient of R⁴log R, at an interior angle.
@@ -61,7 +84,7 @@ function psi41(α, θ; Z, E, a21, n = 8, levels = 8)
     g=geometry(α, θ)
     (; α, θ, v, ξ)=g
     s=sin(α)
-    z1=(π-2)/(2880π)*(3*(32E-15)-8*(12E-5)*ξ^2)
+    z1=(π-2)/(2880π)*(3*(32*E-15)-8*(12*E-5)*ξ^2)
     z3=-(π-2)/(120π)*(4+5s)*v
     z2=iszero(Z) ? 0.0 : psi41_z2(α, θ; n, levels)
     Z*z1+Z^2*z2+Z^3*z3+psi41_harmonic(α, θ; Z, E, a21)

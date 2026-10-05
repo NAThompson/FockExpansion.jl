@@ -57,7 +57,27 @@ finite and exact. It reproduces the 256-bit automatic-differentiation values in
     +ψ₄₂+ψ₄₁:    R²[s₀ - 6ψ₄₁ - ψ₄₂] + O(R³ log²R)    (no log at order R²)
     +ψ₄₀:        O(R³ log²R)                           (any Y₄ part of ψ₄₀)
 
-## ψ₄₀ (`psi40_start.py`)
+`residual_study.out` (Z = 2, ground-state E and a₂₁, a₄₀ = a₄₂ = 0), L² norm of
+(H-E)Ψ/R² over the angles:
+
+| R | Ψ⁽³⁾ | +ψ₄₂ | +ψ₄₂+ψ₄₁ | all of k = 4 |
+|---|---:|---:|---:|---:|
+| 1e-4 | 23.42 | 23.42 | 21.48 | 0.0017 |
+| 1e-2 | 21.73 | 21.72 | 21.41 | 0.148 |
+| 0.1 | 20.78 | 20.78 | 20.81 | 1.40 |
+| 0.5 | 18.06 | 18.06 | 18.11 | 6.23 |
+
+The log terms alone barely help: the R² residual is dominated by its non-log part
+s₀ ≈ 16-18, which only ψ₄₀ removes.
+
+## ψ₄₀ (`psi40_start.py`, `check_psi40.jl`, `src/fourth_order.jl`)
+
+Numerically, ψ₄₀ = (Λ²-32)⁺[12ψ₄₁ + 2ψ₄₂ - 2Vψ₃₀ + 2Eψ₂₀] + a₄₀Y₄₀ + a₄₂Y₄₂. The
+harmonic parts of ψ₄₁, ψ₄₂ drop out, and the Z²ψ₄₁ term uses the iterated kernel
+G₂ = G∘G = [(γ²-2πγ)/(48π²) + 1/72 + 1/(864π²)] sin3γ/sinγ (`g2.py`), so one
+two-dimensional quadrature suffices. Checks: the Z⁰ and Z⁴ closed forms below
+(4e-13, 1e-13) and the recurrence by finite differences (2e-7 relative).
+
 
 By powers of Z, h₄₀⁽⁰⁾ depends on ξ only and h₄₀⁽⁴⁾ = -(1+sinα)(2+5sinα)/(9 sinα)
 on α only:

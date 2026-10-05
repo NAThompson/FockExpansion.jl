@@ -43,10 +43,29 @@ function green_k4_azimuthal(α, θ, a, t, rule; levels)
     2rule_sum(φ->green_k4(δ+2d*sin(φ/2)^2), graded_points(0.0, Float64(π), true, false; levels = levels+6, q = 0.3), rule)
 end
 
-function solve_k4(h, α, θ; n, levels)
+# Iterated kernel G₂ = G∘G, the pure solution of (Δ+8)G₂ = G (derivations/k4/g2.py):
+#   G₂(γ) = [(γ²-2πγ)/(48π²) + 1/72 + 1/(864π²)] sin 3γ / sin γ, bounded and smooth.
+function green2_k4(omc)
+    γ=2asin(sqrt(min(omc/2, 1.0)))
+    c=cos(γ)
+    ((γ^2-2π*γ)/(48π^2)+1/72+1/(864π^2))*(4c^2-1)
+end
+function green2_k4_azimuthal(α, θ, a, t, rule)
+    δ=2sin((α-a)/2)^2+2sin(α)*sin(a)*sin((θ-t)/2)^2
+    d=sin(α)*sin(θ)*sin(a)*sin(t)
+    2rule_sum(φ->green2_k4(δ+2d*sin(φ/2)^2), (0.0, π/2, Float64(π)), rule)
+end
+
+# Pure solution of (Λ²-32)ψ = h, i.e. ψ = -(1/4)G*h. With `h2`, also adds the pure
+# solution of (Λ²-32)²χ = h2, i.e. χ = (1/16)G₂*h2.
+function solve_k4(h, α, θ; n, levels, h2 = nothing)
     rule=gauss(n)
     A=sort(unique(vcat(split_graded(0.0, π/2, α; levels), split_graded(π/2, Float64(π), α; levels))))
     T=split_graded(0.0, Float64(π), θ; levels)
-    inner(a)=sin(a)^2*rule_sum(t->h(a, t)*sin(t)*green_k4_azimuthal(α, θ, a, t, rule; levels), T, rule)
-    -rule_sum(inner, A, rule)/4
+    function point(a, t)
+        v=-h(a, t)*green_k4_azimuthal(α, θ, a, t, rule; levels)/4
+        h2===nothing || (v+=h2(a, t)*green2_k4_azimuthal(α, θ, a, t, rule)/16)
+        v*sin(t)
+    end
+    rule_sum(a->sin(a)^2*rule_sum(t->point(a, t), T, rule), A, rule)
 end
