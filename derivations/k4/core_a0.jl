@@ -18,15 +18,26 @@ end
 function Lplus_Q_over_l(Qcoef, q1, q2, ω, x)
     # Qcoef = (q0, q1x, q2x, q11, q12, q22) for q0 + a x₁ + b x₂ + c x₁² + d x₁x₂ + e x₂²
     a0, a1, a2, a11, a12, a22=Qcoef
-    F(v, kind)=Uf(kind, v[1], v[2], 1-v[1]^2-v[2]^2, x)   # ω recomputed: fine away from |q| = 1
-    v0=[q1, q2]
+    # differentiate in δ = q - q₀ with ω = ω₀ - 2q₀·δ - |δ|², ω₀ exact: no cancellation near |q| = 1
+    F(v, kind)=Uf(kind, q1+v[1], q2+v[2], ω-2(q1*v[1]+q2*v[2])-v[1]^2-v[2]^2, x)
+    v0=[0.0, 0.0]
     g=ForwardDiff.gradient(v->F(v, :log), v0)
     H=ForwardDiff.hessian(v->F(v, :xlog), v0)
     a0*F(v0, :inv)-a1*g[1]-a2*g[2]+a11*H[1, 1]+a12*H[1, 2]+a22*H[2, 2]
 end
-function core_a0(α, θ, Z; nt=24, nu=24)
+function graded_rule(n, levels; q=0.25)
+    pts=sort(unique(vcat([0.5*q^k for k in 0:levels], [1-0.5*q^k for k in 0:levels], [0.0, 0.5, 1.0])))
+    x, w=gauss(n); xs=Float64[]; ws=Float64[]
+    for i in 1:length(pts)-1
+        h=(pts[i+1]-pts[i])/2; m=(pts[i+1]+pts[i])/2
+        append!(xs, m.+h.*x); append!(ws, h.*w)
+    end
+    xs, ws
+end
+function core_a0(α, θ, Z; nt=24, nu=24, levels=0)
     x=[cos(α), sin(α)*cos(θ), sin(α)*sin(θ), 0.0]
-    tt, tw=gauss(nt, 0.0, 1.0); uu, uw=gauss(nu, 0.0, 1.0)
+    tt, tw=levels==0 ? gauss(nt, 0.0, 1.0) : graded_rule(nt, levels)
+    uu, uw=levels==0 ? gauss(nu, 0.0, 1.0) : graded_rule(nu, levels)
     total=0.0
     for (t, wt) in zip(tt, tw), (u, wu) in zip(uu, uw), s in (1, -1)
         C=2t^2+u^2*(1+t^4)

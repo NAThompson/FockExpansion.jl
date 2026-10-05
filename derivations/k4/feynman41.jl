@@ -147,8 +147,40 @@ function Uf(kind, p1, p2, ω, x)
     γ=2asin(sqrt(clamp(sγ2, zero(sγ2), one(sγ2))))
     c=1-2sγ2
     # remove the degree-2 zonal harmonic U₂(c) = 4c²-1, so every per-t solution is pure
-    zonal(kind, ρ, ω, γ, ℓ)-(2/π)*Mzonal(kind, ρ, ω)*(4c^2-1)
+    ρ<RHO_SERIES && PURE[] && return zonal_series(kind, ρ, c)
+    PURE[] ? zonal(kind, ρ, ω, γ, ℓ)-(2/π)*Mzonal(kind, ρ, ω)*(4c^2-1) : zonal(kind, ρ, ω, γ, ℓ)
 end
+# Small ρ: expand f in powers of ρc, write cⁿ in Chebyshev U_m(c) = sin((m+1)γ)/sin γ
+# (zonal harmonics, Λ²U_m = 4m(m+2)U_m), divide by 4m(m+2) - 32 and drop m = 2.
+const RHO_SERIES=0.3
+function zonal_series(kind, ρ, c; N=48)
+    T=typeof(ρ*c)
+    coef=zeros(T, N+1)            # f = Σ coef[n+1] cⁿ
+    for n in 0:N
+        coef[n+1]=kind==:inv ? ρ^n : kind==:log ? (n==0 ? zero(T) : -ρ^n/n) :
+                  (n==0 ? zero(T) : n==1 ? -ρ : ρ^n/(n*(n-1)))
+    end
+    # cⁿ in the U_m basis: c·U_m = (U_{m+1} + U_{m-1})/2, U_{-1} = 0
+    u=zeros(T, N+2); u[1]=1      # current cⁿ, starting with n = 0
+    acc=zeros(T, N+2)
+    for n in 0:N
+        acc.+=coef[n+1] .* u
+        v=zeros(T, N+2)
+        for m in 0:N
+            u[m+1]==0 && continue
+            v[m+2]+=u[m+1]/2
+            m>0 && (v[m]+=u[m+1]/2)
+        end
+        u=v
+    end
+    s=zero(T); Um1=zero(c); Um=one(c)
+    for m in 0:N
+        m==2 || (s+=acc[m+1]*Um/(4m*(m+2)-32))
+        Um1, Um=Um, 2c*Um-Um1
+    end
+    s
+end
+const PURE=Ref(true)
 
 const B41=(π-2)/(3π)
 # Integrand at p = (σt, 1-t). Near t = 0 use variables (p₁, q = 1-p₂), near t = 1

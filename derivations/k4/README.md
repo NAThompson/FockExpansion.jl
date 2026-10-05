@@ -129,3 +129,22 @@ In the Feynman framework each multiplication by V adds one integration parameter
 this core comes out as a two-dimensional integral unless one integral is done in
 closed form, which is what the ψ₃₀ derivation achieved at k = 3.
 
+### ψ₃₀ panels as superpositions of inverse linear forms (`panel_uform.jl`, `core_a0*.jl`)
+
+With atan(a/b)/a = ∫₀¹ b du/(b² + a²u²), each ψ₃₀ panel is
+c₀N₀ + c₂N₂ = (2/π)∫₀¹dt∫₀¹du L(t)(c₀ + c₂t²)(-2yt)/D with D = 4y²t² + P u² linear in
+x ∈ S³: D = C(1 - q(t,u)·x), |q| < 1 (1 - |q|² = 4t²u²(1+t²)²/C²). For the F_a panels
+(b = ±cos α, -2y = √2 ξ) the factor 1/ξ of V₀ cancels the ξ, so
+L₄⁺[-2V₀F_a] is a two-dimensional integral of the same elementary zonal solutions as
+ψ₄₁⁽²⁾. Checked against the Green's function: 3e-10 and 4e-10 at two points with a
+graded 10-point rule (the integrand has log singularities at u → 0 and t → 1).
+
+Numerical details: per-point zonal solutions are made pure with the closed-form
+Funk–Hecke projection M(ρ) (`harmonic_proj.jl`, checked to 1e-16); for ρ < 0.3 they come
+from the series f = Σ fₙ(ρc)ⁿ → Chebyshev U_m(c), each divided by 4m(m+2) - 32 with m = 2
+dropped (agrees with the closed form to 1e-15 at ρ = 0.25-0.29, where both are accurate).
+
+Remaining core pieces: V₁F_r with matching centre is also two-dimensional; V₀F_r and
+V₁F_a need one or two more Feynman parameters (three- and four-dimensional), and the
+Clausen part 𝒟 has no linear-form representation yet.
+
