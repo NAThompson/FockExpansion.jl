@@ -301,8 +301,8 @@ function panelmap(b, y)
         PanelMap(h, zero(t), asinh(u/t), zero(t), t, false, zero(t), -sfar)
     end
 end
-# Gauss–Legendre rules on [-1,1] with 8, 12, …, 96 nodes.
-const PANEL_RULES=[gauss(n) for n = 8:4:96]
+# Gauss–Legendre rules on [-1,1] with 1, …, 96 nodes.
+const PANEL_RULES=[gauss(n) for n = 1:96]
 # Node count for z-range L and d=-log₁₀(rtol) requested digits: an upper
 # envelope of the nodes needed against 200-bit references over a 31×32 grid of
 # b∈[-0.9999,0.9999], y∈[-1,-1e-10]. Relative accuracy is limited to about
@@ -313,10 +313,26 @@ function panel_nodes(L, rtol)
     clamp(4ceil(Int, n/4), 8, 96)
 end
 const PANEL_ERROR=1e-14
+include("panel_node_table.jl")
+# Nodes for a panel from the calibrated table over (atanh(b), L), or 0 outside it.
+# The table resolves interior points, where the limiting singularities are the
+# arctangent branch points rather than the pinching roots, far more tightly than
+# the envelope in `panel_nodes`; the tolerance level used is the first tabulated
+# one at or below rtol.
+function panel_nodes_table(b, L, rtol)
+    β=atanh(b)
+    β0, β1, nβ=PANEL_NODE_BETA
+    L0, L1, nL=PANEL_NODE_L
+    (β0<=β<=β1 && L<=L1) || return 0
+    k=something(findfirst(<=(rtol), PANEL_NODE_LEVELS), length(PANEL_NODE_LEVELS))
+    i=clamp(floor(Int, (β-β0)/(β1-β0)*nβ)+1, 1, nβ)
+    j=clamp(floor(Int, (L-L0)/(L1-L0)*nL)+1, 1, nL)
+    Int(PANEL_NODE_TABLE[k, i, j])
+end
 function panel_fixed(b, y, c0, c2, map::PanelMap, n)
     π=typedpi(b)
     (; h, za, zb, m, t, cosh_branch, f1, f0)=map
-    x, w=PANEL_RULES[n÷4-1]
+    x, w=PANEL_RULES[n]
     half=(zb-za)/2
     mid=(zb+za)/2
     ih=1/h
@@ -344,7 +360,9 @@ function panel(b, y, c0, c2; rtol)
         L=primal(map.zb-map.za)
         # The double-root limit t → 0 (measure zero) and extreme ranges fall back.
         if isfinite(L) && L<=60
-            val=panel_fixed(b, y, c0, c2, map, panel_nodes(L, rtol))
+            n=panel_nodes_table(primal(b), L, rtol)
+            iszero(n) && (n=panel_nodes(L, rtol))
+            val=panel_fixed(b, y, c0, c2, map, n)
             return val, max(rtol, PANEL_ERROR)*abs(primal(val))
         end
     end
