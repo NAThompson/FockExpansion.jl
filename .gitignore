@@ -4,3 +4,5 @@ examples/*.log
 *.aux
 *.log
 *.synctex.gz
+paper/refs/
+derivations/**/*.csv

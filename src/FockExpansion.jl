@@ -7,7 +7,7 @@ adnorm(x::Real) = abs(x)
 adnorm(x::ForwardDiff.Dual) =
     max(adnorm(ForwardDiff.value(x)), maximum(adnorm, ForwardDiff.partials(x)))
 typedpi(x) = oftype(primal(float(x)), Base.MathConstants.pi)
-export psi00, psi10, psi20, psi21, psi31, psi30, psi30_parts
+export psi00, psi10, psi20, psi21, psi31, psi30, psi30_parts, psi41, psi42
 
 # L(u) = u log|2 sin u| + Cl₂(2u)/2 and T(u) = -u log|2 cos u| + Cl₂(π-2u)/2,
 # given s = sin u and c = cos u so that callers can share them.
@@ -498,6 +498,8 @@ end
 """Numerical ψ₃₀ at an interior angle. Uses four one-dimensional elliptic quadratures."""
 psi30(α, θ; kwargs...) = psi30_parts(α, θ; kwargs...).value
 include("green.jl")
+include("green_k4.jl")
+include("fourth_order.jl")
 include("langner.jl")
 export LangnerTable, psi30_langner
 export psi30_green
