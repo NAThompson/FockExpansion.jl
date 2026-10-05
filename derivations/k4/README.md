@@ -172,3 +172,38 @@ Clausen part 𝒟 has no linear-form representation yet.
   smooth; 32 Gauss nodes per piece give 1e-15-1e-11 down to δ = 1e-14. psi41_z2_green
   went from 1.4 s to 0.45 s with unchanged values (1e-14).
 
+
+## The whole hierarchy by separation of variables (`sylvester30.jl`, `fock_chain*.jl`, `fock_spectral*.jl`)
+
+Let β = arccos(sin α cos θ) be the angle to e₂ (so r₁₂/R = √2 sin(β/2)), and set
+X = α − β, Y = α + β. The singlet angular domain becomes the rectangle
+X ∈ [−π/2, π/2], Y ∈ [π/2, 3π/2]. Its four corners are the coalescence points and its
+edges are the collinear configurations. In these coordinates the Laplacian separates:
+
+    Δ_{S³} = 4/(cos X − cos Y) · [∂_X(cos X ∂_X) − ∂_Y(cos Y ∂_Y)],
+
+so (Λ² − c)ψ = h becomes the Sylvester equation
+
+    [∂_X cos X ∂_X + (c/16)cos X]ψ − [∂_Y cos Y ∂_Y + (c/16)cos Y]ψ = −(cos X − cos Y)h/16.
+
+The weight cos X − cos Y = 2 sin α sin β cancels every Coulomb singularity:
+(cos X − cos Y)/ξ = 2√2 sin α cos(β/2) and (cos X − cos Y)V₁ = 4 sin β (cos(α/2)+sin(α/2)).
+Every ψ_kp computed so far is analytic on the rectangle. A tensor Chebyshev grid
+therefore converges spectrally: 16×16 gives ψ₃₀ to 1e-13.
+
+`fock_chain.jl` runs the recurrence from ψ₀₀ upwards. Each solve diagonalises the two
+1D operators and divides by λ_i^X − λ_j^Y. Resonant pairs (even k) are dropped and the
+result is purified against the S-state harmonics Y_kl. The harmonic part of ψ_k,p+1 is
+then fixed by solvability of the p equation, and free constants (a₂₁, a₄₀, a₄₂, …) are
+added to ψ_k0. Results:
+- `fock_chain_check.jl`: ψ₁₀ … ψ₃₁ agree with the package to 2e-13. ψ₄₂ agrees to 5e-15,
+  ψ₄₁ to 1e-11 and ψ₄₀ to 2e-13.
+- `fock_chain_conv.jl`: n = 24, 32 and 40 agree to 1e-12 for every ψ_kp with k ≤ 6. This
+  includes ψ₅₀–ψ₅₂ and ψ₆₀–ψ₆₃. The whole chain takes about 0.02 s.
+- `fock_chain_pde.jl`: an independent check. Λ² is applied in (α, θ) by automatic
+  differentiation of the interpolant at off-grid points, and the recurrence residual is
+  ≤ 3e-10 for all k ≤ 6.
+- `fock_spectral.jl` is precision-generic. Float64 eigenpairs are refined by
+  fixed-shift inverse iteration with generic LU. `fock_spectral_big.jl` (256-bit) gives
+  |ψ₃₀ − closed form| = 7e-26, 3e-38 and 1e-50 for n = 32, 48 and 64, about 0.75 digits
+  per grid point, in seconds.
