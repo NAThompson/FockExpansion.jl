@@ -136,33 +136,104 @@ function classical(α, p0, Z)
     e3=-s*(5s^2-3)/36
     v+e0+Z*e1+Z^2*e2+Z^3*e3
 end
+# The elliptic moments are integrals over 0 < q < upper = min(h, 1), h = √((1+b)/(1-b)).
+# Write q = upper*t. The quartic under the square root vanishes at t = 1; as y → 0
+# (always together with b → 0) the integrand develops a peak of width σ ~ |y| there.
+
+# Quartic (1-q²)((1+b)-(1-b)q²) at q = upper*t, with m = 1-t² computed as (1-t)(1+t).
+# Written as a sum of nonnegative terms, so the zero at t = 1 costs no relative precision.
+# The caller states which limit applies, so primal ties never switch formulas under duals.
+quartic(b, h, m, upper_is_h) = upper_is_h ? m*h^2*((1+b)*m-2b) : m*((1-b)*m+2b)
+
+# Moment integrand c0*N₀ + c2*N₂ at q, given a = atan(1/q), d = atan(q/h) and the quartic P.
+function moment_integrand(q, a, d, h, b, y, c0, c2, P)
+    π=typedpi(q)
+    iszero(q) && return (2/π)*(c0*π^2/4+c2)/sqrt(1+b)
+    numerator=c0*(a-d)*(a+d)+c2*((h*d/q)^2-(q*a)^2)
+    (2/π)*numerator/sqrt(P+4*y^2*q^2)
+end
+
+# ∫₀¹ f(t, 1-t) dt for an integrand with a peak of width σ at t = 1, as one quadrature
+# over s ∈ [0, 2] with a break at s = 1. The bulk t ∈ [0, 1/2] stays linear in s, since a
+# stretching map there would crowd the branch points at t = ±i. A narrow peak gets
+# x = 1-t = σ sinh(τ) on the tail, which turns it into a smooth ramp. A single quadgk
+# call keeps one compiled specialization per integrand, which matters for nested duals.
+# Fixed real endpoints let duals carry the derivatives of σ and of the moving upper limit.
+function endpoint_quadgk(f, σ, lo; rtol)
+    hi=one(lo)
+    narrow=primal(σ)<1/4
+    τmax=narrow ? asinh((hi/2)/σ) : zero(σ)
+    function integrand(s)
+        s<=hi && return f(s/2, 1-s/2)/2
+        u=s-hi
+        narrow || return f(1-u/2, u/2)/2
+        τ=τmax*u
+        x=σ*sinh(τ)
+        σ*τmax*cosh(τ)*f(1-x, x)
+    end
+    order=primal(lo) isa BigFloat ? 21 : 7
+    quadgk(integrand, lo, hi, 2hi; rtol, atol = rtol/100, norm = adnorm, order)
+end
+
+"""One elliptic moment combination c0*N₀(b, y) + c2*N₂(b, y), with its quadrature error estimate."""
 function panel(b, y, c0, c2; rtol)
     π=typedpi(b)
     h=sqrt((1+b)/(1-b))
     # Chart decisions use only primal values, never dual partials at a tie.
-    upper=primal(h)<=1 ? h : one(h)
-    function integrand(q)
-        q == 0 && return (2/π)*(c0*π^2/4+c2)/sqrt(1+b)
-        a=atan(1/q)
-        d=atan(q/h)
-        numerator=c0*(a-d)*(a+d)+c2*((h*d/q)^2-(q*a)^2)
-        # Positive form of the transformed quartic avoids cancellation near y=0.
-        T=(1-q^2)*((1+b)-(1-b)*q^2)+4*y^2*q^2
-        (2/π)*numerator/sqrt(T)
+    upper_is_h=primal(h)<=1
+    upper=upper_is_h ? h : one(h)
+    function integrand(t, x)
+        q=upper*t
+        P=quartic(b, h, x*(1+t), upper_is_h)
+        upper*moment_integrand(q, π/2-atan(q), atan(q/h), h, b, y, c0, c2, P)
     end
-    # Fixed real endpoints let duals carry the moving-upper-limit derivative.
-    lo=zero(primal(h))
-    hi=one(lo)
-    quadgk(
-        t->upper*integrand(upper*t),
-        lo,
-        hi/2,
-        hi;
-        rtol,
-        atol = rtol/100,
-        norm = adnorm,
-        order = primal(h) isa BigFloat ? 21 : 7,
-    )
+    endpoint_quadgk(integrand, abs(y), zero(primal(h)); rtol)
+end
+
+# The four moment combinations of ψ₃₀ as two quadratures in t, one per pair of panels
+# that share both their arctangents and their peak width. The pair b = ±cos(α) has
+# h₂ = 1/h₁, so both panels need only atan(t) and atan(t/h₁); the pair with b = -v
+# shares q, a and d outright. Each pair costs two arctangents per node instead of four.
+function elliptic(α, g, Z; rtol)
+    π=typedpi(α)
+    r=sqrt(oftype(primal(α), 2))
+    lo=zero(primal(α))
+    # Panels 1 and 2: b = ±c with c = cos(α) ≥ 0 because α ≤ π/2, so h₁ ≥ 1 ≥ h₂.
+    c=cos(α)
+    y=-g.ξ/r
+    h1=sqrt((1+c)/(1-c))
+    h2=inv(h1)
+    c0₁₂=-r*Z/576*(9Z*c^2-18Z-8c^2+8)
+    c2₁=r*Z/288*(c-1)*(90Z*y^2-45Z-18c-32y^2+16)
+    c2₂=r*Z/288*(-c-1)*(90Z*y^2-45Z+18c-32y^2+16)
+    function pair12(t, x)
+        m=x*(1+t)
+        A=atan(t)
+        D=atan(t/h1)
+        moment_integrand(t, π/2-A, D, h1, c, y, c0₁₂, c2₁, quartic(c, h1, m, false))+
+        h2*moment_integrand(h2*t, π/2-D, A, h2, -c, y, c0₁₂, c2₂, quartic(-c, h2, m, true))
+    end
+    # Panels 3 and 4: b = -v, y = -r1 and y = -r2.
+    b=-g.v
+    h=sqrt((1+b)/(1-b))
+    upper_is_h=primal(h)<=1
+    upper=upper_is_h ? h : one(h)
+    c0₃₄=Z^2*(1-b^2)/18
+    c2₃=2Z^2*(b-1)*(2g.r1^2-1)/9
+    c2₄=2Z^2*(b-1)*(2g.r2^2-1)/9
+    function pair34(t, x)
+        q=upper*t
+        a=π/2-atan(q)
+        d=atan(q/h)
+        P=quartic(b, h, x*(1+t), upper_is_h)
+        upper*(
+            moment_integrand(q, a, d, h, b, -g.r1, c0₃₄, c2₃, P)+
+            moment_integrand(q, a, d, h, b, -g.r2, c0₃₄, c2₄, P)
+        )
+    end
+    v12, e12=endpoint_quadgk(pair12, -y, lo; rtol)
+    v34, e34=endpoint_quadgk(pair34, min(g.r1, g.r2), lo; rtol)
+    v12+v34, e12+e34
 end
 """Decompose ψ₃₀ into its classical, E/a₂₁, and elliptic contributions.
 `quadrature_error` is an adaptive quadrature estimate, not a rigorous error bound.
@@ -175,24 +246,7 @@ function psi30_parts(α, θ; Z, E, a21, rtol = 1e-11)
     α=primal(g.α)<=π/2 ? g.α : π-g.α
     cl=classical(α, acos(v), Z)
     state=E*(Z*σ*(2+r1*r2)/18-(6-ξ^2)*ξ/72)-a21*(Z*σ*v/2-(6-5ξ^2)*ξ/12)
-    ell=0.0
-    err=0.0
-    if Z!=0
-        for b in (cos(α), -cos(α))
-            y=-ξ/sqrt(oftype(primal(α), 2))
-            c0=-sqrt(oftype(primal(α), 2))*Z/576*(9Z*b^2-18Z-8b^2+8)
-            c2=sqrt(oftype(primal(α), 2))*Z/288*(b-1)*(90Z*y^2-45Z-18b-32y^2+16)
-            val, e=panel(b, y, c0, c2; rtol)
-            ell+=val
-            err+=e
-        end
-        for y in (-r1, -r2)
-            b=-v
-            val, e=panel(b, y, Z^2*(1-b^2)/18, 2Z^2*(b-1)*(2y^2-1)/9; rtol)
-            ell+=val
-            err+=e
-        end
-    end
+    ell, err=Z==0 ? (zero(cl), zero(primal(cl))) : elliptic(α, g, Z; rtol)
     (; classical = cl, state, elliptic = ell, value = cl+state+ell, quadrature_error = err)
 end
 """Numerical ψ₃₀ at an interior angle. Uses four one-dimensional elliptic quadratures."""
