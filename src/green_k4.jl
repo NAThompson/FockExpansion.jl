@@ -37,10 +37,31 @@ function rule_sum(f, pts, (x, w))
 end
 
 # Azimuthal integral ∫₀^{2π} G dφ between (α,θ) and (a,t); logarithmic at a = α, t = θ.
-function green_k4_azimuthal(α, θ, a, t, rule; levels)
+# With 1 - cos γ = δ + 2d sin²(φ/2), nearby points (δ < d) give a peak of width √(δ/d)
+# at φ = 0. On φ ∈ [0, π/2] the map sin(φ/2) = σ sinh v, σ = √(δ/(2d)), makes
+# 1 - cos γ = δ cosh²v and the integrand smooth in v; plain Gauss covers the rest.
+const AZIMUTHAL_RULE=gauss(32)
+function green_k4_azimuthal(α, θ, a, t, rule = nothing; levels = 0)
     δ=2sin((α-a)/2)^2+2sin(α)*sin(a)*sin((θ-t)/2)^2
     d=sin(α)*sin(θ)*sin(a)*sin(t)
-    2rule_sum(φ->green_k4(δ+2d*sin(φ/2)^2), graded_points(0.0, Float64(π), true, false; levels = levels+6, q = 0.3), rule)
+    x, w=AZIMUTHAL_RULE
+    s=0.0
+    lo=0.0
+    if δ<d
+        σ=sqrt(δ/(2d))
+        vmax=asinh(sin(π/4)/σ)
+        for (xi, wi) in zip(x, w)
+            v=vmax*(xi+1)/2
+            sφ=σ*sinh(v)
+            s+=wi*vmax*σ*cosh(v)/sqrt(1-sφ^2)*green_k4(δ*cosh(v)^2)
+        end
+        lo=π/2
+    end
+    for (xi, wi) in zip(x, w)
+        φ=lo+(π-lo)*(xi+1)/2
+        s+=wi*(π-lo)/2*green_k4(δ+2d*sin(φ/2)^2)
+    end
+    2s
 end
 
 # Iterated kernel G₂ = G∘G, the pure solution of (Δ+8)G₂ = G (derivations/k4/g2.py):
@@ -63,7 +84,7 @@ function solve_k4(h, α, θ; n, levels, h2 = nothing)
     A=sort(unique(vcat(split_graded(0.0, π/2, α; levels), split_graded(π/2, Float64(π), α; levels))))
     T=split_graded(0.0, Float64(π), θ; levels)
     function point(a, t)
-        v=-h(a, t)*green_k4_azimuthal(α, θ, a, t, rule; levels)/4
+        v=-h(a, t)*green_k4_azimuthal(α, θ, a, t)/4
         h2===nothing || (v+=h2(a, t)*green2_k4_azimuthal(α, θ, a, t, rule)/16)
         v*sin(t)
     end

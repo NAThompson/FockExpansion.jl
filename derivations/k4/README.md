@@ -159,3 +159,16 @@ Clausen part 𝒟 has no linear-form representation yet.
   harmonic-free integrand is used directly (smooth in φ; 48 Gauss nodes give 4e-12 in
   Float64, limited by cancellation in M's derivatives near ρ = 1).
 
+### Azimuthal kernel of the k = 4 Green's function (`kernel_s.jl`, `kernel_fast.jl`)
+
+* Exact one-variable form (checked to 13 digits in BigFloat): with C = a + d cos φ,
+  (π-γ)/sin γ = ∫₀^∞ dt/(t² - 2tC + 1) and s = t + 1/t give the φ-average of
+  -(π-γ)T₃(C)/sin γ as -2∫₂^∞ ds/√(s²-4) [(s³-3s)/(2√((s-2c₁)(s-2c₂))) - (s² + 2as +
+  4a² + 2d² - 3)/2], c₁,₂ = a ± d. It is an elliptic integral, but incomplete (the
+  substitution reaches s = ∞ at sn² = (b-d)/(a-d) < 1), and the two terms diverge
+  separately, so the closed form needs careful regularization; not done.
+* In use (`src/green_k4.jl`): for nearby points (δ < d) the peak at φ = 0 is mapped
+  with sin(φ/2) = √(δ/(2d)) sinh v, which makes 1 - cos γ = δ cosh²v and the integrand
+  smooth; 32 Gauss nodes per piece give 1e-15-1e-11 down to δ = 1e-14. psi41_z2_green
+  went from 1.4 s to 0.45 s with unchanged values (1e-14).
+
