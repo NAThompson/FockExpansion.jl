@@ -13,7 +13,7 @@ function node(α, θ; n=8, levels=8)
     ξ=F.xi_stable(α, θ); V=1/ξ-Z*(1/sin(α/2)+1/cos(α/2))
     p30=psi30(α, θ; Z, E, a21, rtol=1e-12); p31=psi31(α, θ; Z)
     s0=V*p30-E*psi20(α, θ; Z, E, a21); s1=V*p31-E*psi21(α, θ; Z)
-    p42=psi42(α, θ; Z); p41=psi41(α, θ; Z, E, a21, n, levels)
+    p42=psi42(α, θ; Z); p41=psi41(α, θ; Z, E, a21)
     p40=psi40(α, θ; Z, E, a21, n, levels)
     (; V, p30, p31, s0, s1, p42, p41, p40)
 end

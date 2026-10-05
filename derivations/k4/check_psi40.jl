@@ -17,7 +17,7 @@ Z=2.0
 ψ(a,t)=psi40(a,t; Z, E, a21, n=10, levels=10)
 function rhs(a,t)
     ξ=F.xi_stable(a,t); V=1/ξ-Z*(1/sin(a/2)+1/cos(a/2))
-    12psi41(a,t; Z, E, a21, n=10, levels=10)+2psi42(a,t; Z)-2V*psi30(a,t; Z, E, a21, rtol=1e-13)+2E*psi20(a,t; Z, E, a21)
+    12psi41(a,t; Z, E, a21)+2psi42(a,t; Z)-2V*psi30(a,t; Z, E, a21, rtol=1e-13)+2E*psi20(a,t; Z, E, a21)
 end
 for (a,t) in ((0.7,1.1),)
     h=2e-3; f0=ψ(a,t)

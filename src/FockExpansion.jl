@@ -527,6 +527,7 @@ end
 psi30(α, θ; kwargs...) = psi30_parts(α, θ; kwargs...).value
 include("green.jl")
 include("green_k4.jl")
+include("feynman_k4.jl")
 include("fourth_order.jl")
 include("langner.jl")
 export LangnerTable, psi30_langner

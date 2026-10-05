@@ -42,8 +42,28 @@ and ψ⁽³⁾ to 1e-17, and finite differences confirm the ψ⁽²⁾ equation 
 
 On S³ the Coulomb factors are chord distances to three points:
 ξ = |x-e₂|/√2, 2sin(α/2) = |x-e₁|, 2cos(α/2) = |x+e₁|, so V₁ = 2/|x-e₁| + 2/|x+e₁|.
-ψ⁽²⁾ has two-centre (±e₁, e₂) sources, the same structure that gives ψ₃₀ its
-elliptic panels; a closed form for it is open.
+
+### ψ⁽²⁾ as a one-dimensional integral (`feynman41.jl`, `src/feynman_k4.jl`)
+
+The source is B Σ± Q±(x)/(d± ξ) with Q± = -1/3 - (7/3)w + (5/3)w² ± uw
+(u = cos α, w = sin α cos θ). Three steps make it elementary:
+
+1. Feynman: 1/(dξ) = (1/(√2π)) ∫₀¹ dt/(√(t(1-t)) ℓ), ℓ = 1 - p·x, p± = (±t, 1-t, 0, 0):
+   a point source moving along the arc from e₂ to ±e₁.
+2. Polynomials as p-derivatives: x_i/ℓ = -∂ᵢ log ℓ and x_i x_j/ℓ = ∂ᵢ∂ⱼ(ℓ log ℓ).
+3. 1/ℓ, log ℓ and ℓ log ℓ depend on x only through c = p̂·x = cos γ. With U = W/sin γ,
+   W'' + 9W = -f sin γ/4 + κ sin 3γ, solved by variation of parameters. Only
+   polynomials in cos γ, log ℓ and A(γ) = (2/√(1-ρ²)) atan((1+ρ)tan(γ/2)/√(1-ρ²)) occur.
+
+So ψ⁽²⁾ = (B/(√2π)) ∫₀¹ dt/√(t(1-t)) Σ± [-U_{1/ℓ}/3 + (7/3)∂₂U_{log ℓ} + (5/3)∂₂²U_{ℓlog ℓ}
+± ∂₁∂₂U_{ℓlog ℓ}] - 0.0048977716325816 Y₄₀ + 0.0145608238240513 Y₄₂, the
+last two terms removing the harmonic part (fitted against the Green's function to
+8e-16; no closed form found by PSLQ). Coefficients that vanish as ρ → 1 are kept in
+factored form (`zonal_coeffs.py`), which makes the integrand stable in Float64 down to
+t = 1e-32 (checked against 768-bit evaluation); it grows like log t at both ends.
+A 608-node graded rule gives about 2e-15 in about 15 ms, versus 1.4 s for the
+two-dimensional Green's-function quadrature. Each zonal solution is checked against
+quadrature of its defining integrals (1e-16).
 
 ## Residual of the truncated series (`residual3.jl`, `residual_study.jl`)
 

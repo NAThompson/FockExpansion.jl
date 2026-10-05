@@ -39,9 +39,13 @@ end
         V1 = 1/sin(a/2)+1/cos(a/2)
         24psi42(a, t; Z = 1.0)-2*B*ς*sin(a)*cos(t)/2/ξ(a, t)+2V1*B*ξ(a, t)*(5ξ(a, t)^2-6)/12
     end
-    z2(a, t) = F4.psi41_z2(a, t; n = 10, levels = 10)
+    z2(a, t) = F4.psi41_z2(a, t)
     @test lambda2(z2, 0.7, 1.1)-32z2(0.7, 1.1) ≈ h2(0.7, 1.1) atol=1e-6
     @test F4.psi41_z2(π-0.7, 1.1) ≈ F4.psi41_z2(0.7, 1.1) atol=1e-15
+    # The one-dimensional representation against the Green's function.
+    for (a, t) in ((0.7, 1.1), (1.5, 0.3), (0.05, 1.5))
+        @test F4.psi41_z2(a, t) ≈ F4.psi41_z2_green(a, t; n = 10, levels = 10) atol=1e-13
+    end
     # Harmonic part: solvability of the ψ₄₀ equation, ⟨Y₄ₗ, 12ψ₄₁+2ψ₄₂-2Vψ₃₀+2Eψ₂₀⟩ = 0.
     # The pure parts of ψ₄₁ are orthogonal to Y₄ₗ, so only its harmonic part enters.
     Z, E, a21 = 1.7, -2.2, 0.31
@@ -53,9 +57,8 @@ end
     end
     @test psi41(π-0.7, 1.1; Z, E, a21) ≈ psi41(0.7, 1.1; Z, E, a21) atol=1e-14
     # psi41 assembles its components with the closed forms above.
-    let a = 0.7, t = 1.1, E = -2.9
-        p1(a, t) = (π-2)/(2880π)*(3*(32*E-15)-8*(12*E-5)*ξ(a, t)^2)
-        @test psi41(a, t; Z, E, a21)-Z^2*F4.psi41_z2(a, t)-F4.psi41_harmonic(a, t; Z, E, a21) ≈
-              Z*p1(a, t)+Z^3*p3(a, t) atol=1e-15
-    end
+    a, t = 0.7, 1.1
+    z1 = (π-2)/(2880π)*(3*(32*E-15)-8*(12*E-5)*ξ(a, t)^2)
+    @test psi41(a, t; Z, E, a21)-Z^2*F4.psi41_z2(a, t)-F4.psi41_harmonic(a, t; Z, E, a21) ≈
+          Z*z1+Z^3*p3(a, t) atol=1e-15
 end

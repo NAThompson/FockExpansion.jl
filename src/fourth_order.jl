@@ -41,8 +41,9 @@ function psi41_harmonic(α, θ; Z, E, a21)
     (c0+c)*harmonic40(α, θ)+(c2+4c)*harmonic42(α, θ)
 end
 
-"""Z² component of ψ₄₁ without Y₄ₗ admixture, by quadrature against the S³ Green's function."""
-function psi41_z2(α::Real, θ::Real; n = 8, levels = 8)
+"""Z² component of ψ₄₁ by quadrature against the S³ Green's function (about a second);
+an independent check of `psi41_z2`."""
+function psi41_z2_green(α::Real, θ::Real; n = 8, levels = 8)
     solve_k4(psi41_z2_source, Float64(α), Float64(θ); n, levels)
 end
 
@@ -79,13 +80,13 @@ end
 
 """ψ₄₁, the coefficient of R⁴log R, at an interior angle.
 Includes its Y₄ₗ part, which is fixed by the ψ₄₀ equation and depends on E and a₂₁.
-Float64 only; each call takes a two-dimensional quadrature (about a second)."""
-function psi41(α, θ; Z, E, a21, n = 8, levels = 8)
+Float64 only (about 15 ms)."""
+function psi41(α, θ; Z, E, a21)
     g=geometry(α, θ)
     (; α, θ, v, ξ)=g
     s=sin(α)
     z1=(π-2)/(2880π)*(3*(32*E-15)-8*(12*E-5)*ξ^2)
     z3=-(π-2)/(120π)*(4+5s)*v
-    z2=iszero(Z) ? 0.0 : psi41_z2(α, θ; n, levels)
+    z2=iszero(Z) ? 0.0 : psi41_z2(α, θ)
     Z*z1+Z^2*z2+Z^3*z3+psi41_harmonic(α, θ; Z, E, a21)
 end
