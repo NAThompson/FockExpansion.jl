@@ -106,3 +106,26 @@ on α only:
     ψ₄₀⁽⁴⁾ = sinα/36 + 7/288 + 2(4cos²α-1)/(135π)            (pure)
 
 Z¹ to Z³ involve V × (dilogarithmic and elliptic parts of ψ₃₀ and ψ₂₀).
+
+### Reductions of ψ₄₀ (`a21_sector.jl`, `e_sector.jl`)
+
+Write L_k⁺ for the pure inverse of Λ² - k(k+4) and P₄ for the projection onto the
+k = 4 harmonics.
+
+* **a₂₁ sector.** ψ₃₀ depends on a₂₁ only through -a₂₁ψ₃₁/(ZB), B = (π-2)/(3π). With
+  h₄₁ = 24ψ₄₂ - 2Vψ₃₁ + 2Eψ₂₁ this gives exactly ∂ψ₄₀/∂a₂₁ = -ψ₄₁ᵖᵘʳᵉ/(ZB)
+  (checked to 1e-12). Reason: ∂Ψ/∂a₂₁ is itself a local solution, R²Y₂₁ + ….
+* **E sector.** (H-E)∂_EΨ = Ψ gives (Λ²-32)∂_Eψ₄₀ = 12∂_Eψ₄₁ - 2V∂_Eψ₃₀ - E/3 + 2ψ₂₀.
+  Everything is algebraic except 2Zχ, and the resolvent identity
+  L₄⁺χ = (L₄⁺h_χ - χ + P₄χ)/20, with (Λ²-12)χ = h_χ = 2ς/(3ξ sin α) - 8(π-2)v/(3π),
+  reduces it to χ itself and the two-centre algebraic source h_χ (checked to 3e-13; the
+  P₄χ part is again ∝ 1-2sin²α sin²θ).
+* **Algebraic two-centre sources** (polynomial/(d±ξ)) are one-dimensional Feynman
+  integrals with the same zonal solutions as ψ₄₁⁽²⁾; sources depending on one centre
+  only are ODEs in one angle.
+
+What remains is the pure-Z core L₄⁺[-2V × (Clausen part 𝒟 and elliptic panels of ψ₃₀)].
+In the Feynman framework each multiplication by V adds one integration parameter, so
+this core comes out as a two-dimensional integral unless one integral is done in
+closed form, which is what the ψ₃₀ derivation achieved at k = 3.
+
