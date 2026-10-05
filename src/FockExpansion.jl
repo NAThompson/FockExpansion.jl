@@ -360,7 +360,9 @@ function panel(b, y, c0, c2; rtol)
         L=primal(map.zb-map.za)
         # The double-root limit t → 0 (measure zero) and extreme ranges fall back.
         if isfinite(L) && L<=60
-            n=panel_nodes_table(primal(b), L, rtol)
+            # The table is calibrated on values; derivatives need more nodes, so
+            # duals keep the envelope.
+            n=b isa Float64 ? panel_nodes_table(b, L, rtol) : 0
             iszero(n) && (n=panel_nodes(L, rtol))
             val=panel_fixed(b, y, c0, c2, map, n)
             return val, max(rtol, PANEL_ERROR)*abs(primal(val))
