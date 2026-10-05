@@ -175,8 +175,9 @@ function endpoint_quadgk(f, σ, lo; rtol)
     quadgk(integrand, lo, hi, 2hi; rtol, atol = rtol/100, norm = adnorm, order)
 end
 
-"""One elliptic moment combination c0*N₀(b, y) + c2*N₂(b, y), with its quadrature error estimate."""
-function panel(b, y, c0, c2; rtol)
+"""One elliptic moment combination c0*N₀(b, y) + c2*N₂(b, y), with its quadrature error estimate,
+by adaptive quadrature."""
+function panel_adaptive(b, y, c0, c2; rtol)
     π=typedpi(b)
     h=sqrt((1+b)/(1-b))
     # Chart decisions use only primal values, never dual partials at a tie.
@@ -235,8 +236,148 @@ function elliptic(α, g, Z; rtol)
     v34, e34=endpoint_quadgk(pair34, min(g.r1, g.r2), lo; rtol)
     v12+v34, e12+e34
 end
+# Fixed-rule evaluation of the panel integral ∫₀ᵘ (2/π) n(q)/√T(q) dq.
+# The quartic factors exactly as T = (1-b)(q²-s₁)(q²-s₂) = Q(q)F(q), where the
+# real quadratic Q = (q-m)² ± t² holds the two roots nearest the endpoint u
+# and F > 0 on [0,u]. As y → 0 those roots pinch onto u and the integrand
+# becomes nearly singular. The substitution q = m + t sinh z (or m - t cosh z)
+# gives dq/√Q = dz exactly, so the z-integrand n(q)/√F(q) is smooth and a
+# fixed Gauss–Legendre rule converges, with a node count growing like
+# log(1/|y|). Differences that vanish as y → 0 use T(u) = 4y²u², i.e.
+# (u²-s₁)(u²-s₂) = 4y²u²/(1-b), so none is formed by cancellation.
+struct PanelMap{T}
+    h::T
+    za::T
+    zb::T
+    m::T
+    t::T
+    cosh_branch::Bool # q = m - t cosh z, else q = m + t sinh z
+    f1::T             # F(q) = (1-b)(q² + f1 q + f0)
+    f0::T
+end
+acosh1p(δ) = log1p(δ+sqrt(δ*(2+δ))) # acosh(1+δ), accurate for small δ
+function panelmap(b, y)
+    h2=(1+b)/(1-b)
+    h=sqrt(h2)
+    u=primal(h)<=1 ? h : one(h)
+    u2=u*u
+    # B-u², with B=(s₁+s₂)/2; fma forms b∓2y² with a single rounding.
+    Bu=primal(h)<=1 ? -fma(2y, y, b)/(1-b) : fma(-2y, y, b)/(1-b)
+    P=4y^2*u2/(1-b) # (u²-s₁)(u²-s₂)
+    disc=fma(Bu, Bu, -P) # B²-s₁s₂
+    if primal(disc)<0
+        # Complex pair r, r̄ with r=√s₁: Q=(q-m)²+t², m=Re r, t=Im r.
+        B=Bu+u2
+        sq=sqrt(-disc)
+        a=hypot(B, sq) # |s₁|
+        if primal(B)>=0
+            rr=sqrt((a+B)/2)
+            ri=sq/(2rr)
+        else
+            ri=sqrt((a-B)/2)
+            rr=sq/(2ri)
+        end
+        # ρ=r-u=(s₁-u²)/(r+u), with s₁-u²=Bu+i sq
+        den=(rr+u)^2+ri^2
+        ρr=(Bu*(rr+u)+sq*ri)/den
+        t=ri
+        m=u+ρr
+        PanelMap(h, asinh(-m/t), asinh(-ρr/t), m, t, false, 2rr, a)
+    elseif primal(Bu+u2)>0
+        # Two roots u² < s₁ ≤ s₂: Q=(q-r₁)(q-r₂)=(q-m)²-t², r₁=√s₁ ≥ u.
+        sd=sqrt(disc)
+        δ2=-(Bu+sd) # u²-s₂
+        δ1=P/δ2     # u²-s₁ without cancellation
+        r1=sqrt(u2-δ1)
+        r2=sqrt(u2-δ2)
+        t=sd/(r1+r2) # (r₂-r₁)/2
+        ε1=-δ1/(r1+u) # r₁-u
+        PanelMap(h, acosh1p(ε1/t), acosh1p(r1/t), r1+t, t, true, r1+r2, r1*r2)
+    else
+        # Two negative roots: Q=q²-s_near, F=(1-b)(q²-s_far).
+        sd=sqrt(disc)
+        sfar=Bu+u2-sd
+        t=sqrt(-h2/sfar) # √(-s_near), s_near s_far=h²
+        PanelMap(h, zero(t), asinh(u/t), zero(t), t, false, zero(t), -sfar)
+    end
+end
+# Gauss–Legendre rules on [-1,1] with 8, 12, …, 96 nodes.
+const PANEL_RULES=[gauss(n) for n = 8:4:96]
+# Node count for z-range L and d=-log₁₀(rtol) requested digits: an upper
+# envelope of the nodes needed against 200-bit references over a 31×32 grid of
+# b∈[-0.9999,0.9999], y∈[-1,-1e-10]. Relative accuracy is limited to about
+# 1e-14 (worst near b=±0.9999), so d is capped at 14.
+function panel_nodes(L, rtol)
+    d=clamp(-log10(rtol), 4, 14)
+    n=(0.83d+4.3)+(0.18d-0.35)*L
+    clamp(4ceil(Int, n/4), 8, 96)
+end
+const PANEL_ERROR=1e-14
+function panel_fixed(b, y, c0, c2, map::PanelMap, n)
+    π=typedpi(b)
+    (; h, za, zb, m, t, cosh_branch, f1, f0)=map
+    x, w=PANEL_RULES[n÷4-1]
+    half=(zb-za)/2
+    mid=(zb+za)/2
+    ih=1/h
+    acc=zero(half*c0)
+    @inbounds for i in eachindex(x)
+        z=mid+half*x[i]
+        q=cosh_branch ? m-t*cosh(z) : m+t*sinh(z)
+        iq=1/q
+        a=atan(iq)
+        d=atan(q*ih)
+        numerator=c0*(a-d)*(a+d)+c2*((h*d*iq)^2-(q*a)^2)
+        acc+=w[i]*numerator/sqrt(q*(q+f1)+f0)
+    end
+    (2/π)*half*acc/sqrt(1-b)
+end
+"""Panel integral ∫₀ᵘ (2/π)(c₀n₀(q)+c₂n₂(q))/√T(q) dq for one pair (b,y).
+Returns (value, error estimate). Float64 inputs (including ForwardDiff duals)
+use a fixed Gauss–Legendre rule after removing the endpoint near-singularity;
+other number types use adaptive quadrature with tolerance `rtol`.
+"""
+function panel(b, y, c0, c2; rtol)
+    b, y=promote(float(b), float(y))
+    if primal(b) isa Float64
+        map=panelmap(b, y)
+        L=primal(map.zb-map.za)
+        # The double-root limit t → 0 (measure zero) and extreme ranges fall back.
+        if isfinite(L) && L<=60
+            val=panel_fixed(b, y, c0, c2, map, panel_nodes(L, rtol))
+            return val, max(rtol, PANEL_ERROR)*abs(primal(val))
+        end
+    end
+    panel_adaptive(b, y, c0, c2; rtol)
+end
+# The four moment combinations of ψ₃₀ for Float64 inputs, one fixed-rule panel each.
+# Each panel has its own map z → q, so unlike `elliptic` the pairs cannot share
+# arctangents; removing the near-singularity analytically more than pays for that
+# except at interior points with loose rtol.
+function elliptic_fixed(α, g, Z; rtol)
+    r=sqrt(oftype(primal(α), 2))
+    y=-g.ξ/r
+    ell=zero(α*Z)
+    err=zero(primal(ell))
+    for b in (cos(α), -cos(α))
+        c0=-r*Z/576*(9Z*b^2-18Z-8b^2+8)
+        c2=r*Z/288*(b-1)*(90Z*y^2-45Z-18b-32y^2+16)
+        val, e=panel(b, y, c0, c2; rtol)
+        ell+=val
+        err+=e
+    end
+    b=-g.v
+    for yr in (-g.r1, -g.r2)
+        val, e=panel(b, yr, Z^2*(1-b^2)/18, 2Z^2*(b-1)*(2yr^2-1)/9; rtol)
+        ell+=val
+        err+=e
+    end
+    ell, err
+end
 """Decompose ψ₃₀ into its classical, E/a₂₁, and elliptic contributions.
-`quadrature_error` is an adaptive quadrature estimate, not a rigorous error bound.
+`quadrature_error` is an estimate, not a rigorous error bound: for Float64 inputs it is
+max(rtol, 1e-14) times each panel (from the calibration of the fixed rule), otherwise
+the adaptive quadrature estimate.
 Inputs are dimensionless and a₂₁ uses the total-projection convention.
 """
 function psi30_parts(α, θ; Z, E, a21, rtol = 1e-11)
@@ -246,7 +387,13 @@ function psi30_parts(α, θ; Z, E, a21, rtol = 1e-11)
     α=primal(g.α)<=π/2 ? g.α : π-g.α
     cl=classical(α, acos(v), Z)
     state=E*(Z*σ*(2+r1*r2)/18-(6-ξ^2)*ξ/72)-a21*(Z*σ*v/2-(6-5ξ^2)*ξ/12)
-    ell, err=Z==0 ? (zero(cl), zero(primal(cl))) : elliptic(α, g, Z; rtol)
+    ell, err=if Z==0
+        (zero(cl), zero(primal(cl)))
+    elseif primal(α) isa Float64
+        elliptic_fixed(α, g, Z; rtol)
+    else
+        elliptic(α, g, Z; rtol)
+    end
     (; classical = cl, state, elliptic = ell, value = cl+state+ell, quadrature_error = err)
 end
 """Numerical ψ₃₀ at an interior angle. Uses four one-dimensional elliptic quadratures."""

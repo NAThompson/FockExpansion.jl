@@ -44,7 +44,9 @@ The third-order coefficient is the sum of three pieces:
 The mathematical reduction expresses the elliptic contributions through one two-variable function and its derivative.
 For numerical evaluation, this version uses the equivalent pair of moments `N₀` and `N₂`, combined into one integral per contribution.
 The moments now use an equivalent elementary kernel with arctangent squares and finite endpoint limits, removing the logarithmic endpoint singularity.
-Full evaluation takes about 14–15 microseconds.
+For Float64 inputs (and ForwardDiff duals of them), each integral is evaluated with a fixed Gauss–Legendre rule after a substitution that removes the endpoint near-singularity analytically, so the cost hardly depends on position.
+On one x86 machine (Julia 1.12) a full evaluation takes about 5–7 microseconds at `rtol` from 1e-11 to 1e-14, including near-coalescence points, where adaptive quadrature took up to 49 microseconds.
+BigFloat inputs use adaptive quadrature.
 
 
 ## Available coefficients
