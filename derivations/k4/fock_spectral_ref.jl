@@ -6,9 +6,7 @@ include("fock_spectral.jl")
 setprecision(BigFloat, 256)
 # Coefficients of Y₄₀ = 4cos²α-1 and Y₄₂ = sin²α P₂(cos θ) in ψ₄₁.
 function harmonic41(g, ψ)
-    H=sharmonics(g, 4)
-    G=[sip(g, a, b) for a in H, b in H]
-    c=G\[sip(g, h, ψ[(4, 1)]) for h in H]
+    c=hcoef(HBasis(g, 4), ψ[(4, 1)])
     c[1], c[3]
 end
 ns=(48, 64)

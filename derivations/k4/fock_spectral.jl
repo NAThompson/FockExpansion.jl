@@ -62,9 +62,11 @@ function sharmonics(g::SGrid{T}, k) where {T}
         for j in 2:m
             Cn=(2(j+l)*x1.*C1-(j+2l)*C0)/j; C0, C1=C1, Cn; Cm=Cn
         end
-        Pl=zeros(T, size(x1))
-        for kk in 0:l÷2
-            Pl.+=T((-1)^kk*binomial(l, kk)*binomial(2l-2kk, l))/2^l .* x2.^(l-2kk).*s2.^kk
+        # sin^l α P_l(cos θ) = Q_l(x2, s2): (j+1)Q_{j+1} = (2j+1)x2 Q_j - j s2 Q_{j-1}
+        Q0=ones(T, size(x1)); Pl=l==0 ? Q0 : x2
+        Q1=x2
+        for j in 1:l-1
+            Qn=((2j+1)*x2.*Q1-j*s2.*Q0)/(j+1); Q0, Q1=Q1, Qn; Pl=Qn
         end
         push!(H, Cm.*Pl)
     end
@@ -82,35 +84,50 @@ function resonant_mask(λX, λY, nres)
     m=falses(size(d)); m[p[1:nres]].=true
     m
 end
-function ssolve(g::SGrid{T}, o::SOps{T}, wh, H) where {T}
+# The harmonics as columns of an n²×m matrix with a factored Gram matrix, built once per k:
+# projections are then one matrix-vector product instead of m² grid sums.
+struct HBasis{T}; H::Vector{Matrix{T}}; Hm::Matrix{T}; WHm::Matrix{T}; G::LU{T,Matrix{T},Vector{Int}}; end
+function HBasis(g::SGrid{T}, k) where {T}
+    H=iseven(k) ? sharmonics(g, k) : Matrix{T}[]
+    Hm=isempty(H) ? zeros(T, g.n^2, 0) : reduce(hcat, vec.(H))
+    WHm=vec(g.W).*Hm
+    HBasis{T}(H, Hm, WHm, lu(Hm'*WHm))
+end
+Base.isempty(hb::HBasis)=isempty(hb.H)
+# coefficients c with ⟨H_l, f⟩ = Σ_m G_lm c_m, for the inner product with weight W·u
+hcoef(hb::HBasis, f, u=nothing)=hb.G\(hb.WHm'*(u===nothing ? vec(f) : vec(f).*vec(u)))
+hcombo(hb::HBasis, c)=reshape(hb.Hm*c, size(hb.H[1]))
+function ssolve(g::SGrid{T}, o::SOps{T}, wh, hb::HBasis{T}) where {T}
     Rt=o.iVX*(-wh./16)*o.iVY'
-    res=resonant_mask(o.λX, o.λY, length(H))
+    res=resonant_mask(o.λX, o.λY, length(hb.H))
     F=[res[i, j] ? zero(T) : Rt[i, j]/(o.λX[i]-o.λY[j]) for i in 1:g.n, j in 1:g.n]
     ψ=o.VX*F*o.VY'
-    isempty(H) && return ψ
-    G=[sip(g, a, b) for a in H, b in H]
-    ψ-sum(c*h for (c, h) in zip(G\[sip(g, h, ψ) for h in H], H))
+    isempty(hb) && return ψ
+    ψ-hcombo(hb, hcoef(hb, ψ))
 end
-function sfock(g::SGrid{T}; Z, E, kmax, free=Dict{Tuple{Int,Int},Any}()) where {T}
+# `onk(k, ψ, seconds)` is called after each order; with `keep = 2` only the two latest orders
+# (all the recurrence needs) are kept, for long runs.
+function sfock(g::SGrid{T}; Z, E, kmax, free=Dict{Tuple{Int,Int},Any}(), keep=typemax(Int), onk=nothing) where {T}
     Z, E=T(Z), T(E)
     wV=2sqrt(T(2))*sin.(g.α).*cos.(g.β./2)-4Z*sin.(g.β).*(cos.(g.α./2)+sin.(g.α./2))
     ψ=Dict{Tuple{Int,Int},Matrix{T}}((0, 0)=>ones(T, g.n, g.n))
     get0(k, p)=get(ψ, (k, p), zeros(T, g.n, g.n))
     for k in 1:kmax
+        t0=time()
         o=SOps(g, k*(k+4))
-        H=iseven(k) ? sharmonics(g, k) : Matrix{T}[]
+        hb=HBasis(g, k)
         for p in (k÷2):-1:0
             wh(ψk1)=g.w.*(2(k+2)*(p+1)*ψk1+(p+1)*(p+2)*get0(k, p+2)+2E*get0(k-2, p))-2wV.*get0(k-1, p)
             if iseven(k) && p<k÷2 && haskey(ψ, (k, p+1))
-                G=[sip(g, a, b) for a in H, b in H]
-                s=[sum(g.W./g.w.*h.*wh(get0(k, p+1))) for h in H]
-                cc=-(G\s)./(2(k+2)*(p+1))
-                ψ[(k, p+1)]+=sum(cc[l]*H[l] for l in eachindex(H))
+                cc=-hcoef(hb, wh(get0(k, p+1)), 1 ./ g.w)./(2(k+2)*(p+1))
+                ψ[(k, p+1)]+=hcombo(hb, cc)
             end
-            ψkp=ssolve(g, o, wh(get0(k, p+1)), H)
-            iseven(k) && p==0 && (ψkp+=sum(T(get(free, (k, l), 0))*H[l+1] for l in 0:k÷2))
+            ψkp=ssolve(g, o, wh(get0(k, p+1)), hb)
+            iseven(k) && p==0 && (ψkp+=sum(T(get(free, (k, l), 0))*hb.H[l+1] for l in 0:k÷2))
             ψ[(k, p)]=ψkp
         end
+        onk===nothing || onk(k, ψ, time()-t0)
+        for kk in collect(keys(ψ)); kk[1]<=k-keep && delete!(ψ, kk); end
     end
     ψ
 end
