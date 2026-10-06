@@ -3,13 +3,14 @@
 # where the matrix [Φⱼ(ρ_out, Ωᵢ)] (rows weighted by the S³ measure) becomes singular.
 # E_D(ρ_out) is the ground-state energy of helium confined to the hypersphere and decreases
 # to the free-atom energy as ρ_out grows.
-# usage: julia -t 4 --project=. dirichlet.jl T n K kfree "ρ1,ρ2,..." Emin Emax nE
+# usage: julia -t 4 --project=. dirichlet.jl T n K kfree "ρ1,ρ2,..." Emin Emax nE   (scan)
+#        julia -t 4 --project=. dirichlet.jl T n K kfree ρ Elo Ehi root           (root)
 using DoubleFloats, Printf, LinearAlgebra
 include("../k4/fock_spectral.jl")
 T=ARGS[1]=="Double64" ? Double64 : Float64
 n=parse(Int, ARGS[2]); K=parse(Int, ARGS[3]); kfree=parse(Int, ARGS[4])
 ρs=T.(parse.(Float64, split(ARGS[5], ",")))
-Emin, Emax, nE=parse(Float64, ARGS[6]), parse(Float64, ARGS[7]), parse(Int, ARGS[8])
+Emin, Emax=parse(Float64, ARGS[6]), parse(Float64, ARGS[7]); nE=ARGS[8]=="root" ? 0 : parse(Int, ARGS[8])
 g=SGrid(T, n)
 # angular collocation: tensor Gauss-Chebyshev nodes in (α, θ), weights √(sin²α sin θ)
 m=16
@@ -52,9 +53,40 @@ function smin(E)
     end
 end
 @printf("T=%s n=%d K=%d kfree=%d (%d free constants), %d angles\n", T, n, K, kfree, length(frees), length(angs))
-for E in range(Emin, Emax; length=nE)
-    t=@elapsed s=smin(E)
-    @printf("E=%.6f  σmin/σmax:", E)
-    for (ρ, v) in zip(ρs, s); @printf("  ρ=%.1f %.2e", Float64(ρ), v); end
-    @printf("   (%.0f s)\n", t); flush(stdout)
+if ARGS[8]=="root"
+    # σmin(E) ≈ c|E-E_D| near the root: intersect the two sides of the V and shrink.
+function vroot(f, a, b)
+    fa, fb=f(a), f(b)
+    m=(a+b)/2; fm=f(m)
+    for it in 1:30
+        # three points bracketing the minimum; slopes from the outer pairs
+        if fa<fm || fb<fm
+            error("minimum not bracketed: f($a)=$fa, f($m)=$fm, f($b)=$fb")
+        end
+        sl, sr=(fm-fa)/(m-a), (fb-fm)/(b-m)   # sl < 0 < sr
+        # line through (a,fa) slope sl and line through (b,fb) slope sr; take the side with
+        # the smaller value at m as the reference V
+        E=(fb-fa+sl*a-sr*b)/(sl-sr)
+        E=clamp(E, a+(m-a)/10, b-(b-m)/10)
+        # a step that lands on m gives no information: probe the larger side instead
+        abs(E-m)<(b-a)/1000 && (E=b-m>m-a ? m+(b-m)/3 : m-(m-a)/3)
+        fE=f(E)
+        @printf("  it %2d  E = %.12f  σmin/σmax = %.2e  bracket %.1e\n", it, E, fE, b-a); flush(stdout)
+        if E<m
+            fE<fm ? ((b, fb, m, fm)=(m, fm, E, fE)) : ((a, fa)=(E, fE))
+        else
+            fE<fm ? ((a, fa, m, fm)=(m, fm, E, fE)) : ((b, fb)=(E, fE))
+        end
+        b-a<1e-10 && break
+    end
+    m
+end
+    @printf("E_D(ρ=%.2f) = %.12f\n", Float64(ρs[1]), vroot(E->smin(E)[1], Emin, Emax))
+else
+    for E in range(Emin, Emax; length=nE)
+        t=@elapsed s=smin(E)
+        @printf("E=%.6f  σmin/σmax:", E)
+        for (ρ, v) in zip(ρs, s); @printf("  ρ=%.1f %.2e", Float64(ρ), v); end
+        @printf("   (%.0f s)\n", t); flush(stdout)
+    end
 end
