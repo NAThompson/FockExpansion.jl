@@ -135,6 +135,17 @@ is 1.43e-14 (Float64), 9.41e-37 (128 bits), 4.08e-56 (192 bits), and 1.66e-75
 it does not establish additional physical digits of the ground-state inputs.
 The residual of a radially truncated Fock expansion is a separate quantity.
 
+### Fourth-order logarithmic coefficients
+
+`psi42(α, θ; Z)` is the closed-form coefficient of R⁴log²R.
+`psi41(α, θ; Z, E, a21)` is the coefficient of R⁴log R. Its Z¹ and Z³ parts are
+closed forms (Liverts & Barnea 2015, Table I); its Z² part is computed by
+quadrature against the S³ Green's function of the resonant k = 4 operator
+(about a second per call, Float64 only). Its Y₄ₗ harmonic part is not free: the
+regularity condition of the ψ₄₀ equation fixes it in terms of Z, E and a₂₁.
+See `derivations/k4/README.md` for the derivation, checks, and the exact
+residual of the truncated series.
+
 ### Alternative third-order evaluators
 
 `psi30_green(α, θ; Z, E, a21, rtol=1e-8)` evaluates the full Liverts

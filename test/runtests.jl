@@ -73,3 +73,6 @@ include("forwarddiff.jl")
 include("panels.jl")
 
 include("alternative_representations.jl")
+include("collisions.jl")
+
+include("fourth_order.jl")

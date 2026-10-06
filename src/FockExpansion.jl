@@ -7,7 +7,7 @@ adnorm(x::Real) = abs(x)
 adnorm(x::ForwardDiff.Dual) =
     max(adnorm(ForwardDiff.value(x)), maximum(adnorm, ForwardDiff.partials(x)))
 typedpi(x) = oftype(primal(float(x)), Base.MathConstants.pi)
-export psi00, psi10, psi20, psi21, psi31, psi30, psi30_parts
+export psi00, psi10, psi20, psi21, psi31, psi30, psi30_parts, psi40, psi41, psi42
 
 # L(u) = u log|2 sin u| + Cl₂(2u)/2 and T(u) = -u log|2 cos u| + Cl₂(π-2u)/2,
 # given s = sin u and c = cos u so that callers can share them.
@@ -37,7 +37,10 @@ function geometry(α, θ)
     )
     r1, r2=cos(α/2), sin(α/2)
     v=sin(α)*cos(θ)
-    (; α, θ, r1, r2, σ = r1+r2, v, ξ = sqrt(1-v))
+    # 1-v and 1+v without cancellation near the coalescences v = ±1
+    omv=2sin(π/4-α/2)^2+2sin(α)*sin(θ/2)^2
+    opv=2sin(π/4-α/2)^2+2sin(α)*cos(θ/2)^2
+    (; α, θ, r1, r2, σ = r1+r2, v, ξ = sqrt(omv), opv)
 end
 psi00(α, θ) = (geometry(α, θ); 1.0)
 function psi10(α, θ; Z)
@@ -153,12 +156,13 @@ end
 # Quartic (1-q²)((1+b)-(1-b)q²) at q = upper*t, with m = 1-t² computed as (1-t)(1+t).
 # Written as a sum of nonnegative terms, so the zero at t = 1 costs no relative precision.
 # The caller states which limit applies, so primal ties never switch formulas under duals.
-quartic(b, h, m, upper_is_h) = upper_is_h ? m*h^2*((1+b)*m-2b) : m*((1-b)*m+2b)
+# opb = 1+b and omb = 1-b are passed separately: b = ±cos α rounds to ±1 for tiny α.
+quartic(b, h, m, upper_is_h, opb, omb) = upper_is_h ? m*h^2*(opb*m-2b) : m*(omb*m+2b)
 
 # Moment integrand c0*N₀ + c2*N₂ at q, given a = atan(1/q), d = atan(q/h) and the quartic P.
-function moment_integrand(q, a, d, h, b, y, c0, c2, P)
+function moment_integrand(q, a, d, h, b, y, c0, c2, P, opb)
     π=typedpi(q)
-    iszero(q) && return (2/π)*(c0*π^2/4+c2)/sqrt(1+b)
+    iszero(q) && return (2/π)*(c0*π^2/4+c2)/sqrt(opb)
     numerator=c0*(a-d)*(a+d)+c2*((h*d/q)^2-(q*a)^2)
     (2/π)*numerator/sqrt(P+4*y^2*q^2)
 end
@@ -187,16 +191,16 @@ end
 
 """One elliptic moment combination c0*N₀(b, y) + c2*N₂(b, y), with its quadrature error estimate,
 by adaptive quadrature."""
-function panel_adaptive(b, y, c0, c2; rtol)
+function panel_adaptive(b, y, c0, c2; rtol, opb = 1+b, omb = 1-b)
     π=typedpi(b)
-    h=sqrt((1+b)/(1-b))
+    h=sqrt(opb/omb)
     # Chart decisions use only primal values, never dual partials at a tie.
     upper_is_h=primal(h)<=1
     upper=upper_is_h ? h : one(h)
     function integrand(t, x)
         q=upper*t
-        P=quartic(b, h, x*(1+t), upper_is_h)
-        upper*moment_integrand(q, π/2-atan(q), atan(q/h), h, b, y, c0, c2, P)
+        P=quartic(b, h, x*(1+t), upper_is_h, opb, omb)
+        upper*moment_integrand(q, π/2-atan(q), atan(q/h), h, b, y, c0, c2, P, opb)
     end
     endpoint_quadgk(integrand, abs(y), zero(primal(h)); rtol)
 end
@@ -212,8 +216,9 @@ function elliptic(α, g, Z; rtol)
     # Panels 1 and 2: b = ±c with c = cos(α) ≥ 0 because α ≤ π/2, so h₁ ≥ 1 ≥ h₂.
     c=cos(α)
     y=-g.ξ/r
-    h1=sqrt((1+c)/(1-c))
+    h1=g.r1/g.r2 # √((1+c)/(1-c)) = cot(α/2)
     h2=inv(h1)
+    opc, omc=2g.r1^2, 2g.r2^2
     c0₁₂=-r*Z/576*(9Z*c^2-18Z-8c^2+8)
     c2₁=r*Z/288*(c-1)*(90Z*y^2-45Z-18c-32y^2+16)
     c2₂=r*Z/288*(-c-1)*(90Z*y^2-45Z+18c-32y^2+16)
@@ -221,25 +226,26 @@ function elliptic(α, g, Z; rtol)
         m=x*(1+t)
         A=atan(t)
         D=atan(t/h1)
-        moment_integrand(t, π/2-A, D, h1, c, y, c0₁₂, c2₁, quartic(c, h1, m, false))+
-        h2*moment_integrand(h2*t, π/2-D, A, h2, -c, y, c0₁₂, c2₂, quartic(-c, h2, m, true))
+        moment_integrand(t, π/2-A, D, h1, c, y, c0₁₂, c2₁, quartic(c, h1, m, false, opc, omc), opc)+
+        h2*moment_integrand(h2*t, π/2-D, A, h2, -c, y, c0₁₂, c2₂, quartic(-c, h2, m, true, omc, opc), omc)
     end
     # Panels 3 and 4: b = -v, y = -r1 and y = -r2.
     b=-g.v
-    h=sqrt((1+b)/(1-b))
+    opb, omb=g.ξ^2, g.opv
+    h=sqrt(opb/omb)
     upper_is_h=primal(h)<=1
     upper=upper_is_h ? h : one(h)
-    c0₃₄=Z^2*(1-b^2)/18
+    c0₃₄=Z^2*opb*omb/18
     c2₃=2Z^2*(b-1)*(2g.r1^2-1)/9
     c2₄=2Z^2*(b-1)*(2g.r2^2-1)/9
     function pair34(t, x)
         q=upper*t
         a=π/2-atan(q)
         d=atan(q/h)
-        P=quartic(b, h, x*(1+t), upper_is_h)
+        P=quartic(b, h, x*(1+t), upper_is_h, opb, omb)
         upper*(
-            moment_integrand(q, a, d, h, b, -g.r1, c0₃₄, c2₃, P)+
-            moment_integrand(q, a, d, h, b, -g.r2, c0₃₄, c2₄, P)
+            moment_integrand(q, a, d, h, b, -g.r1, c0₃₄, c2₃, P, opb)+
+            moment_integrand(q, a, d, h, b, -g.r2, c0₃₄, c2₄, P, opb)
         )
     end
     v12, e12=endpoint_quadgk(pair12, -y, lo; rtol)
@@ -266,14 +272,15 @@ struct PanelMap{T}
     f0::T
 end
 acosh1p(δ) = log1p(δ+sqrt(δ*(2+δ))) # acosh(1+δ), accurate for small δ
-function panelmap(b, y)
-    h2=(1+b)/(1-b)
+# bmy = b-2y² and bpy = b+2y² can be passed when the caller knows them without cancellation.
+function panelmap(b, y; opb = 1+b, omb = 1-b, bmy = fma(-2y, y, b), bpy = fma(2y, y, b))
+    h2=opb/omb
     h=sqrt(h2)
     u=primal(h)<=1 ? h : one(h)
     u2=u*u
     # B-u², with B=(s₁+s₂)/2; fma forms b∓2y² with a single rounding.
-    Bu=primal(h)<=1 ? -fma(2y, y, b)/(1-b) : fma(-2y, y, b)/(1-b)
-    P=4y^2*u2/(1-b) # (u²-s₁)(u²-s₂)
+    Bu=primal(h)<=1 ? -bpy/omb : bmy/omb
+    P=4y^2*u2/omb # (u²-s₁)(u²-s₂)
     disc=fma(Bu, Bu, -P) # B²-s₁s₂
     if primal(disc)<0
         # Complex pair r, r̄ with r=√s₁: Q=(q-m)²+t², m=Re r, t=Im r.
@@ -387,7 +394,7 @@ end
 end
 # Float64 node loop: q = m + t sinh z (or m - t cosh z) via one exp, and
 # atan(1/q) = π/2 - atan(q) for 0 < q ≤ 1.
-function panel_fixed(b::Float64, y::Float64, c0::Float64, c2::Float64, map::PanelMap{Float64}, n)
+function panel_fixed(b::Float64, y::Float64, c0::Float64, c2::Float64, map::PanelMap{Float64}, n, omb::Float64 = 1-b)
     (; h, za, zb, m, t, cosh_branch, f1, f0)=map
     x, w=PANEL_RULES[n]
     half=(zb-za)/2
@@ -406,9 +413,9 @@ function panel_fixed(b::Float64, y::Float64, c0::Float64, c2::Float64, map::Pane
         # F(q)/(1-b) > 0; abs lets the compiler drop sqrt's domain check
         acc+=w[i]*numerator/sqrt(abs(q*(q+f1)+f0))
     end
-    (2/pi)*half*acc/sqrt(1-b)
+    (2/pi)*half*acc/sqrt(omb)
 end
-function panel_fixed(b, y, c0, c2, map::PanelMap, n)
+function panel_fixed(b, y, c0, c2, map::PanelMap, n, omb = 1-b)
     π=typedpi(b)
     (; h, za, zb, m, t, cosh_branch, f1, f0)=map
     x, w=PANEL_RULES[n]
@@ -425,17 +432,17 @@ function panel_fixed(b, y, c0, c2, map::PanelMap, n)
         numerator=c0*(a-d)*(a+d)+c2*((h*d*iq)^2-(q*a)^2)
         acc+=w[i]*numerator/sqrt(q*(q+f1)+f0)
     end
-    (2/π)*half*acc/sqrt(1-b)
+    (2/π)*half*acc/sqrt(omb)
 end
 """Panel integral ∫₀ᵘ (2/π)(c₀n₀(q)+c₂n₂(q))/√T(q) dq for one pair (b,y).
 Returns (value, error estimate). Float64 inputs (including ForwardDiff duals)
 use a fixed Gauss–Legendre rule after removing the endpoint near-singularity;
 other number types use adaptive quadrature with tolerance `rtol`.
 """
-function panel(b, y, c0, c2; rtol)
-    b, y=promote(float(b), float(y))
+function panel(b, y, c0, c2; rtol, opb = 1+b, omb = 1-b, bmy = fma(-2y, y, b), bpy = fma(2y, y, b))
+    b, y, opb, omb, bmy, bpy=promote(float(b), float(y), float(opb), float(omb), float(bmy), float(bpy))
     if primal(b) isa Float64
-        map=panelmap(b, y)
+        map=panelmap(b, y; opb, omb, bmy, bpy)
         L=primal(map.zb-map.za)
         # The double-root limit t → 0 (measure zero) and extreme ranges fall back.
         if isfinite(L) && L<=60
@@ -443,11 +450,11 @@ function panel(b, y, c0, c2; rtol)
             # duals keep the envelope.
             n=b isa Float64 ? panel_nodes_table(b, L, rtol) : 0
             iszero(n) && (n=panel_nodes(L, rtol))
-            val=panel_fixed(b, y, c0, c2, map, n)
+            val=panel_fixed(b, y, c0, c2, map, n, omb)
             return val, max(rtol, PANEL_ERROR)*abs(primal(val))
         end
     end
-    panel_adaptive(b, y, c0, c2; rtol)
+    panel_adaptive(b, y, c0, c2; rtol, opb, omb)
 end
 # The four moment combinations of ψ₃₀ for Float64 inputs, one fixed-rule panel each.
 # Each panel has its own map z → q, so unlike `elliptic` the pairs cannot share
@@ -458,16 +465,21 @@ function elliptic_fixed(α, g, Z; rtol)
     y=-g.ξ/r
     ell=zero(α*Z)
     err=zero(primal(ell))
-    for b in (cos(α), -cos(α))
+    # 1 ± cos α = 2cos²(α/2), 2sin²(α/2); with 2y² = 1-v, cos α ∓ 2y² = ±(v - 2sin²(α/2)) + …
+    # is formed without cancellation, since cos α rounds to 1 for tiny α.
+    c=cos(α)
+    d=g.v-2g.r2^2 # cos α - ξ²
+    for (b, opb, omb, bmy, bpy) in ((c, 2g.r1^2, 2g.r2^2, d, c+g.ξ^2), (-c, 2g.r2^2, 2g.r1^2, -c-g.ξ^2, -d))
         c0=-r*Z/576*(9Z*b^2-18Z-8b^2+8)
-        c2=r*Z/288*(b-1)*(90Z*y^2-45Z-18b-32y^2+16)
-        val, e=panel(b, y, c0, c2; rtol)
+        c2=-r*Z/288*omb*(90Z*y^2-45Z-18b-32y^2+16)
+        val, e=panel(b, y, c0, c2; rtol, opb, omb, bmy, bpy)
         ell+=val
         err+=e
     end
     b=-g.v
+    opb, omb=g.ξ^2, g.opv
     for yr in (-g.r1, -g.r2)
-        val, e=panel(b, yr, Z^2*(1-b^2)/18, 2Z^2*(b-1)*(2yr^2-1)/9; rtol)
+        val, e=panel(b, yr, Z^2*opb*omb/18, -2Z^2*omb*(2yr^2-1)/9; rtol, opb, omb)
         ell+=val
         err+=e
     end
@@ -479,12 +491,28 @@ max(rtol, 1e-14) times each panel (from the calibration of the fixed rule), othe
 the adaptive quadrature estimate.
 Inputs are dimensionless and a₂₁ uses the total-projection convention.
 """
+# Below this α the panels with b = ±cos α degenerate (one root of the quartic moves to
+# infinity as cos α rounds to 1), so Float64 inputs use cubic extrapolation in α from
+# α = (1,2,3,4)·SMALL_ALPHA; ψ₃₀ is smooth there and the extrapolation error is ~1e-14.
+const SMALL_ALPHA = 1e-4
 function psi30_parts(α, θ; Z, E, a21, rtol = 1e-11)
     π=typedpi(α)
     g=geometry(α, θ)
     (; r1, r2, σ, v, ξ)=g
     α=primal(g.α)<=π/2 ? g.α : π-g.α
-    cl=classical(α, acos(v), Z)
+    # The panels use the folded angle, so cos(α/2) and sin(α/2) swap with it.
+    primal(g.α)<=π/2 || (g=merge(g, (; α, r1 = g.r2, r2 = g.r1)))
+    if primal(α) isa Float64 && primal(α)<SMALL_ALPHA
+        nodes=SMALL_ALPHA .* (1, 2, 3, 4)
+        parts=map(a->psi30_parts(a, θ; Z, E, a21, rtol), nodes)
+        weight(i)=prod((α-nodes[j])/(nodes[i]-nodes[j]) for j = 1:4 if j!=i)
+        w=map(weight, (1, 2, 3, 4))
+        combine(f)=sum(w[i]*f(parts[i]) for i = 1:4)
+        return (; classical = combine(p->p.classical), state = combine(p->p.state),
+                elliptic = combine(p->p.elliptic), value = combine(p->p.value),
+                quadrature_error = sum(abs(primal(w[i]))*parts[i].quadrature_error for i = 1:4))
+    end
+    cl=classical(α, 2atan(ξ, sqrt(g.opv)), Z) # acos(v), accurate near v = ±1
     state=E*(Z*σ*(2+r1*r2)/18-(6-ξ^2)*ξ/72)-a21*(Z*σ*v/2-(6-5ξ^2)*ξ/12)
     ell, err=if Z==0
         (zero(cl), zero(primal(cl)))
@@ -498,6 +526,9 @@ end
 """Numerical ψ₃₀ at an interior angle. Uses four one-dimensional elliptic quadratures."""
 psi30(α, θ; kwargs...) = psi30_parts(α, θ; kwargs...).value
 include("green.jl")
+include("green_k4.jl")
+include("feynman_k4.jl")
+include("fourth_order.jl")
 include("langner.jl")
 export LangnerTable, psi30_langner
 export psi30_green
