@@ -22,21 +22,28 @@ function SGrid(::Type{T}, n) where {T}
     W=[(P/2)*w[i, j]*q[i]*q[j] for i in 1:n, j in 1:n]
     SGrid{T}(n, X, Y, α, β, w, W, D)
 end
+# Newton refinement of the whole eigendecomposition M = VΛV⁻¹ (eigenvalues distinct):
+# with A = V⁻¹MV, the correction V ← V(I+E), E_ij = A_ij/(λ_j-λ_i), converges quadratically.
+# Each step is a few n³ operations in the working precision.
 function refine_eigen(M::Matrix{T}) where {T}
     e=eigen(Float64.(M))
-    λs=T.(real(e.values)); V=T.(real(e.vectors))
-    # Fixed shift at the Float64 eigenvalue: one LU per pair, and each step gains about
-    # -log10(1e-14/gap) digits. A Rayleigh shift would make M-λI exactly singular.
-    iters=ceil(Int, precision(T)*log10(2)/8)+1
-    for k in eachindex(λs)
-        v=V[:, k]
-        F=lu(M-(λs[k]*(1+T(2)^-40)+T(2)^-40)*I)
-        for _ in 1:iters
-            y=F\v; v=y/norm(y)
-        end
-        V[:, k]=v; λs[k]=dot(v, M*v)
+    V=T.(real(e.vectors))
+    λ=T.(real(e.values))
+    tol=eps(T)*opnorm(M, 1)
+    prev=T(Inf)
+    for it in 1:20
+        A=V\(M*V)
+        λ=diag(A)
+        off=maximum(abs(A[i, j]) for i in axes(A, 1), j in axes(A, 2) if i!=j)
+        # stop at roundoff: below tolerance, or no longer converging quadratically
+        (off<tol || off>prev/4) && break
+        prev=off
+        E=[i==j ? zero(T) : A[i, j]/(λ[j]-λ[i]) for i in axes(A, 1), j in axes(A, 2)]
+        V+=V*E
+        V./=sqrt.(sum(abs2, V; dims=1))
+        it==20 && @warn "refine_eigen: off-diagonal $(Float64(off)) after 20 steps"
     end
-    λs, V
+    λ, V
 end
 struct SOps{T}; VX::Matrix{T}; λX::Vector{T}; iVX::Matrix{T}; VY::Matrix{T}; λY::Vector{T}; iVY::Matrix{T}; end
 function SOps(g::SGrid{T}, c) where {T}
