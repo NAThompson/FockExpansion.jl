@@ -67,4 +67,18 @@ end
         @test psi40(0.7, 1.1; Z = 0.0, E, a21) ≈ p40_0(0.7, 1.1) atol=1e-13
         @test psi40(π-0.7, 1.1; Z = 2.0, E, a21, step = 0.125) ≈ psi40(0.7, 1.1; Z = 2.0, E, a21, step = 0.125) atol=1e-14
     end
+    # Independent reference values from the 256-bit spectral solution of the whole hierarchy
+    # (derivations/k4/fock_spectral_ref.jl; grids n = 48 and 64 agree to 1e-38).
+    let Z = 1.7, E = -2.2, a21 = 0.31
+        for (a, t, r41, r40) in ((0.7, 1.1, -0.01214924667877228035760333, 0.6827950979687855037644383),
+                                 (1.5, 0.3, -0.1603145467166121681419629, 0.4233893486868100167537526),
+                                 (2.3, 2.0, 0.04158027503238696413555123, 0.6286370389039812304249224))
+            @test psi41(a, t; Z, E, a21) ≈ r41 atol=2e-14
+            @test psi40(a, t; Z, E, a21, a40 = 0.1, a42 = -0.2) ≈ r40 atol=5e-14
+        end
+    end
+    # Float64-only functions refuse wider inputs instead of dropping precision.
+    @test_throws ArgumentError psi41(big"0.7", 1.1; Z = 2.0, E, a21 = 0.4)
+    @test_throws ArgumentError psi40(0.7, 1.1; Z = big"2.0", E, a21 = 0.4)
+    @test_throws ArgumentError F4.psi41_z2(big"0.7", 1.1)
 end

@@ -100,8 +100,6 @@ function Uf(kind, p1, p2, ω, x)
     zonal(kind, ρ, ω, γ, ℓ)
 end
 
-# Integrand at p = (σt, 1-t). Near t = 0 use variables (p₁, q = 1-p₂), near t = 1
-# (r = 1-|p₁|, p₂), so that ω = 1-|p|² = 2t(1-t) never cancels.
 # Integrand at p = (σt, 1-t), given t and 1-t separately. Near t = 0 use variables
 # (p₁, q = 1-p₂), near t = 1 (r = 1-|p₁|, p₂), so that ω = 1-|p|² = 2t(1-t) never cancels.
 function feynman_integrand(t, omt, x, σ)
@@ -113,7 +111,6 @@ function feynman_integrand(t, omt, x, σ)
     H=J*ForwardDiff.hessian(v->F(v, :xlog), v0)*J
     -F(v0, :inv)/3+(7/3)*d1[2]+(5/3)*H[2, 2]+σ*H[1, 2]
 end
-integrand(t, x, σ)=integrand(t, 1-t, x, σ)
 
 # Fixed rule in φ (t = sin²φ) on panels graded geometrically toward φ = 0 and π/2,
 # where the integrand grows like log φ.
@@ -133,8 +130,10 @@ end
 const FEYNMAN_RULE=feynman_rule()
 const PSI41_Z2_SHIFT=(0.0048977716325816, -0.0145608238240513)
 
-"""Z² component of ψ₄₁ without Y₄ₗ admixture, as a one-dimensional integral (about 15 ms)."""
+"""Z² component of ψ₄₁ without Y₄ₗ admixture, as a one-dimensional integral (about 15 ms).
+Float64 only: wider inputs throw an ArgumentError."""
 function psi41_z2(α::Real, θ::Real; rule = FEYNMAN_RULE)
+    check_float64(:psi41_z2, α, θ)
     α, θ=Float64(α), Float64(θ)
     x=[cos(α), sin(α)*cos(θ), sin(α)*sin(θ), 0.0]
     s=0.0

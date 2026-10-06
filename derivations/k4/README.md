@@ -150,11 +150,11 @@ Clausen part 𝒟 has no linear-form representation yet.
 
 ### Status of the ψ₄₁ constants
 
-* Pure-Z harmonic coefficients (`harmonic41_exact.jl`): graded 128-bit tensor rules at two
-  resolutions agree with each other to 1e-13-1e-12 and with the stored Float64 values to
-  about 1e-15. The e-e coalescence corner limits the rule to algebraic convergence, so
-  30 digits needs a better rule there. PSLQ at 14 digits over {1, 1/π, 1/π², G/π, G/π²,
-  log 2, log 2/π} finds only noise-level relations.
+* Pure-Z harmonic coefficients: the 256-bit spectral chain (`fock_spectral_ref.jl`) gives
+  them to 40 digits (n = 48 and 64 agree to 1e-38). The earlier stored Float64 values
+  from graded quadrature (`harmonic41_exact.jl`) were off by up to 2.5e-14. That is
+  1e-13 in ψ₄₁ at Z = 1.7, now removed. The same script gives the 25-digit ψ₄₁ and ψ₄₀
+  reference values used in `test/fourth_order.jl`.
 * Shift constants of ψ₄₁⁽²⁾: not needed at arbitrary precision, where the per-point
   harmonic-free integrand is used directly (smooth in φ; 48 Gauss nodes give 4e-12 in
   Float64, limited by cancellation in M's derivatives near ρ = 1).
@@ -207,3 +207,6 @@ added to ψ_k0. Results:
   fixed-shift inverse iteration with generic LU. `fock_spectral_big.jl` (256-bit) gives
   |ψ₃₀ − closed form| = 7e-26, 3e-38 and 1e-50 for n = 32, 48 and 64, about 0.75 digits
   per grid point, in seconds.
+- Resonances: at every n tested (16-64) the Sylvester operator has exactly k/2+1
+  resonant pairs for even k and none for odd k, with the next gap ≥ 0.4. `resonant_mask`
+  drops those pairs and errors if they are not cleanly separated.

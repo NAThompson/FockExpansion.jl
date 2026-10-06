@@ -54,10 +54,22 @@ function Ops(g::Grid, c)
     Ops(VX, real(eX.values), inv(VX), VY, real(eY.values), inv(VY))
 end
 ip(g::Grid, f, h)=sum(g.W.*f.*h)
+# Resonant pairs λX_i = λY_j of the Sylvester operator: exactly the nres = k÷2+1 S-state
+# harmonics for even k and none for odd k. Take the nres smallest gaps and check that they
+# are separated from the rest, so a near-crossing cannot be mistaken for a harmonic.
+function resonant_mask(λX, λY, nres)
+    d=[abs(x-y) for x in λX, y in λY]
+    p=sortperm(vec(d))
+    nres==0 || d[p[nres]]<1e-6*d[p[nres+1]] || error("resonant gaps not separated: $(d[p[nres]]) vs $(d[p[nres+1]])")
+    d[p[nres+1]]>1e-2 || error("near-resonant non-harmonic pair, gap $(d[p[nres+1]])")
+    m=falses(size(d)); m[p[1:nres]].=true
+    m
+end
 # pure solution of (Λ² - c)ψ = h given wh = (cos X - cos Y)h on the grid
 function solve(g::Grid, o::Ops, wh, H)
     Rt=o.iVX*(-wh./16)*o.iVY'
-    F=[abs(o.λX[i]-o.λY[j])<1e-6 ? 0.0 : Rt[i, j]/(o.λX[i]-o.λY[j]) for i in 1:g.n, j in 1:g.n]
+    res=resonant_mask(o.λX, o.λY, length(H))
+    F=[res[i, j] ? 0.0 : Rt[i, j]/(o.λX[i]-o.λY[j]) for i in 1:g.n, j in 1:g.n]
     ψ=o.VX*F*o.VY'
     isempty(H) && return ψ
     G=[ip(g, a, b) for a in H, b in H]

@@ -19,18 +19,27 @@ function psi42(α, θ; Z)
     (π-2)*(5π-14)/(180π^2)*Z^2*(1-2sin(g.α)^2*sin(g.θ)^2)
 end
 
+# The fourth-order coefficients below are computed in Float64. Refuse wider inputs rather
+# than silently dropping their precision.
+function check_float64(name, xs...)
+    any(x->x isa AbstractFloat && precision(x)>precision(Float64), xs) &&
+        throw(ArgumentError("$name is Float64-only; got $(join(unique(typeof.(xs)), ", "))"))
+    nothing
+end
+
 # Unnormalized k = 4 hyperspherical harmonics with l = 0, 2 (l = 1 is odd under
 # α → π-α and absent from singlet states).
 harmonic40(α, θ) = 4cos(α)^2-1
 harmonic42(α, θ) = sin(α)^2*(3cos(θ)^2-1)/2
 
 # Coefficients of harmonic40 and harmonic42 in ψ₄₁, from the ψ₄₀ solvability
-# condition ⟨Y₄ₗ, h₄₀⟩ = 0. The E and a₂₁ terms were identified exactly; the
-# pure-Z terms involve the transcendental parts of ψ₃₀ and are numerical
-# (derivations/k4/harmonic41.jl, accurate to about 1e-13).
+# condition ⟨Y₄ₗ, h₄₀⟩ = 0. The E and a₂₁ terms were identified exactly. The
+# pure-Z terms involve the transcendental parts of ψ₃₀; they come from the 256-bit
+# spectral solution of the hierarchy (derivations/k4/fock_spectral_ref.jl, 40 digits),
+# rounded to Float64.
 const PSI41_HARMONIC = (
-    l0 = (-0.001355480179782, 0.003059320401767, 0.000701904941965),
-    l2 = (0.005105394795546, -0.005367956424392, -0.001900348776693),
+    l0 = (-0.0013554801797822578866, 0.0030593204017684670484, 0.00070190494196250615738),
+    l2 = (0.0051053947955489353034, -0.0053679564244078672069, -0.0019003487766684624263),
 )
 function psi41_harmonic(α, θ; Z, E, a21)
     π=typedpi(α)
@@ -60,8 +69,10 @@ end
 component plus `a40*Y₄₀ + a42*Y₄₂` (Y₄₀ = 4cos²α-1, Y₄₂ = sin²α P₂(cos θ)).
 a40 and a42 are not fixed by the Fock recurrence. Float64 only; one two-dimensional
 tanh-sinh quadrature with ψ₃₀ at every node: `step = 0.0625` (default) gives about 1e-14
-in about a second, `step = 0.125` about 1e-10 in 0.3 s."""
+in about a second, `step = 0.125` about 1e-10 in 0.3 s. Inputs wider than Float64 throw
+an ArgumentError."""
 function psi40(α, θ; Z, E, a21, a40 = 0.0, a42 = 0.0, step = 0.0625)
+    check_float64(:psi40, α, θ, Z, E, a21, a40, a42)
     g=geometry(α, θ)
     α, θ=Float64(g.α), Float64(g.θ)
     # (Λ²-32)ψ₄₀ = 12ψ₄₁ + 2ψ₄₂ - 2Vψ₃₀ + 2Eψ₂₀. The harmonic parts of ψ₄₁ and ψ₄₂
@@ -81,8 +92,11 @@ end
 
 """ψ₄₁, the coefficient of R⁴log R, at an interior angle.
 Includes its Y₄ₗ part, which is fixed by the ψ₄₀ equation and depends on E and a₂₁.
-Float64 only (about 15 ms)."""
+Float64 only (about 15 ms); inputs wider than Float64 throw an ArgumentError.
+The Y₄ₗ constants are exact to Float64 rounding; the remaining error is that of the Z²
+component ψ₄₁⁽²⁾ (about 1e-15), so the absolute error grows like Z²."""
 function psi41(α, θ; Z, E, a21)
+    check_float64(:psi41, α, θ, Z, E, a21)
     g=geometry(α, θ)
     (; α, θ, v, ξ)=g
     s=sin(α)
