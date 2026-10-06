@@ -32,9 +32,9 @@ Fit results: maximum error relative to max|ψ| at each ρ.
 
   | constant | value | spread |
   |---|---|---|
-  | a₂₁ | 0.4767478 | 1e-8 |
-  | a₄₀ | −0.2013782 | 4e-7 |
-  | a₄₂ | 0.2265200 | 4e-7 |
+  | a₂₁ | 0.4767478 | 6e-8 |
+  | a₄₀ | −0.2013783 | 5e-7 |
+  | a₄₂ | 0.2265200 | 5e-7 |
 
   ψ(0) is 4.29460776 × (Hylleraas normalization). a₂₁ is the coefficient of sin α cos θ in
   ψ₂₀; a₄₀ and a₄₂ are the coefficients of Y₄₀ and Y₄₂ in ψ₄₀.
