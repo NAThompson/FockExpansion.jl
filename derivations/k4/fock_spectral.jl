@@ -107,3 +107,13 @@ function sfock(g::SGrid{T}; Z, E, kmax, free=Dict{Tuple{Int,Int},Any}()) where {
     end
     ψ
 end
+# Barycentric interpolation of a grid function at (α, θ).
+function interp(g::SGrid{T}, F, α, θ) where {T}
+    P=T(π)
+    β=acos(sin(α)*cos(θ))
+    tx, ty=2(α-β)/P, 2(α+β-P)/P
+    x=[cos(P*(j+T(1)/2)/g.n) for j in 0:g.n-1]
+    bw=[(-1)^j*sin(P*(j+T(1)/2)/g.n) for j in 0:g.n-1]
+    ax=bw./(tx.-x); ay=bw./(ty.-x)
+    (ax'*F*ay)/(sum(ax)*sum(ay))
+end
