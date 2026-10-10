@@ -169,3 +169,30 @@ The block convention and cubic sign in the printed thesis are corrected.
 Run `examples/benchmark_representations.jl` for a warmed three-method comparison
 against a high-precision reference. Float64 speed comparisons use Float64
 accuracy targets; they do not establish 25-digit accuracy.
+
+### Exact third-order recurrence certificate
+
+With [uv](https://docs.astral.sh/uv/) installed, run:
+
+```sh
+./verification/direct_recurrence/verify_all.py
+```
+
+The executable script declares its pinned Python dependencies; uv manages the
+Python environment automatically. It regenerates the residuals, verifies exact
+zero in all eight parameter sectors, and checks the links to the coefficient
+tables. Success ends with a green `Certificate verified` summary.
+See `verification/direct_recurrence/README.txt` for details and the scope of the
+certificate.
+
+A native Julia implementation of the same algebraic checks is also available:
+
+```sh
+./verification/direct_recurrence/verify_all.jl
+```
+
+It installs its dependencies in a separate Julia environment, independently
+differentiates the shared formula inputs, and checks all eight sectors exactly.
+No Python process or saved Python residual is used. Both versions use FLINT
+for exact polynomial arithmetic; see the certificate README for the precise
+scope of this cross-check.

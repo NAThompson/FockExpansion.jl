@@ -1,0 +1,117 @@
+Detailed derivations retained from the longer manuscript (TeX notation).
+
+\section{Direct verification of the Fock recurrence}\label{app:direct-recurrence}
+This verification starts with the compact expression itself and the lower-order coefficients in \eqref{eq:p20}--\eqref{eq:p31}.
+It does not use a third-order formula from Langner's thesis.
+
+Put $a=\cos\alpha$ and $v=\cos\beta=\sin\alpha\cos\theta$.
+On functions of these two coordinates, the angular operator is
+\begin{equation}
+ \Lambda^2=-4\bigl[(1-a^2)\partial_a^2+(1-v^2)\partial_v^2
+ -2av\partial_a\partial_v-3a\partial_a-3v\partial_v\bigr].
+\end{equation}
+This is $-4\Delta_{S^3}$ restricted to functions of the first two Cartesian coordinates of the unit three-sphere.
+The physical interior is the disk $a^2+v^2<1$.
+
+\subsection{The integral terms}
+In each panel use $b$ and $y$ as in the compact formula and set
+\begin{gather}
+ P=1+b+(2-4y^2)t^2+(1-b)t^4,\qquad
+ N=(1+t^2)\{1+b+(1-b)t^2\},\\
+ L(t)=\log\frac{1+t}{1-t},\qquad
+ \widehat A=1+\frac2\pi\arcsin\frac{2yt}{\sqrt N}.
+\end{gather}
+The operator in these coordinates is
+\begin{equation}
+ \mathcal D=-4(1-b^2)\partial_b^2-(1-y^2)\partial_y^2
+ -\frac{2b(1-2y^2)}y\partial_b\partial_y
+ +12b\partial_b-\frac{2-5y^2}{y}\partial_y-21.
+\end{equation}
+The two angular panels carry the overall factors $\sqrt2 Z$ and $\sqrt2 Z^2$; the rotated panels carry $Z^2$.
+After removing these factors, their weights $Q=q_0+q_2t^2$ and their associated polynomials $H$ are
+\begin{align}
+ Q_{A1}&=\frac{b^2-1}{72}
+ +\frac{(b-1)(-18b-32y^2+16)}{288}t^2,\\
+ H_{A1}&=-\frac t{36}\{(18b+32y^2-25)t^2-4b-8\},\\
+ Q_{A2}&=\frac{2-b^2}{64}
+ +\frac{5(b-1)(2y^2-1)}{32}t^2,\\
+ H_{A2}&=\frac t8\{(20y^2-10)t^2-b-5\},\\
+ Q_{R2}&=\frac{1-b^2}{18}
+ +\frac{2(b-1)(2y^2-1)}9t^2,\\
+ H_{R2}&=\frac{4t}9\{(8y^2-4)t^2-b-2\}.
+\end{align}
+Direct differentiation gives, in all three cases,
+\begin{equation}\label{eq:direct-panel-certificate}
+ \mathcal D\!\left(\frac{Q\widehat A}{\sqrt P}\right)
+ =\frac{\partial}{\partial t}\!\left(\frac{H\widehat A}{\sqrt P}\right)
+ +\frac{\rho(t)}\pi,
+ \qquad
+ \rho(t)=\frac{c_1t}{1+t^2}+\frac{c_2t}{D}+\frac{c_3t}{D^2},\quad
+ D=1+b+(1-b)t^2.
+\end{equation}
+The coefficients are
+\begin{align*}
+(c_1,c_2,c_3)_{A1}={}&\left(
+ -\frac{22b+32y^2-17}{36y},
+ \frac{(b-1)(14b+32y^2+1)}{36y},
+ \frac{(b+1)(7b+16y^2-6)}{18y}\right),\\
+(c_1,c_2,c_3)_{A2}={}&\left(
+ \frac{b+20y^2-5}{8y},
+ -\frac{(b-1)(-b+20y^2-5)}{8y},
+ \frac{b^2-20by^2+10b-20y^2+8}{8y}\right),\\
+(c_1,c_2,c_3)_{R2}={}&\left(
+ \frac{4(b+8y^2-2)}{9y},
+ -\frac{4(b-1)(-b+8y^2-2)}{9y},
+ -\frac{4(b+1)(-b+8y^2-3)}{9y}\right).
+\end{align*}
+The accompanying certificate checks \eqref{eq:direct-panel-certificate} by exact polynomial arithmetic.
+Writing $H=h_0t+h_2t^3$, integration by parts therefore gives
+\begin{align}\label{eq:direct-panel-image}
+ \mathcal D\int_0^1\frac{LQ\widehat A}{\sqrt P}\,\dd t
+ ={}&2h_2K_\infty+2(h_0+h_2)K_1
+ +(h_0+h_2)\frac{\widehat A(1)}{\sqrt{P(1)}}\log2\\
+ &+\frac1\pi\left\{\frac{c_1\pi^2}{16}
+ +\frac{c_2x^2}{4(1-b)}+\frac{c_3x}{4\sin x}\right\},\qquad b=\cos x.\nonumber
+\end{align}
+Here $K_1$ has the same finite-part convention as in the preceding reductions.
+The finite endpoint term containing $\log2$ must be retained: it is what remains after cancellation of the two logarithmic divergences in the integration by parts.
+All parameter differentiations are justified on compact subsets of the physical interior by an integrable logarithmic majorant.
+Thus applying the Fock operator removes the elliptic integrals altogether.
+
+\subsection{Cancellation of the residual}
+Insert the proved classical expressions for $K_\infty$ and $K_1$ in \eqref{eq:direct-panel-image}, differentiate the classical part of the compact formula, and subtract the right-hand side of \eqref{eq:fullsource}.
+The resulting expression contains only algebraic coefficients, angles, real logarithms, and Clausen functions.
+The substitution $T=\tan(\alpha/4)$, $U=\tan(\beta/4)$ makes the algebraic coefficients rational over $\mathbb Q(\sqrt2)$, with the stated constants adjoined.
+The identities $\mathrm{Cl}_2'(q)=-\log|2\sin(q/2)|$ and $(\log|2\sin q|)'=\cot q$ supply the derivatives.
+Logarithm duplication and Clausen reflection put all terms in a common notation.
+The certificate uses an algebraically regrouped implementation of the classical coefficient table; a separate exact comparison checks that regrouping, including the angle polynomial and remainder.
+The certificate separately checks the coefficients of $1,Z,Z^2,Z^3,E,EZ,a_{21},Za_{21}$.
+Every resulting rational numerator is zero.
+This proves the recurrence identically throughout the physical interior, rather than only at sampled points.
+The standalone verification is supplied in \texttt{verification/direct\_recurrence/}; running \texttt{verify\_all.py} regenerates the residuals and checks their exact zeros and their links to the coefficient tables.
+
+\subsection{Regularity and uniqueness}
+The integral part has a uniform bound even at the degenerate angular limits.
+For the physical parameters, $y\leq0$ and $0\leq P\leq N$, so
+\begin{equation}
+ 0\leq\frac{\widehat A}{\sqrt P}
+ =\frac{2}{\pi\sqrt P}\arcsin\sqrt{\frac PN}
+ \leq\frac1{\sqrt N}\leq\frac1{\sqrt2\,t}.
+\end{equation}
+The removable value is used when $P=0$.
+Since $L(t)/t$ is integrable and the polynomial weights are bounded, dominated convergence gives bounded, continuous panel values on the closed disk.
+For the classical part, the physical angles obey
+$|\alpha-\pi/2|+|\beta-\pi/2|\leq\pi/2$.
+With the shifts in \eqref{eq:classical-general}, every $\mathcal L$ argument lies in $[-\pi/2,3\pi/4]$, where $\mathcal L$ is continuous and its apparent singularity at zero is removable.
+The two logarithm arguments lie in $[\pi/4,\pi/2]$ and $[\pi/2,3\pi/4]$, respectively, so their sines are bounded away from zero.
+The complete candidate is therefore bounded and continuous.
+
+The disk boundary lifts to the smooth circle $C=\{x_3=x_4=0\}\subset S^3$.
+It is a removable set for this bounded solution.
+For completeness, take smooth logarithmic cutoffs that vanish within distance $\varepsilon^2$ of $C$ and equal one beyond distance $\varepsilon$.
+They can be chosen with both $\|\nabla\chi_\varepsilon\|_{L^1}$ and $\|\Delta\chi_\varepsilon\|_{L^1}$ tending to zero.
+Testing the interior equation against $\chi_\varepsilon\varphi$, boundedness makes all cutoff derivative terms vanish in the limit.
+The source lies in $L^2$, as established above, so the recurrence holds distributionally on the whole sphere.
+Elliptic regularity gives an $H^2(S^3)$ solution.
+Finally, $4n(n+2)\ne21$ for every nonnegative integer $n$, so the solution is unique.
+This identifies the compact expression with $\psi_{3,0}$ directly from the recurrence and the specified lower-order coefficients.

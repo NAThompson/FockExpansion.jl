@@ -1,0 +1,52 @@
+Direct recurrence verification: regularity and uniqueness
+
+The angular operator is -4 Delta_{S^3} on functions of the first two Cartesian
+coordinates (a,v) of S^3. The physical open disk is a^2+v^2<1. Its boundary
+lifts to the smooth circle C={x3=x4=0} in S^3, not a boundary hypersurface.
+The three binary collision points lie on this circle.
+
+Uniform boundedness of the displayed compact formula
+For each universal panel let N=(1+t^2)(1+b+(1-b)t^2), P=N-4y^2t^2.
+Physical parameters have -1<=b<=1, y<=0, and P>=0. Hence, for 0<t<1,
+ Ahat/sqrt(P) = (2/pi) asin(sqrt(P/N))/sqrt(P) <= 1/sqrt(N)
+             <= 1/(sqrt(2) t).
+The value at P=0 is interpreted by its removable limit. The last inequality
+uses N>=2t^2(1+t^2)>=2t^2 for b in [-1,1]. Since
+ log((1+t)/(1-t))/t is integrable on (0,1), and each polynomial weight Q is
+uniformly bounded on the compact parameter set, every panel is uniformly
+bounded. Dominated convergence gives its continuous extension to the closed
+disk. This treats simultaneous parameter/end-point degenerations too.
+
+For the classical part, physical angles satisfy
+ |alpha-pi/2|+|beta-pi/2|<=pi/2.
+Thus w_+=(alpha+beta-3pi/2)/4 in [-pi/4,0], and
+w_-=(alpha-beta+pi/2)/4 in [0,pi/4]. All arguments w_s+m*pi/4,
+m=-1,0,1, lie in [-pi/2,pi/2]. L(u)=int_0^u x cot(x) dx is continuous
+there; the apparent singularity at u=0 is removable. T(w)=int_0^w x tan(x)
+dx and log|2cos(w)| are bounded for |w|<=pi/4. The one-variable L arguments
+also lie in [-pi/2,pi/2]. Polynomial coefficients and angle polynomials are
+bounded. State-dependent algebraic terms are bounded. Therefore the complete
+compact formula is bounded and continuous on S^3.
+
+Removing the circle
+Assume the exact residual identity has been checked on the open disk.
+It then holds pointwise on S^3\C. To extend it distributionally choose a
+smooth cutoff chi_e that is zero within distance e^2 of C, one beyond distance
+e, and logarithmic between, with smooth endpoint transitions. In tube
+coordinates about a codimension-two smooth circle, one may arrange
+ ||grad chi_e||_L1 ->0 and ||Delta chi_e||_L1 ->0.
+For the totally geodesic circle in S^3 the radial density is sin(r)cos(r),
+so Delta log r=(cot r-tan r)/r-1/r^2=O(1); the main annulus contribution is
+O(e^2/|log e|), and the smoothed endpoint transitions contribute O(1/|log e|).
+For a smooth test phi apply the interior PDE to chi_e phi. All derivative-of-
+cutoff terms tend to zero by the boundedness of the candidate. The source is
+L2 (the already specified lower Fock coefficients are bounded and Coulomb
+singularities are inverse distances to three points). Dominated convergence
+then yields the full distributional equation on S^3.
+
+Elliptic regularity gives F in H2. The eigenvalues of -4 Delta_{S^3} are
+4n(n+2), n=0,1,2,...; none equals 21. Thus the equation has at most one H2
+solution. This argument uses neither Langner's third-order formula nor a
+numerical comparison to the Green integral. Its only contingent premise is
+the exact interior residual certificate, which passed exactly in all eight sectors and is recorded
+in certificate.json. It presumes the stated lower-order coefficients/conventions.

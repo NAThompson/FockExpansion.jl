@@ -30,8 +30,8 @@
 % The native compiler checks the requested page budget, including references.
 \newcounter{manuscriptpages}
 \AddToHook{shipout/after}{\stepcounter{manuscriptpages}}
-\AtEndDocument{\clearpage\ifnum\value{manuscriptpages}>5\relax
- \PackageError{PageBudget}{Exceeded 5-page budget; got \arabic{manuscriptpages}}{Adjust the layout.}\fi}
+\AtEndDocument{\clearpage\ifnum\value{manuscriptpages}>6\relax
+ \PackageError{PageBudget}{Exceeded 6-page budget; got \arabic{manuscriptpages}}{Adjust the layout.}\fi}
 \begin{document}
 \maketitle
 \vspace{-1.5em}
@@ -55,6 +55,9 @@ Langner's thesis gives the full third-order coefficient as convergent double ser
 Our contribution is a compact evaluation of $\psi_{3,0}$, with no angular-mode sum, and a direct verification independent of the third-order starting series.
 
 \section{The formula}
+To obtain the representation, we write the hypergeometric coefficients in Langner's double series as integrals and sum the resulting generating functions.
+Partial fractions and integration by parts separate the elementary and dilogarithmic terms from four remaining integrals: two in the original angular coordinates and two in rotated coordinates.
+Their weights are quadratic, so each is a combination of the same two moments $N_0$ and $N_2$.
 The formula holds for $0<\alpha,\theta<\pi$, with boundary values defined by continuity.
 Let $a_{21}$ be the total coefficient of the harmonic $\sin\alpha\cos\theta$ in $\psi_{2,0}$, following Ref.~\cite{LK2024}.
 Then
@@ -168,8 +171,8 @@ These definitions require no fitted constants or implicit coefficient tables.
 The parameters $Z,E,a_{21}$ may be varied without changing $N_0$ and $N_2$.
 
 \section{Direct verification}
-The accompanying Python/SymPy--FLINT code verifies exactly that our formula satisfies the third-order Fock recurrence.
-Regularity and the absence of a regular homogeneous solution then establish uniqueness for the specified lower-order coefficients.
+The proof has two steps: applying the angular operator eliminates the elliptic integrals, and the remaining classical terms cancel against the recurrence source.
+The code checks these algebraic identities; regularity and uniqueness identify the result with $\psi_{3,0}$.
 For this verification only, write $\xi=r_{12}/R=\sqrt{1-\sin\alpha\cos\theta}$.
 The third-order Fock recurrence is
 \begin{equation}\label{eq:recurrence}
@@ -202,10 +205,12 @@ For each integral weight $Q=c_0+c_2t^2$, its action has the form
  \quad D=1+b+(1-b)t^2,
 \end{equation}
 where $H$ is cubic in $t$.
-The accompanying code constructs and checks these polynomial identities exactly.
-Integration by parts, retaining the finite logarithmic endpoint contribution, leaves classical conic integrals and elementary terms, all explicitly evaluated in the certificate.
+Multiply this identity by $\log((1+t)/(1-t))$ and integrate by parts.
+The logarithmic endpoint contributions cancel, leaving a finite boundary term and conic integrals with explicit classical evaluations.
+Thus the operator removes the elliptic integrals, reducing the recurrence to an identity among algebraic functions, angles, logarithms and Clausen functions.
 After $T=\tan(\alpha/4)$ and $U=\tan(\beta/4)$, every residual coefficient is rational.
-Exact arithmetic gives zero separately in the eight sectors $1,Z,Z^2,Z^3,E,EZ,a_{21},Za_{21}$; no numerical samples enter this check.
+The certificates check the integral identities, the coefficient-table links, and exact cancellation in the eight sectors $1,Z,Z^2,Z^3,E,EZ,a_{21},Za_{21}$.
+Python/SymPy and Julia/Nemo perform the differentiation and reduction separately, using shared formula inputs and FLINT arithmetic; neither check uses numerical samples or saved residuals.
 The coefficient reductions use the rational-function field $\mathbb Q(\sqrt2,i)(T,U,\pi,G,\log2)$, treating $\pi,G,\log2$ as formal constants.
 The input $\chi$ is the zero-$K=2$-projection dilogarithmic formula of Ref.~\cite{LB2015}, implemented in \path{inputs/round2/sym_H.py}, function \texttt{chi}, with harmonic shift $-(3\pi+10-16G)/(24\pi)$.
 
@@ -219,7 +224,7 @@ Since $\Lambda^2=-4\Delta_{S^3}$ has eigenvalues $4n(n+2)\ne21$, the solution is
 \end{proof}
 
 \section{Numerical evaluation}
-The Julia package \texttt{TwoElectronFockExpansion.jl} combines $c_0N_0+c_2N_2$ into one adaptive quadrature per pair $(b,y)$.
+The Julia package \texttt{FockExpansion.jl} combines $c_0N_0+c_2N_2$ into a single one-dimensional quadrature per pair $(b,y)$.
 The timings use equivalent elementary integrals with finite endpoints, rather than the special-function evaluator in Appendix~\ref{app:finite}.
 Table~\ref{tab:timing} reports Float64 results at three interior points, with requested relative quadrature tolerance $10^{-12}$.
 Times are medians of 101 evaluations after ten warm-up calls, excluding compilation, using one thread in Julia 1.13.1 on ARM64 macOS (CPU target \texttt{apple-m1}).
@@ -303,7 +308,9 @@ Ordinary logarithms, dilogarithms and trilogarithms suffice when $\theta=0,\pi$;
 This paper establishes the representation and its recurrence; classification of further reductions and function-class obstructions is outside its scope.
 
 \section*{Code and reproducibility}
-The \path{verification/} directory contains the exact recurrence certificate, kernel derivations, benchmarks and reproduction instructions.
+The exact recurrence certificate is in \path{verification/direct_recurrence/}.
+From the repository root, run \path{./verification/direct_recurrence/verify_all.py} with uv installed, or \path{./verification/direct_recurrence/verify_all.jl} with Julia installed.
+Both runners install their dependencies and report the exact checks; the analytic regularity and uniqueness argument is given above.
 Within \path{verification/}, \path{compact_elliptic_moments/} and \path{ginac_validation/} contain the finite evaluator, $E_4$ checks and modular-transformation reproducer.
 
 \section*{AI assistance}

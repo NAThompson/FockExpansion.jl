@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+/*.pkl
+/certificate.json
+*.log
+.venv/
+/certificate_julia.json
