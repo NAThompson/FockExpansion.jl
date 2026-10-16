@@ -1,0 +1,14 @@
+# Figures: Codex's patched global representation (EFFECTIVE_* construction)
+
+Source notes (read only): `~/Documents/Codex/2026-09-05/how-much-compu/outputs/boundary_matching/EFFECTIVE_*`.
+Every number is recomputed in Julia, and the scripts assert that it matches the Codex JSON files.
+Data for H5Web is in `output/patched.nc`, one group per script (`/schematic`, `/budget`, `/growth`, `/blend`).
+
+| File | Caption | Regenerate |
+|---|---|---|
+| `output/patched_schematic.{pdf,png}` | (a) Radial regions of Z_k = χF_{N,k} + (1−χ)W_k on a log₂ρ axis. The Fock ball ρ ≤ r* = 2⁻¹⁴ (pale: 2⁻¹³ after the 2026-10-14 sharpening), the blend zone [r*/2, r*], the extraction shell [a/2, a] = [2⁻¹², 2⁻¹¹], the global heat approximant, the Coulomb clipping radii 1/M, and physical scales. (b) The pipeline: green boxes were executed and certified; orange dashed boxes have explicit error budgets but were never executed. | `julia -t 4 --project=examples/sciviz examples/sciviz/patched_schematic.jl` |
+| `output/patched_budget.{pdf,png}` | (a) Full PDE residual δ ≤ ε·2^−(56+12n) that suffices to extract coefficient n. Even n = 0 needs a residual 2⁶⁴ smaller than the certified seed residual 2.42e−4. (b) Uniform tail bound 2¹⁶⁰(N+2)⁸2⁻ᴺ, with the selected N = 223/244/265/307/389 for targets 2⁰…2⁻¹⁶⁰. (c) Heat-smoothing parameters M, J, L, log₂(1/h) and integration dimension versus ε; the open circles are the JSON rows. (d) The Temple enclosure [−2.9037245216, −2.9037243767] contains the high-precision E₀, which sits 3.2e−10 below the upper end. | `julia -t 4 --project=examples/sciviz examples/sciviz/patched_budget.jl` |
+| `output/patched_growth.{pdf,png}` | (a) Proven bounds ‖p_n‖_C⁰ ≤ 2¹⁵⁵(n+1)⁸8192ⁿ (and the sharpened 2¹⁵³(n+1)⁸4096ⁿ) and ‖h_n‖_H¹ ≤ 2⁵⁴4096ⁿ, against the actual max\|ψ_{n,p}\| from FockExpansion.jl, scaled to the L²-normalized state (Ψ(0) = 1.367). The gap is about 2²²⁴ at n = 4. The proven bounds grow like 2¹³ per order; the actual coefficients do not grow (≈2^−0.24 per order). (b) The size of the n-th term at ρ = r*: below 2⁻⁵² by n = 4 in practice, but 2¹⁵⁵ or more by the bound. Norms differ (sup on a grid vs C⁰,*/H¹), and ψ₄₀ is taken with a₄₀ = a₄₂ = 0. | `julia -t 4 --project=examples/sciviz examples/sciviz/patched_growth.jl` |
+| `output/patched_blend.{pdf,png}` | ILLUSTRATIVE, not certified. F₃ (ψ00…ψ31, HE parameters) is blended with the 151-term Codex witness trial (a stand-in for the heat-smoothed W, which was never computed) by a C^∞ cutoff with radius 0.1 bohr instead of 2⁻¹⁴. Top: Ψ along R at three (α, θ). Bottom: \|F₃ − W\| ≈ 2×10⁻⁵R² near 0 (the finite basis does not reproduce ψ₂₀ exactly; the curve is unchanged with the witness's own E and a₂₁). This is 7.9e−14 at r* and 1.0e−4 at 0.1 bohr. | `julia -t 4 --project=examples/sciviz examples/sciviz/patched_blend.jl` |
+
+Shared helpers (witness loader, cutoff χ, NetCDF group writer): `examples/sciviz/patched_common.jl`.
