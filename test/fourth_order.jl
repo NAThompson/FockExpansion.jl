@@ -77,6 +77,13 @@ end
             @test psi40(a, t; Z, E, a21, a40 = 0.1, a42 = -0.2) ≈ r40 atol=5e-14
         end
     end
+    # Near and at the poles θ = π, 0, against the spectral solution (128-bit, n = 48, 64).
+    let Z = 1.7, E = -2.2, a21 = 0.31
+        for (t, r40) in ((π-0.01, 0.4479160029353247366910543), (π, 0.4479070511588533572141819),
+                         (0.0, 0.5968282234720722454807952))
+            @test psi40(1.0, t; Z, E, a21) ≈ r40 atol=5e-14
+        end
+    end
     # Float64-only functions refuse wider inputs instead of dropping precision.
     @test_throws ArgumentError psi41(big"0.7", 1.1; Z = 2.0, E, a21 = 0.4)
     @test_throws ArgumentError psi40(0.7, 1.1; Z = big"2.0", E, a21 = 0.4)

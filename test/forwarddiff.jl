@@ -30,3 +30,12 @@ end
     @test ForwardDiff.derivative(x->ForwardDiff.derivative(FockExpansion.L, x), 0.0) == 0
     @test ForwardDiff.derivative(FockExpansion.T, 0.0) == 0
 end
+@testset "ψ₂₀ α-derivatives at α = π/2" begin
+    d(f, a) = ForwardDiff.derivative(f, a)
+    for θ in (0.3, 1.2, 2.9)
+        f(a) = psi20(a, θ; Z = 2, E = -2.9, a21 = 0.123)
+        d2(a) = d(b->d(f, b), a)
+        @test d(f, π/2) ≈ 0 atol=1e-14
+        @test d2(π/2) ≈ (d2(π/2-1e-5)+d2(π/2+1e-5))/2 atol=1e-8
+    end
+end

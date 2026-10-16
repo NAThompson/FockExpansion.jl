@@ -65,7 +65,7 @@ function psi41_z2_source(a, t)
     B*(V1*(5ξ^3/6-ξ)+ς*(ξ-1/ξ))
 end
 
-"""ψ₄₀, the R⁴ coefficient, at an interior angle: the solution with no Y₄₀, Y₄₂
+"""ψ₄₀, the R⁴ coefficient, for 0 < α < π and 0 ≤ θ ≤ π: the solution with no Y₄₀, Y₄₂
 component plus `a40*Y₄₀ + a42*Y₄₂` (Y₄₀ = 4cos²α-1, Y₄₂ = sin²α P₂(cos θ)).
 a40 and a42 are not fixed by the Fock recurrence. Float64 only; one two-dimensional
 tanh-sinh quadrature with ψ₃₀ at every node: `step = 0.0625` (default) gives about 1e-14
@@ -73,8 +73,9 @@ in about a second, `step = 0.125` about 1e-10 in 0.3 s. Inputs wider than Float6
 an ArgumentError."""
 function psi40(α, θ; Z, E, a21, a40 = 0.0, a42 = 0.0, step = 0.0625)
     check_float64(:psi40, α, θ, Z, E, a21, a40, a42)
-    g=geometry(α, θ)
-    α, θ=Float64(g.α), Float64(g.θ)
+    # θ = 0, π are coordinate poles, not boundaries; the source nodes stay interior.
+    0<=θ<=π || throw(DomainError(θ, "psi40 requires 0 ≤ θ ≤ π."))
+    α, θ=Float64(geometry(α, π/2).α), Float64(θ)
     # (Λ²-32)ψ₄₀ = 12ψ₄₁ + 2ψ₄₂ - 2Vψ₃₀ + 2Eψ₂₀. The harmonic parts of ψ₄₁ and ψ₄₂
     # are annihilated by the pure inverse; 12Z²ψ₄₁⁽²⁾ = 12Z²(Λ²-32)⁺ h₄₁⁽²⁾ is applied
     # through the iterated kernel.

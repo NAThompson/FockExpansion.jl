@@ -55,7 +55,8 @@ function unit_dilog(z)
 end
 function chi(α, μ)
     π=typedpi(α)
-    x=min(α, π-α)
+    # Fold on the primal so that nested duals at α = π/2 keep one branch.
+    x=primal(α)<=π/2 ? α : π-α
     s=sin(x)
     c=cos(x)
     v=s*μ
@@ -63,11 +64,6 @@ function chi(α, μ)
     ξ=sqrt(1-v)
     g=sqrt(1-v^2)
     h=-(3π+10-16cl2(π/2))/(24π)
-    if abs(c)<8eps(primal(float(α)))
-        return (g+1-2sqrt(oftype(primal(α), 2))*ξ)/6-μ*log(sqrt(oftype(primal(α), 2))+ξ)/3+g*asin(
-            μ,
-        )/(3π)+h*μ
-    end
     β=abs(μ)==1 ? μ*x : asin(v)
     dl=cl2(x-β)+cl2(π+β-x)-cl2(π-x-β)-cl2(x+β)
     logs=β*(2log(s)-2log(g+c))
