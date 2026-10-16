@@ -13,6 +13,11 @@ using Test, FockExpansion
         @test psi10(α, θ; Z = 2) ≈ ξ/2-2*(sin(α/2)+cos(α/2))
     end
     @test_throws DomainError psi30(0.0, 0.3; Z = 2, E = -2.9, a21 = 0.0)
+    # The default rtol reaches Float64 accuracy against the same formula in BigFloat.
+    ref = setprecision(128) do
+        psi30(big(0.701π), big(0.438π); Z = big"2", E = big"-2.9", a21 = big"0.123", rtol = big"1e-30")
+    end
+    @test psi30(0.701π, 0.438π; Z = 2, E = -2.9, a21 = 0.123) ≈ ref atol=1e-14
 end
 @testset "Second order independent reference" begin
     for (α, θ, ref) in (

@@ -491,7 +491,7 @@ Inputs are dimensionless and a₂₁ uses the total-projection convention.
 # infinity as cos α rounds to 1), so Float64 inputs use cubic extrapolation in α from
 # α = (1,2,3,4)·SMALL_ALPHA; ψ₃₀ is smooth there and the extrapolation error is ~1e-14.
 const SMALL_ALPHA = 1e-4
-function psi30_parts(α, θ; Z, E, a21, rtol = 1e-11)
+function psi30_parts(α, θ; Z, E, a21, rtol = 1e-13)
     π=typedpi(α)
     g=geometry(α, θ)
     (; r1, r2, σ, v, ξ)=g
