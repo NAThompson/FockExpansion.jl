@@ -98,8 +98,9 @@ function de_rule(a, b; h = 0.0625, N = 48)
     for j = (-N):N
         τ=j*h
         s=π/2*sinh(τ)
-        x=(a+b)/2+(b-a)/2*tanh(s)
-        # On short intervals the outer nodes round onto the endpoints, e.g. t = π.
+        # Offset from the nearer endpoint, which avoids cancellation in (a+b)/2+(b-a)/2*tanh(s).
+        x=s>=0 ? b-(b-a)/(1+exp(2s)) : a+(b-a)/(1+exp(-2s))
+        # Offsets below half an ulp of the endpoint still round onto it, e.g. t = π.
         a<x<b || continue
         push!(xs, x)
         push!(ws, (b-a)/2*h*π/2*cosh(τ)/cosh(s)^2)

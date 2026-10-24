@@ -39,3 +39,12 @@ end
         @test d2(π/2) ≈ (d2(π/2-1e-5)+d2(π/2+1e-5))/2 atol=1e-8
     end
 end
+@testset "psi20 α-derivative at cos θ = 1" begin
+    # For θ below about 1e-8, cos θ rounds to 1 and two Clausen terms vanish exactly.
+    for α in (0.7, π/2-1e-3, π/2+0.2), θ in (1e-9, 0.0+eps())
+        d = ForwardDiff.derivative(a->psi20(a, θ; Z = 2, E = -2.9, a21 = 0.1), α)
+        dref = ForwardDiff.derivative(a->psi20(a, 1e-6; Z = 2, E = -2.9, a21 = 0.1), α)
+        @test isfinite(d)
+        @test d ≈ dref atol=1e-5
+    end
+end

@@ -53,10 +53,11 @@ function unit_dilog(z)
     u=mod(angle(z), 2π)
     complex(π^2/6-u*(2π-u)/4, cl2(u))
 end
+# Fold α to [0, π/2] on the primal so that nested duals at α = π/2 keep one branch.
+fold_half(α, π) = primal(α)<=π/2 ? α : π-α
 function chi(α, μ)
     π=typedpi(α)
-    # Fold on the primal so that nested duals at α = π/2 keep one branch.
-    x=primal(α)<=π/2 ? α : π-α
+    x=fold_half(α, π)
     s=sin(x)
     c=cos(x)
     v=s*μ
@@ -65,7 +66,15 @@ function chi(α, μ)
     g=sqrt(1-v^2)
     h=-(3π+10-16cl2(π/2))/(24π)
     β=abs(μ)==1 ? μ*x : asin(v)
-    dl=cl2(x-β)+cl2(π+β-x)-cl2(π-x-β)-cl2(x+β)
+    # At μ = ±1 two Clausen arguments vanish identically. cl2(0) = cl2(π) = 0, but cl2'
+    # is infinite at 0 and times a zero dual partial gives NaN, so drop them exactly.
+    dl=if μ == 1
+        -cl2(π-2x)-cl2(2x)
+    elseif μ == -1
+        cl2(2x)+cl2(π-2x)
+    else
+        cl2(x-β)+cl2(π+β-x)-cl2(π-x-β)-cl2(x+β)
+    end
     logs=β*(2log(s)-2log(g+c))
     logs+=μ == -1 ? zero(β) : (β+x)*log1p(μ)
     logs+=μ == 1 ? zero(β) : (β-x)*log1p(-μ)
@@ -495,7 +504,7 @@ function psi30_parts(α, θ; Z, E, a21, rtol = 1e-13)
     π=typedpi(α)
     g=geometry(α, θ)
     (; r1, r2, σ, v, ξ)=g
-    α=primal(g.α)<=π/2 ? g.α : π-g.α
+    α=fold_half(g.α, π)
     # The panels use the folded angle, so cos(α/2) and sin(α/2) swap with it.
     primal(g.α)<=π/2 || (g=merge(g, (; α, r1 = g.r2, r2 = g.r1)))
     if primal(α) isa Float64 && primal(α)<SMALL_ALPHA
