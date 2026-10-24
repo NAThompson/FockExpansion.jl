@@ -1,0 +1,230 @@
+\documentclass[aps,pra,twocolumn,superscriptaddress,nofootinbib]{revtex4-2}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newcommand{\Cl}{\operatorname{Cl}_2}
+\newcommand{\lab}[1]{\textup{\textsc{#1}}}
+
+\begin{document}
+
+\title{Finite recurrences with exact Fock structure and a zero-tail selection theorem for the helium ground state}
+\author{Nick Thompson}
+\date{October 2026}
+
+\begin{abstract}
+We propose the ansatz $e^{-\sigma/2}\sum_k \ln^k\sigma\sum_i g_iF_{k,i}$ for the helium ground state in Pekeris' perimetric coordinates, where $\sigma=2\varepsilon(r_1+r_2)$, the $F_{k,i}$ are triple Laguerre series and the $g_i$ are transcendental ``atoms'' taken from the exact Fock coefficients.
+Through Fock order three the Laguerre coefficients obey an explicit finite recurrence: at $E=-\varepsilon^2$, $Z=2$, the five unweighted order-three blocks have $2\,577\,274$ stencil entries and shell half-bandwidth at most $16$.
+Separately, we prove that the zero-tail backward (Miller) solution of the weak recurrence, with the constant Laguerre coefficient fixed to one, converges in form norm to the ground state.
+Finite-section experiments show undamped propagation of tail data and convergence consistent with algebraic decay; no asymptotic rate or Pincherle-type classification is proved.
+We distinguish proofs, machine checks, numerical observations and open questions.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+Pekeris turned the helium Schr\"odinger equation into a $33$-term recurrence for Laguerre coefficients in perimetric coordinates~\cite{Pekeris1958,Pekeris1959,KZ2011}.
+Each Pekeris function is analytic in the interparticle distances, so it cannot carry Fock's $R^2\ln R$ term at the triple-collision point $R=(r_1^2+r_2^2)^{1/2}=0$~\cite{Fock1954,FHOS2005}.
+Frankowski and Pekeris added logarithmic basis functions variationally~\cite{FP1966}.
+Morgan proved convergence of Fock-type expansions near $R=0$~\cite{Morgan1986}; his abstract leaves open whether the physical eigenfunction is represented by one.
+
+We ask whether the ground state can be a ``special function'' in a stronger sense: one global expansion with (i)~the exact Fock structure at $R=0$ built into the basis, (ii)~an exponential factor carrying the decay, (iii)~coefficients that obey an explicit finite recurrence, and (iv)~the physical solution selected by a criterion stated on that recurrence.
+We construct (i) and (iii) through Fock order three and prove a selection theorem for (iv) on the physical weak form of the recurrence.
+Two gaps remain open: a convergent global reconstruction of the restricted sectors, and the identification of that weak form with the formal row-cleared recurrence of (iii).
+Labels: \lab{proved} (argument in the record~\cite{record}), \lab{verified} (exact or high-precision machine check), \lab{numerical}, \lab{open}, \lab{conj}.
+
+\section{Ansatz and logarithmic sectors}
+With $u=\varepsilon(r_2+r_{12}-r_1)$, $v=\varepsilon(r_1+r_{12}-r_2)$, $w=2\varepsilon(r_1+r_2-r_{12})$ and $\sigma=u+v+w$, set
+\begin{equation}\label{eq:ansatz}
+\Psi=e^{-\sigma/2}\sum_{k\ge0}\ln^k\sigma\sum_i g_i\,F_{k,i}(u,v,w),
+\end{equation}
+where $F_{k,i}=\sum A^{(k,i)}_{lmn}L_l(u)L_m(v)L_n(w)$ and $g_0=1$.
+Write $F_k=\sum_ig_iF_{k,i}$.
+Each sector is restricted to log-free homogeneous expansions at $R=0$ with $F_k=O(R^{2k})$; without this restriction the split is not unique (the gauge $F_0\to F_0-G\ln\sigma$, $F_1\to F_1+G$).
+The exponential is a gauge, not the boundary condition, since an unrestricted Laguerre series can undo it.
+Decay is imposed below as membership in the Coulomb form domain.
+
+Let $P=-(2v+w)(2u+w)(u+v)\,e^{\sigma/2}(H-E)e^{-\sigma/2}$, a second-order operator with polynomial coefficients $M_{ij},b_i,c$.
+The product rule for $\ln^k\sigma$ gives, for the plain atom $g_0=1$, the sector equations
+\begin{equation}\label{eq:sectors}
+\sigma^2PF_j+(j+1)C_1F_{j+1}+(j+1)(j+2)C_2F_{j+2}=0,
+\end{equation}
+with $C_1=2\sigma\sum_{ij}M_{ij}\partial_j+\sigma\sum_ib_i-\sum_{ij}M_{ij}$ and
+\begin{equation}
+\begin{split}
+C_2=\sum_{ij}M_{ij}&=4\varepsilon^2(u+v)(2u+w)(2v+w)\\&=128\,\varepsilon^5r_1r_2r_{12},
+\end{split}
+\end{equation}
+proportional to the physical volume density.
+\begin{proposition}[\lab{verified}]\label{prop:sectors}
+Every operator in~\eqref{eq:sectors} acts on Laguerre coefficients by a finite stencil.
+At $E=-\varepsilon^2$ the offsets number $33$ for $P$ (Pekeris' recurrence), $177$ for $\sigma^2P$, $117$ for $C_1$ and $57$ for $C_2$; at general $E$, $P$ has $57$ offsets and $\sigma^2P$ has $225$.
+\end{proposition}
+\noindent
+Two independent derivations agree on all $441$ coefficients.
+The Pekeris part agrees with the Koutschan--Zeilberger transcription of Pekeris' Eq.~(22)~\cite{KZ2011}, and direct application of $H$ to random arrays in every sector reproduces the stencils exactly.
+The coupling is upper-triangular in the log level, but the tower has no top sector, so~\eqref{eq:sectors} is not solved from the top down.
+We use~\eqref{eq:sectors} formally; an identity for the infinite tower needs a fixed gauge and enough convergence to differentiate and extract coefficients.
+At the simple ground eigenvalue a finite tower has no positive log sectors, provided every sector times $e^{-\sigma/2}$ lies in the physical operator domain (\lab{proved}; the triple-point value is nonzero).
+
+\section{Atoms and the order-three recurrence}
+At Fock order two the only non-polynomial content in distance coordinates is $Z\chi$, where $R^2\psi_{20}=\text{polynomial}+ZR^2\chi$ and $\chi$ is a Clausen-type function.
+Let $P_{+}=(2R^2-r_{12}^2)^{1/2}=|\mathbf x_1+\mathbf x_2|$, $\alpha=2\arctan(r_2/r_1)$ and $\beta=\arcsin[(R^2-r_{12}^2)/R^2]$.
+\begin{proposition}[order two; \lab{proved}]\label{prop:order2}
+The smallest module over rational functions of $(r_1,r_2,r_{12})$ that contains $1$ and $\chi$ and is closed under differentiation has rank five, with basis
+$\{1,\;L=\ln\tfrac{s+r_{12}}{R},\;\alpha,\;V=\tfrac{P_+}{r_{12}}(\beta+\tfrac\pi2),\;U\}$, $s=r_1+r_2$, where $U$ is a weight-two combination of $\Cl$ values and single logarithms.
+Independence follows from monodromy.
+One analytic expression covers both orderings $r_1\gtrless r_2$.
+The cleared log-sector recurrence is finite, with shell half-bandwidth $10$ at $E=-\varepsilon^2$.
+\end{proposition}
+\noindent
+The $1/r_{12}$ pole of $V$ prevents form admissibility even after exponential damping; $r_{12}V$ removes it.
+Exponentially damped polynomial products of $1,\tilde L,\alpha-\pi/2,r_{12}V,U$ are form-admissible, with $\tilde L=L-\frac{\pi-2}{\pi}\ln(s/R)$ for the $\ln\sigma$ convention (\lab{proved}).
+
+At order three, $R^3\psi_{30}$ decomposes into a polynomial, a classical block (Clausen functions and logarithms) and four elliptic ``panels'', which are moments $N_0,N_2$ of an algebraic integrand over a quartic.
+For a cyclic vector of the combined module $\{1,\chi,R^3\psi_{30}\}$, finite-field reconstruction of the connection along a test line fails through total (numerator plus denominator) degree $350$; separate panels reconstruct with degrees $47$--$49$ (\lab{verified}).
+The high degree is an artefact of the cyclic basis, so we keep the blocks separate.
+\begin{proposition}[order three]\label{prop:order3}
+(a)~\lab{proved}: the classical block has an exact $18$-state connection (its pullback to distance coordinates is real, \lab{verified}).
+Each panel has a radical-free $55$-state connection over $\mathbb Q(r_1,r_2,r_{12})$, which reduces to $23$ reachable states over $\mathbb Q(\pi)(r_1,r_2,r_{12})$.
+The panel atoms are global on the open physical triangle: with $h$ a panel ratio such as $r_1/r_2$, the two moment kernels satisfy $g_j(h/s)\,h/s^2=-g_j(s)$, so $\int_1^hg_j=0$ and $N_0,N_2$ equal their fixed-endpoint integrals from $1$.
+(b)~\lab{verified}: the cleared log-sector Laguerre recurrences of the five unweighted blocks have the sizes in Table~\ref{tab:counts}.
+\end{proposition}
+
+\begin{table}[t]
+\caption{Order-three recurrence for $E=-\varepsilon^2$, $Z=2$.
+``Sectors'' counts atom states, i.e.\ unknown Laguerre arrays per log level.
+These are sufficient presentations, not minimal ranks.
+Row-clearing factors have degree $\le12$.}
+\label{tab:counts}
+\begin{ruledtabular}
+\begin{tabular}{lrrr}
+Block & Sectors & Offsets & Half-bandwidth\\
+\hline
+Classical & 21 & 215\,406 & 12\\
+Panels 1, 2 (each) & 23 & 562\,570 & 16\\
+Panels 3, 4 (each) & 23 & 618\,364 & 16\\
+\hline
+Total & 113 & 2\,577\,274 & 16
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+Applying $e^{\sigma/2}(H-E)e^{-\sigma/2}$ directly, with the actual atoms, to random Laguerre arrays in every sector at log levels $0,1$ reproduces the stencils to a relative $10^{-54}$ (classical block) and $10^{-30}$ (panels).
+An independent symbolic derivation reproduces selected panel-3 blocks exactly ($1\,062$ monomials).
+A compiled generator regenerates all stencils on demand~\cite{record}.
+
+\paragraph*{Form-domain admissibility.}
+Exponentially damped polynomial products of the classical order-three atoms are form-admissible without weights (\lab{proved}).
+Some panel primitives are not even in $L^2$ near collinear configurations.
+Let $\delta=[4r_1^2r_2^2-(r_1^2+r_2^2-r_{12}^2)^2]/R^4$; this is $16\,\mathrm{Area}^2/R^4$ for the electron--nucleus triangle and vanishes exactly on collinear configurations.
+\begin{proposition}[\lab{proved}]\label{prop:weight}
+Exponentially damped polynomial products of all panel atoms with $\delta^4$ lie in the Coulomb form domain.
+No power $\delta^a$ with $0\le a<1$ suffices for every panel primitive.
+Polynomials times $e^{-\sigma/2}\delta^4$ are already form-dense in the singlet $S$ sector.
+\end{proposition}
+\noindent
+The weight changes the angular jets.
+Table~\ref{tab:counts} counts the unweighted operators; weighted stencils need the $d\ln\delta^4$ correction to the connection.
+The least sufficient power, and whether $R^3\psi_{30}$ lies exactly in a finite span of weighted atoms, are \lab{open}.
+
+\section{Selection by zero-tail backward recursion}
+At fixed $\varepsilon$ let $V_N$ be $e^{-\sigma/2}$ times exchange-symmetric Laguerre polynomials of total shell $l+m+n\le N$.
+The multiplier in $P$ is, up to a negative constant, the volume density, so the rows of the plain recurrence are the Galerkin rows of $H-E$ in $V_N$ up to normalization and exchange multiplicities.
+Let $K_N(E)$ be that finite section.
+\begin{theorem}[zero-tail selection; \lab{proved}]\label{thm:select}
+Assume that $E_0$ is the isolated simple ground eigenvalue, with positive eigenfunction $\psi_0$.
+Then:
+(i)~$\bigcup_NV_N$ is a core for the Coulomb form on the singlet $S$ sector;
+(ii)~the coefficient $A_{000}$ extends to a bounded functional on the form domain, and $A_{000}(\psi_0)>0$;
+(iii)~for each $N$ the system ``$A_{000}=1$, $A_{lmn}=0$ above shell $N$, every row through shell $N$ except the constant row, at $E=E_0$'' has a unique solution $\psi_N$, and $\psi_N\to\psi_0/A_{000}(\psi_0)$ in form norm with a C\'ea bound
+$\|\psi_N-\psi\|\le C\inf_{v\in V_N,\,A_{000}(v)=1}\|v-\psi\|$;
+(iv)~where $K_N(E)$ is invertible the dropped row is $g_N(E)=1/[K_N(E)^{-1}]_{000,000}$; its zero near $E_0$ is eventually the ground Ritz value, and $g_N(E_0)\to0$.
+\end{theorem}
+\noindent
+\emph{Sketch.}
+(i)~A functional annihilating every $V_N$ annihilates $e^{-\sigma/2}e^{\mathbf t\cdot\mathbf X}$ on the tube $|\mathrm{Re}\,\mathbf t|<\varepsilon$, by rotational averaging and holomorphy; Fourier inversion then shows it vanishes.
+(ii)~Hardy's inequality in $\mathbb R^6$ bounds $A_{000}$, and its representing density is positive.
+(iii)~Write $v=t\psi_0+v_\perp$.
+On $\ker A_{000}$ the bound $|t|\le\|A_{000}\|\,\|v_\perp\|/A_{000}(\psi_0)$ and the spectral gap make $q-E_0$ coercive, so C\'ea's lemma applies.
+(iv)~The Schur identity gives the formula; coercivity gives $g_N(E_0)\to0$, and density, min--max and the nonzero head overlap identify the Ritz zero.
+$\square$
+
+The theorem extends to nested, form-dense, exchange-symmetric enrichments of $V_N$ by $\ln\sigma$, $\ln^2\sigma$, the corrected order-two atoms, the classical order-three atoms and the $\delta^4$-weighted panels, provided the head is a bounded overlap functional that is nonzero on $\psi_0$ and physical linear dependencies are quotiented out (\lab{proved}).
+\lab{open}: identifying this physical weak pencil with the formal row-cleared recurrence of Table~\ref{tab:counts}, an explicit rate in $N$, and a classification of all formal solutions.
+
+Numerically, for the plain 57-term recurrence at $\varepsilon=1.704$, $|g_N(E_0)|$ falls from $1.8\times10^{-4}$ ($N=6$) to $6.1\times10^{-8}$ ($N=22$), roughly as $N^{-5}$ over the tested range.
+
+\paragraph*{Raw-tail experiments and dichotomy.}
+Classical scalar minimality compares a solution with independent ones through a ratio that tends to zero; it does not require geometric separation.
+For this recurrence, unit random data placed in shells $N+1$ to $N+3$ change the low shells by amounts of order $0.03$ to $3$ for $N=10,\dots,22$, i.e.\ undamped (\lab{numerical}).
+Geometric decay of the full plain Laguerre array would make $F$ entire, contradicting the nonzero $R^2\ln R$ term (\lab{proved}).
+Even Leaver's classical radial (Jaff\'e-type) recurrences have a double characteristic root $1$ and only stretched-exponential separation~\cite{Leaver1985,Leaver1986}, so even there selection does not rest on a geometric dichotomy.
+We do not prove a basis-independent no-dichotomy theorem.
+The selecting notion here is a small tail in the form norm, not a coefficient ratio.
+
+\begin{table}[t]
+\caption{$E-E_0$ (hartree) with basis size in parentheses, polynomial degree $N$.
+Columns: plain Laguerre; constant replaced by the exact Fock seed $1-Z\kappa(r_1^2+r_2^2-r_{12}^2)\ln\sigma$, $\kappa=\frac{\pi-2}{3\pi}$, plus $\ln\sigma$ times polynomials; plus $\ln^2\sigma$ times polynomials; plus parity-adapted polynomial products of the admissible order-two atoms (min5); min5$+\psi_{30}$.
+These Ritz spaces are not the 113-state construction of Table~\ref{tab:counts}.}
+\label{tab:energy}
+\begin{ruledtabular}
+\begin{tabular}{lccccc}
+$N$ & plain & $+\ln$ & $+\ln^2$ & min5 & $+\psi_{30}$\\
+\hline
+6 & 4.8e-6 & 6.2e-8 & 4.6e-8 & 3.9e-12 & 3.9e-12\\
+ & (50) & (77) & (86) & (141) & (144)\\
+8 & 9.9e-7 & 1.6e-9 & 6.5e-10 & 2.8e-16 & 2.8e-16\\
+ & (95) & (158) & (195) & (341) & (354)\\
+10 & 2.7e-7 & 6.2e-11 & 1.2e-11 & 2.3e-20 & 1.9e-20\\
+ & (161) & (279) & (361) & (660) & (694)\\
+11 & 1.5e-7 & 1.4e-11 & 1.6e-12 & 1.2e-21 & 7.3e-22\\
+ & (203) & (357) & (469) & (873) & (923)
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\section{Numerics}
+Table~\ref{tab:energy} gives Ritz energies at fixed $\varepsilon=1.704$, $E_0=-2.903724377034119598\ldots$ (\lab{numerical}, multiprecision arithmetic, all $E\ge E_0$).
+The log seed builds in the leading Fock logarithm, and min5 the order-two non-polynomial angular content; adding $\psi_{30}$ gives only modest gains at comparable size.
+Log--log slopes against basis size steepen to about $-8$ to $-15$, while semilog curves remain convex.
+These finite data are consistent with fast algebraic convergence; no asymptotic rate is established.
+For comparison, Pekeris' recurrence at $525$ functions gives $E-E_0=1.4\times10^{-8}$.
+
+\begin{remark}
+Fixing the Fock jets through $R^2\ln R$ exactly and reading the harmonic coefficient $a_{21}$ (Liverts total-projection convention, $\psi_{00}=1$, $\ln R$) through a global finite-part functional gives $a_{21}\approx0.47674788$ at $N=11$.
+Two bases agree to $3\times10^{-9}$, but the error scale is only empirical, about $10^{-8}$; these are not certified digits.
+\end{remark}
+
+\section{Open problems}
+(1)~Identify the physical weak pencil with the formal row-cleared recurrence (gauge, admissible tails), and classify all formal solutions.
+(2)~Give an explicit rate in $N$ for Theorem~\ref{thm:select}.
+(3)~Find the least panel weight power in $\{1,2,3,4\}$, and decide whether $\psi_{30}$ lies exactly in a finite weighted span.
+(4)~Prove minimality of the order-three ranks ($12$ classical, $13$ per panel are candidates).
+(5)~Extend to order four: does $\psi_{40}$, $\psi_{41}$ close on a finite module, and is $\ln^p R$ nonzero for every $p$ (\lab{conj})?
+
+\begin{acknowledgments}
+The derivations, proofs and computations were carried out with the AI systems Claude (Anthropic) and Codex (OpenAI).
+They worked independently and cross-checked each other; the record~\cite{record} attributes each result and lists every co-signature and dissent.
+Responsibility for the manuscript and its claims rests with the human author.
+\end{acknowledgments}
+
+\begin{thebibliography}{99}
+\bibitem{Fock1954} V. A. Fock, Izv. Akad. Nauk SSSR, Ser. Fiz. \textbf{18}, 161 (1954); English translation in K. Nor. Vidensk. Selsk. Forh. \textbf{31}, 138 (1958). % TODO: original full text not inspected; page ranges from codex/codex_literature.md
+\bibitem{Pekeris1958} C. L. Pekeris, Phys. Rev. \textbf{112}, 1649 (1958).
+\bibitem{Pekeris1959} C. L. Pekeris, Phys. Rev. \textbf{115}, 1216 (1959).
+\bibitem{FP1966} K. Frankowski and C. L. Pekeris, Phys. Rev. \textbf{146}, 46 (1966); \textbf{150}, 366(E) (1966).
+\bibitem{FHOS2005} S. Fournais, M. Hoffmann-Ostenhof, T. Hoffmann-Ostenhof, and T. \O. S\o rensen, Commun. Math. Phys. \textbf{255}, 183 (2005).
+\bibitem{Morgan1986} J. D. Morgan III, Theor. Chim. Acta \textbf{69}, 181 (1986).
+\bibitem{Leaver1985} E. W. Leaver, Proc. R. Soc. Lond. A \textbf{402}, 285 (1985).
+\bibitem{Leaver1986} E. W. Leaver, J. Math. Phys. \textbf{27}, 1238 (1986).
+\bibitem{KZ2011} C. Koutschan and D. Zeilberger, Math. Intelligencer \textbf{33}(2), 52 (2011).
+\bibitem{record} Research record and code, \url{https://github.com/NAThompson/FockExpansion.jl}, commit 8495a40, directory \texttt{derivations/pekeris\_fock/} (2026); see \texttt{THEORY.md} there. % TODO: confirm commit is pushed and update to final revision
+\end{thebibliography}
+
+\end{document}
