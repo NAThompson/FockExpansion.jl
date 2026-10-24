@@ -113,6 +113,13 @@ end
             @test psi40(1.0, t; Z, E, a21) ≈ r40 atol=5e-14
         end
     end
+    # Near α = π/2, where an 8-point G₂ azimuthal rule gave errors up to 8e-13 (60-digit spectral
+    # data at E = a₂₁ = 0, derivations/pekeris_fock/claude9/spec40.txt).
+    for (a, t, r40) in ((1.5363787940726878, 1.8064754809386592, 0.3722263813907205728692752),
+                        (1.7299206379108274, 1.7460469161933476, 0.3622273973978488858445726),
+                        (1.6301394819622352, 1.6946884488181788, 0.3527984914123717304411289))
+        @test psi40(a, t; Z = 2.0, E = 0.0, a21 = 0.0) ≈ r40 atol=3e-14
+    end
     # Float64-only functions refuse wider inputs instead of dropping precision.
     @test_throws ArgumentError psi41(big"0.7", 1.1; Z = 2.0, E, a21 = 0.4)
     @test_throws ArgumentError psi40(0.7, 1.1; Z = big"2.0", E, a21 = 0.4)

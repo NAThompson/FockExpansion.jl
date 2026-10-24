@@ -111,11 +111,11 @@ end
 # live on α ∈ (0, π/2] with kernel K(x,y) + K(x,ȳ), ȳ the mirror α → π-α, and the domain
 # is split at the target. The logarithmic kernel singularity and the Coulomb corners at
 # (π/2, 0) and (π/2, π) then sit at rectangle corners, where tanh-sinh converges
-# exponentially (h = 0.0625 gives about 1e-14, h = 0.125 about 1e-10).
+# exponentially (h = 0.0625 gives about 2e-14, h = 0.125 about 4e-10).
 function solve_k4_symmetric(h, α, θ; h2 = nothing, step = 0.0625)
     α>π/2 && (α=π-α)
     N=ceil(Int, 3/step)
-    rule2=gauss(8)
+    rule2=gauss(12)   # G₂ has a √(1-cos γ) term: gauss(8) left errors up to 1e-12
     total=0.0
     for (a0, a1) in ((0.0, α), (α, π/2)), (t0, t1) in ((0.0, θ), (θ, Float64(π)))
         (a1>a0 && t1>t0) || continue

@@ -98,9 +98,9 @@ end
 """ψ₄₀, the R⁴ coefficient, for 0 < α < π and 0 ≤ θ ≤ π: the solution with no Y₄₀, Y₄₂
 component plus `a40*Y₄₀ + a42*Y₄₂` (Y₄₀ = 4cos²α-1, Y₄₂ = sin²α P₂(cos θ)).
 a40 and a42 are not fixed by the Fock recurrence. Float64 only; one two-dimensional
-tanh-sinh quadrature with ψ₃₀ at every node: `step = 0.0625` (default) gives about 1e-14
-in about a second, `step = 0.125` about 1e-10 in 0.3 s. Inputs wider than Float64 throw
-an ArgumentError."""
+tanh-sinh quadrature with ψ₃₀ at every node. Against 60-digit spectral values at 300
+points (Z = 2), `step = 0.0625` (default) gives at most 2e-14 (median 4e-15) in about
+0.6 s, `step = 0.125` at most 4e-10 in 0.15 s. Inputs wider than Float64 throw an ArgumentError."""
 function psi40(α, θ; Z, E, a21, a40 = 0.0, a42 = 0.0, step = 0.0625)
     check_float64(:psi40, α, θ, Z, E, a21, a40, a42)
     # θ = 0, π are coordinate poles, not boundaries; the source nodes stay interior.
