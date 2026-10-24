@@ -139,9 +139,12 @@ The residual of a radially truncated Fock expansion is a separate quantity.
 
 `psi42(α, θ; Z)` is the closed-form coefficient of R⁴log²R.
 `psi41(α, θ; Z, E, a21)` is the coefficient of R⁴log R. Its Z¹ and Z³ parts are
-closed forms (Liverts & Barnea 2015, Table I); its Z² part is computed by
-quadrature against the S³ Green's function of the resonant k = 4 operator
-(about a second per call, Float64 only). Its Y₄ₗ harmonic part is not free: the
+closed forms (Liverts & Barnea 2015, Table I); its Z² part is a finite closed form
+(under a microsecond in Float64, also BigFloat and ForwardDiff), checked against
+quadratures with the S³ Green's function of the resonant k = 4 operator.
+Liverts & Barnea (PRA 92, 042512 (2015); arXiv:1601.06964) give ψ₄₁⁽²ᵈ⁾ only as an infinite Legendre series with explicit terms;
+the finite closed form in the order-2 module {1, α, L, U, V} is from derivations/pekeris_fock (phase 9).
+Its Y₄ₗ harmonic part is not free: the
 regularity condition of the ψ₄₀ equation fixes it in terms of Z, E and a₂₁.
 See `derivations/k4/README.md` for the derivation, checks, and the exact
 residual of the truncated series.

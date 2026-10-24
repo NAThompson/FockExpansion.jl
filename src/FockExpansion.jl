@@ -66,20 +66,26 @@ function chi(α, μ)
     g=sqrt(1-v^2)
     h=-(3π+10-16cl2(π/2))/(24π)
     β=abs(μ)==1 ? μ*x : asin(v)
+    (g+s-2σ*ξ)/6+(-2π*v*log(σ+ξ)+π*c*log((c+σ*ξ)^2/(σ^2*(g+c)))+2g*β+c*clausen_logs(x, μ, β, s, c, g))/(6π)+h*v
+end
+# β log(s/(g+c))² + (β+x) log(1+μ) + (β-x) log(1-μ) - Cl₂(x-β) - Cl₂(π+β-x) + Cl₂(π-x-β) + Cl₂(x+β)
+# for 0 ≤ x ≤ π/2, s, c = sin x, cos x, β = asin(s μ), g = cos β; shared by χ and ψ₄₁⁽²⁾.
+function clausen_logs(x, μ, β, s, c, g)
+    π=typedpi(x)
     # At μ = ±1 two Clausen arguments vanish identically. cl2(0) = cl2(π) = 0, but cl2'
-    # is infinite at 0 and times a zero dual partial gives NaN, so drop them exactly.
-    dl=if μ == 1
+    # is infinite at 0 and times a dual partial gives NaN, so drop them (their limit).
+    m=primal(μ)
+    dl=if m == 1
         -cl2(π-2x)-cl2(2x)
-    elseif μ == -1
+    elseif m == -1
         cl2(2x)+cl2(π-2x)
     else
         cl2(x-β)+cl2(π+β-x)-cl2(π-x-β)-cl2(x+β)
     end
     logs=β*(2log(s)-2log(g+c))
-    logs+=μ == -1 ? zero(β) : (β+x)*log1p(μ)
-    logs+=μ == 1 ? zero(β) : (β-x)*log1p(-μ)
-    (g+s-2σ*ξ)/6+(-2π*v*log(σ+ξ)+π*c*log((c+σ*ξ)^2/(σ^2*(g+c)))+2g*β+c*(logs-dl))/(6π)+h*v
-
+    logs+=m == -1 ? zero(β) : (β+x)*log1p(μ)
+    logs+=m == 1 ? zero(β) : (β-x)*log1p(-μ)
+    logs-dl
 end
 """Closed classical expression for ψ₂₀, with total-projection a₂₁."""
 function psi20(α, θ; Z, E, a21)

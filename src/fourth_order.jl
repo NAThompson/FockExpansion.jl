@@ -8,8 +8,9 @@
 # fixes the Y₄ₗ part of ψ₄₁. Only the Y₄ₗ part of ψ₄₀ is left free.
 #
 # By powers of Z, ψ₄₁ = Zψ⁽¹⁾ + Z²ψ⁽²⁾ + Z³ψ⁽³⁾ + harmonic part. ψ⁽¹⁾ and ψ⁽³⁾ are
-# the closed forms of Liverts & Barnea, PRA 92, 042512 (2015), Table I; ψ⁽²⁾ is
-# computed here by quadrature against the S³ Green's function.
+# the closed forms of Liverts & Barnea, PRA 92, 042512 (2015), Table I; ψ⁽²⁾ is the
+# closed form `psi41_z2` (derivations/pekeris_fock/THEORY.md, Phase 9), checked
+# against the S³ Green's function and a one-dimensional Feynman integral.
 
 """ψ₄₂, the coefficient of R⁴log²R (Abbott–Maslen; Liverts–Barnea 2015, Eq. 206).
 With r₁, r₂ the electron positions, 1-2sin²α sin²θ = 1-8|r₁×r₂|²/R⁴."""
@@ -65,6 +66,35 @@ function psi41_z2_source(a, t)
     B*(V1*(5ξ^3/6-ξ)+ς*(ξ-1/ξ))
 end
 
+# Y₄ₗ coefficients that make psi41_z2 orthogonal to Y₄₀, Y₄₂ (256-bit quadrature, 48 digits;
+# derivations/pekeris_fock/codex/phase9/x19_report.md). Numerical, not identified.
+const PSI41_Z2_PURE=(big"0.00082106684957556469415831715509798526043967205959",
+                     big"0.01992734793080898549051527717103411701281763036468")
+
+"""Z² component of ψ₄₁ without Y₄ₗ admixture, in closed form. With R = 1, r₁ = cos(α/2),
+r₂ = sin(α/2), r₁₂ = ξ, v = sin α cos θ, β = asin v and P = √(1+v), it is a combination of
+1, α, log(r₁+r₂+r₁₂), P(β+π/2) and a Clausen–log atom U with quartic polynomial coefficients
+over ℚ(π), plus the numerical Y₄ₗ constants `PSI41_Z2_PURE`
+(derivations/pekeris_fock/THEORY.md, Phase 9). Generic in the number type (Float64,
+BigFloat, ForwardDiff duals); about 1e-16 absolute in Float64, also near the coalescences.
+Liverts & Barnea (PRA 92, 042512 (2015); arXiv:1601.06964) give ψ₄₁⁽²ᵈ⁾ only as an infinite
+Legendre series with explicit terms; this finite form is from derivations/pekeris_fock (phase 9)."""
+function psi41_z2(α, θ)
+    π=typedpi(α)
+    (; α, θ, v, ξ, σ, opv)=geometry(fold_half(α, π), θ)   # ψ₄₁⁽²⁾ is exchange symmetric
+    s, c=sincos(α)
+    μ=cos(θ)
+    P=sqrt(opv)
+    G=ξ*P                                     # cos β, without cancellation near v = ±1
+    β=abs(primal(μ))==1 ? μ*α : atan(v, G)
+    d=sqrt(2*one(π))*sin(π/4-α/2)             # r₁ - r₂
+    U=clausen_logs(α, μ, β, s, c, G)+π*log((d+ξ)^2/(G+c))
+    k=(π-2)/π
+    p=(5π^2-3π-14)/(360π^2)+k*(ξ*σ*(36+40s-60ξ^2)-20s*v-28s*c)/360+
+      oftype(π, PSI41_Z2_PURE[1])*harmonic40(α, θ)+oftype(π, PSI41_Z2_PURE[2])*harmonic42(α, θ)
+    p+7k/(45π)*s*c*α+k/18*(3-2s^2-4ξ^2+2ξ^4)*log(σ+ξ)-7k/(90π)*c*v*U-7k/(45π)*ξ*v*P*(β+π/2)
+end
+
 """ψ₄₀, the R⁴ coefficient, for 0 < α < π and 0 ≤ θ ≤ π: the solution with no Y₄₀, Y₄₂
 component plus `a40*Y₄₀ + a42*Y₄₂` (Y₄₀ = 4cos²α-1, Y₄₂ = sin²α P₂(cos θ)).
 a40 and a42 are not fixed by the Fock recurrence. Float64 only; one two-dimensional
@@ -93,9 +123,8 @@ end
 
 """ψ₄₁, the coefficient of R⁴log R, at an interior angle.
 Includes its Y₄ₗ part, which is fixed by the ψ₄₀ equation and depends on E and a₂₁.
-Float64 only (about 15 ms); inputs wider than Float64 throw an ArgumentError.
-The Y₄ₗ constants are exact to Float64 rounding; the remaining error is that of the Z²
-component ψ₄₁⁽²⁾ (about 1e-15), so the absolute error grows like Z²."""
+Closed form (under a microsecond); supports ForwardDiff duals. Wider inputs throw an
+ArgumentError, because the Y₄ₗ constants are stored only to Float64 rounding."""
 function psi41(α, θ; Z, E, a21)
     check_float64(:psi41, α, θ, Z, E, a21)
     g=geometry(α, θ)
@@ -103,6 +132,6 @@ function psi41(α, θ; Z, E, a21)
     s=sin(α)
     z1=(π-2)/(2880π)*(3*(32*E-15)-8*(12*E-5)*ξ^2)
     z3=-(π-2)/(120π)*(4+5s)*v
-    z2=iszero(Z) ? 0.0 : psi41_z2(α, θ)
+    z2=psi41_z2(α, θ)
     Z*z1+Z^2*z2+Z^3*z3+psi41_harmonic(α, θ; Z, E, a21)
 end

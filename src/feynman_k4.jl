@@ -128,12 +128,12 @@ function feynman_rule(; n = 16, levels = 18, q = 0.25)
     φs, ws
 end
 const FEYNMAN_RULE=feynman_rule()
-const PSI41_Z2_SHIFT=(0.0048977716325816, -0.0145608238240513)
+const PSI41_Z2_SHIFT=(0.0048977716325818218, -0.0145608238240515876)
 
-"""Z² component of ψ₄₁ without Y₄ₗ admixture, as a one-dimensional integral (about 15 ms).
-Float64 only: wider inputs throw an ArgumentError."""
-function psi41_z2(α::Real, θ::Real; rule = FEYNMAN_RULE)
-    check_float64(:psi41_z2, α, θ)
+"""`psi41_z2` as a one-dimensional integral (about 15 ms); an independent check. Float64
+only: wider inputs throw an ArgumentError. Loses accuracy near α = 0, π and r₁₂ = 0."""
+function psi41_z2_feynman(α::Real, θ::Real; rule = FEYNMAN_RULE)
+    check_float64(:psi41_z2_feynman, α, θ)
     α, θ=Float64(α), Float64(θ)
     x=[cos(α), sin(α)*cos(θ), sin(α)*sin(θ), 0.0]
     s=0.0

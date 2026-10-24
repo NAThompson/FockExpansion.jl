@@ -1,4 +1,4 @@
-using Test, FockExpansion
+using Test, FockExpansion, ForwardDiff
 const F4 = FockExpansion
 
 # ∫ f sin²α sinθ dα dθ, graded toward the Coulomb singularities at α = 0, π/2, π and θ = 0.
@@ -46,6 +46,35 @@ end
     for (a, t) in ((0.7, 1.1), (1.5, 0.3), (0.05, 1.5))
         @test F4.psi41_z2(a, t) ≈ F4.psi41_z2_green(a, t; n = 10, levels = 10) atol=1e-13
     end
+    # Closed form against the Feynman integral, which is accurate away from the boundaries;
+    # nearer the coalescences, Float64 against the same closed form in BigFloat.
+    for a in (0.1, 0.7, 1.2, π/2, 2.3, 2.9), t in (0.05, 0.8, 1.6, 2.4, 2.8)
+        @test F4.psi41_z2(a, t) ≈ F4.psi41_z2_feynman(a, t) atol=2e-14
+    end
+    setprecision(256) do
+        for (a, t) in ((1e-8, 1.0), (0.3, 1e-9), (2.5, π-1e-7), (π/2+1e-7, 1e-7), (π/2-1e-9, 0.3), (π-1e-6, 2.0))
+            @test F4.psi41_z2(a, t) ≈ F4.psi41_z2(big(a), big(t)) atol=2e-16
+        end
+        # 60-digit spectral values (derivations/pekeris_fock/claude9/spec41.txt), which include
+        # the Z² part of the hierarchy's Y₄ₗ component; inputs and values truncated to 44 digits.
+        c40, c42 = big"0.00305932040176846773106267150356500648940567", big"-0.00536795642440787076597402151228072313907757"
+        for (a, t, r) in ((big"1.82372502624377676315790053928930750097518991", big"2.24353309293961854956350058611345611763909834",
+                           big"-0.016804267094946716128345686750419657949132468"),
+                          (big"0.08367293768469548707429164363234652793861687", big"1.15685392202119356462696844442813816961611090",
+                           big"0.0097401818358765451959522972472719742714383846"),
+                          (big"0.50332423416928334559178192157255312865667850", big"1.89434614490375545989111083635481249789945774",
+                           big"0.0044515806202731535659140238620186541218321096"))
+            @test F4.psi41_z2(a, t)+c40*F4.harmonic40(a, t)+c42*F4.harmonic42(a, t) ≈ r atol=1e-40
+        end
+    end
+    # The recurrence with ForwardDiff derivatives instead of finite differences.
+    let a = 0.7, t = 1.1, f = x -> F4.psi41_z2(x[1], x[2])
+        g, H = ForwardDiff.gradient(f, [a, t]), ForwardDiff.hessian(f, [a, t])
+        Λ2 = -4*(H[1, 1]+2cot(a)*g[1]+(H[2, 2]+cot(t)*g[2])/sin(a)^2)
+        @test Λ2-32f([a, t]) ≈ h2(a, t) atol=1e-13
+        @test ForwardDiff.derivative(b -> psi41(b, t; Z = 2.0, E, a21 = 0.4), a) ≈
+              (psi41(a+1e-5, t; Z = 2.0, E, a21 = 0.4)-psi41(a-1e-5, t; Z = 2.0, E, a21 = 0.4))/2e-5 atol=1e-9
+    end
     # Harmonic part: solvability of the ψ₄₀ equation, ⟨Y₄ₗ, 12ψ₄₁+2ψ₄₂-2Vψ₃₀+2Eψ₂₀⟩ = 0.
     # The pure parts of ψ₄₁ are orthogonal to Y₄ₗ, so only its harmonic part enters.
     Z, E, a21 = 1.7, -2.2, 0.31
@@ -87,5 +116,5 @@ end
     # Float64-only functions refuse wider inputs instead of dropping precision.
     @test_throws ArgumentError psi41(big"0.7", 1.1; Z = 2.0, E, a21 = 0.4)
     @test_throws ArgumentError psi40(0.7, 1.1; Z = big"2.0", E, a21 = 0.4)
-    @test_throws ArgumentError F4.psi41_z2(big"0.7", 1.1)
+    @test_throws ArgumentError F4.psi41_z2_feynman(big"0.7", 1.1)
 end
