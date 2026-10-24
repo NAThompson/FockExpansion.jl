@@ -37,10 +37,11 @@ function geometry(α, θ)
     )
     r1, r2=cos(α/2), sin(α/2)
     v=sin(α)*cos(θ)
-    # 1-v and 1+v without cancellation near the coalescences v = ±1
-    omv=2sin(π/4-α/2)^2+2sin(α)*sin(θ/2)^2
-    opv=2sin(π/4-α/2)^2+2sin(α)*cos(θ/2)^2
-    (; α, θ, r1, r2, σ = r1+r2, v, ξ = sqrt(omv), opv)
+    # 1-v, 1+v and r1-r2 without cancellation near the coalescences v = ±1
+    q=sin(π/4-α/2)
+    omv=2q^2+2sin(α)*sin(θ/2)^2
+    opv=2q^2+2sin(α)*cos(θ/2)^2
+    (; α, θ, r1, r2, σ = r1+r2, d = sqrt(2*one(q))*q, v, ξ = sqrt(omv), opv)
 end
 psi00(α, θ) = (geometry(α, θ); 1.0)
 function psi10(α, θ; Z)
@@ -55,7 +56,9 @@ function unit_dilog(z)
 end
 # Fold α to [0, π/2] on the primal so that nested duals at α = π/2 keep one branch.
 fold_half(α, π) = primal(α)<=π/2 ? α : π-α
-function chi(α, μ)
+# omμ, opμ = 1∓μ; callers with θ pass 2sin²(θ/2), 2cos²(θ/2), which keep θ-derivatives
+# right where cos θ rounds to ±1.
+function chi(α, μ, omμ = 1-μ, opμ = 1+μ)
     π=typedpi(α)
     x=fold_half(α, π)
     s=sin(x)
@@ -65,33 +68,30 @@ function chi(α, μ)
     ξ=sqrt(1-v)
     g=sqrt(1-v^2)
     h=-(3π+10-16cl2(π/2))/(24π)
-    β=abs(μ)==1 ? μ*x : asin(v)
-    (g+s-2σ*ξ)/6+(-2π*v*log(σ+ξ)+π*c*log((c+σ*ξ)^2/(σ^2*(g+c)))+2g*β+c*clausen_logs(x, μ, β, s, c, g))/(6π)+h*v
+    β=asin(v)
+    (g+s-2σ*ξ)/6+(-2π*v*log(σ+ξ)+π*c*log((c+σ*ξ)^2/(σ^2*(g+c)))+2g*β+c*clausen_logs(x, μ, omμ, opμ, β, s, c, g))/(6π)+h*v
 end
 # β log(s/(g+c))² + (β+x) log(1+μ) + (β-x) log(1-μ) - Cl₂(x-β) - Cl₂(π+β-x) + Cl₂(π-x-β) + Cl₂(x+β)
-# for 0 ≤ x ≤ π/2, s, c = sin x, cos x, β = asin(s μ), g = cos β; shared by χ and ψ₄₁⁽²⁾.
-function clausen_logs(x, μ, β, s, c, g)
+# for 0 ≤ x ≤ π/2, s, c = sin x, cos x, β = asin(s μ), g = cos β, omμ, opμ = 1∓μ; shared by
+# χ and ψ₄₁⁽²⁾. x∓β come from their sine and cosine with g∓cμ = (1-μ²)/(g±cμ), so they stay
+# accurate, with the right partials, as μ → ±1. At μ = ±1 exactly one of them is 0, where
+# cl2' is infinite: drop those terms (their limit).
+function clausen_logs(x, μ, omμ, opμ, β, s, c, g)
     π=typedpi(x)
-    # At μ = ±1 two Clausen arguments vanish identically. cl2(0) = cl2(π) = 0, but cl2'
-    # is infinite at 0 and times a dual partial gives NaN, so drop them (their limit).
-    m=primal(μ)
-    dl=if m == 1
-        -cl2(π-2x)-cl2(2x)
-    elseif m == -1
-        cl2(2x)+cl2(π-2x)
-    else
-        cl2(x-β)+cl2(π+β-x)-cl2(π-x-β)-cl2(x+β)
-    end
+    w=omμ*opμ
+    xmb=atan(s*(μ>0 ? w/(g+c*μ) : g-c*μ), c*g+s^2*μ)
+    xpb=atan(s*(μ<0 ? w/(g-c*μ) : g+c*μ), c*g-s^2*μ)
+    cl(u)=iszero(primal(u)) ? zero(u) : cl2(u)
     logs=β*(2log(s)-2log(g+c))
-    logs+=m == -1 ? zero(β) : (β+x)*log1p(μ)
-    logs+=m == 1 ? zero(β) : (β-x)*log1p(-μ)
-    logs-dl
+    logs+=iszero(primal(opμ)) ? zero(β) : xpb*log(opμ)
+    logs-=iszero(primal(omμ)) ? zero(β) : xmb*log(omμ)
+    logs-cl(xmb)-cl2(π-xmb)+cl2(π-xpb)+cl(xpb)
 end
 """Closed classical expression for ψ₂₀, with total-projection a₂₁."""
 function psi20(α, θ; Z, E, a21)
     π=typedpi(α)
     g=geometry(α, θ)
-    (1-2E)/12+Z*(chi(g.α, cos(g.θ))-g.σ*g.ξ/3)+Z^2*(one(g.α)/3+sin(g.α)/2)+(
+    (1-2E)/12+Z*(chi(g.α, cos(g.θ), 2sin(g.θ/2)^2, 2cos(g.θ/2)^2)-g.σ*g.ξ/3)+Z^2*(one(g.α)/3+sin(g.α)/2)+(
         a21-Z*(π+4)/(9π)
     )*g.v
 end

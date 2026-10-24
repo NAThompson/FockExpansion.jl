@@ -27,3 +27,5 @@ The compiled stencil generator is `claude8/stencil3.jl`. It regenerates the orde
 - the Steklov–Poincaré a21 extraction.
 
 Large caches (`*.jls`, `*.pkl`, expanded stencils) and third-party literature copies are left out.
+
+`claude9/psi41z2_big.jl` predates the rename of the repo's Feynman integral to `psi41_z2_feynman`; `psi41_z2` is now the closed form.

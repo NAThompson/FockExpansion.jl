@@ -75,6 +75,14 @@ end
         @test ForwardDiff.derivative(b -> psi41(b, t; Z = 2.0, E, a21 = 0.4), a) ≈
               (psi41(a+1e-5, t; Z = 2.0, E, a21 = 0.4)-psi41(a-1e-5, t; Z = 2.0, E, a21 = 0.4))/2e-5 atol=1e-9
     end
+    # θ-derivatives stay right where cos θ rounds to ±1 (θ below about 1.5e-8 from a pole).
+    let d2(f, t) = ForwardDiff.derivative(u -> ForwardDiff.derivative(f, u), t), f = t -> F4.psi41_z2(0.7, t)
+        for (t, tref) in ((1e-9, 1e-4), (2e-8, 1e-4), (π-1e-9, π-1e-4))
+            @test d2(f, t) ≈ d2(f, tref) atol=1e-9
+        end
+        g(t) = psi20(0.7, t; Z = 2.0, E, a21 = 0.1)
+        @test d2(g, 1e-9) ≈ d2(g, 1e-4) atol=1e-7
+    end
     # Harmonic part: solvability of the ψ₄₀ equation, ⟨Y₄ₗ, 12ψ₄₁+2ψ₄₂-2Vψ₃₀+2Eψ₂₀⟩ = 0.
     # The pure parts of ψ₄₁ are orthogonal to Y₄ₗ, so only its harmonic part enters.
     Z, E, a21 = 1.7, -2.2, 0.31
@@ -124,4 +132,5 @@ end
     @test_throws ArgumentError psi41(big"0.7", 1.1; Z = 2.0, E, a21 = 0.4)
     @test_throws ArgumentError psi40(0.7, 1.1; Z = big"2.0", E, a21 = 0.4)
     @test_throws ArgumentError F4.psi41_z2_feynman(big"0.7", 1.1)
+    @test_throws ArgumentError psi41(ForwardDiff.Dual(big"0.7", 1), 1.1; Z = 2.0, E, a21 = 0.4)
 end

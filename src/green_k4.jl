@@ -112,10 +112,9 @@ end
 # is split at the target. The logarithmic kernel singularity and the Coulomb corners at
 # (π/2, 0) and (π/2, π) then sit at rectangle corners, where tanh-sinh converges
 # exponentially (h = 0.0625 gives about 2e-14, h = 0.125 about 4e-10).
-function solve_k4_symmetric(h, α, θ; h2 = nothing, step = 0.0625)
+function solve_k4_symmetric(h, α, θ; step = 0.0625)
     α>π/2 && (α=π-α)
     N=ceil(Int, 3/step)
-    rule2=gauss(12)   # G₂ has a √(1-cos γ) term: gauss(8) left errors up to 1e-12
     total=0.0
     for (a0, a1) in ((0.0, α), (α, π/2)), (t0, t1) in ((0.0, θ), (θ, Float64(π)))
         (a1>a0 && t1>t0) || continue
@@ -123,12 +122,7 @@ function solve_k4_symmetric(h, α, θ; h2 = nothing, step = 0.0625)
         T=de_rule(t0, t1; h = step, N)
         for (a, wa) in zip(A...), (t, wt) in zip(T...)
             K=green_k4_azimuthal(α, θ, a, t)+green_k4_azimuthal(α, θ, π-a, t)
-            v=-h(a, t)*K/4
-            if h2!==nothing
-                K2=green2_k4_azimuthal(α, θ, a, t, rule2)+green2_k4_azimuthal(α, θ, π-a, t, rule2)
-                v+=h2(a, t)*K2/16
-            end
-            total+=wa*wt*sin(a)^2*sin(t)*v
+            total-=wa*wt*sin(a)^2*sin(t)*h(a, t)*K/4
         end
     end
     total

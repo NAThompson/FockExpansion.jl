@@ -8,7 +8,7 @@ function h2(a, t)
     p31_1=B*ξ*(5ξ^2-6)/12; p31_2=B*ς*sin(a)*cos(t)/2
     24*(π-2)*(5π-14)/(180π^2)*(1-2sin(a)^2*sin(t)^2)-2p31_2/ξ+2V1*p31_1
 end
-ψ(a,t)=F.psi41_z2(a, t; n=10, levels=10)
+ψ(a,t)=F.psi41_z2_feynman(a, t)
 for (a, t) in ((0.7, 1.1), (1.2, 2.0), (0.4, 0.5))
     hh=2e-3
     f0=ψ(a,t); fap=ψ(a+hh,t); fam=ψ(a-hh,t); ftp=ψ(a,t+hh); ftm=ψ(a,t-hh)
