@@ -1,0 +1,33 @@
+Review 6 — revision 2 of EXTERIOR_CONVERGENCE.md
+2026-10-20
+
+One remaining correction, at lines 128–129:
+
+“corrections chosen in ker ℓ” is false if it means ξ_n ∈ ker ℓ for
+n ≥ 1. Those components are already determined by the next solvability
+condition and generally do not vanish. Normalise only ℓ(ξ_0)=1. Write
+ξ_n = a_n ξ_0 + v_n, v_n ∈ ker ℓ; solve for v_n with B0 restricted to
+ker ℓ (onto range B0), and determine a_n from solvability at step n+1.
+The resulting full ξ_n are unique and holomorphic. The step-n statement
+about a nonzero coefficient applies for n ≥ 2, not n=1.
+
+Concrete counterexample within the stated hypotheses: m=1, U=D=0,
+W=-1, E=0, K=0, and ℓ(x,y)=x. Then
+ A0=[0 1; 1 0], σ=-1, ξ_0=(1,-1), β=-5/2, C2=0.
+The first two solvability steps give
+ ξ_1=(15/8,-35/8),
+so ℓ(ξ_1)=15/8 ≠ 0. These values satisfy the recurrence exactly.
+Thus ker ℓ can be used to choose the complementary part v_n, not the
+whole correction ξ_n. This is a proof-wording repair; the theorem's
+normalisation in (b), and the convergence conclusion, survive it.
+
+The other requested repairs are correct: the local complex energy disk
+and common gap margin; Q²=-2Q and the uniform Fuchsian majorant;
+single-valued continuation on Re t>-γ0 using the removable germ at zero;
+the separated slow-block/Liouville wedge estimate; the Abel factor;
+the two-index Rouché quantifier; and Remark 1's added transversality and
+uniform complex-R estimate. I found no further mathematical obstruction.
+The exact Coppel/Wasow citation locations remain explicitly unverified,
+as the draft acknowledges.
+
+I did not modify ../proof.

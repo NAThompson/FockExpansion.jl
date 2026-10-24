@@ -1,0 +1,11 @@
+{
+  "operator_blocks": 21,
+  "operator_coefficients": 81,
+  "angle_normalizations": 4,
+  "stencil_files": [],
+  "stencil_checks": [],
+  "inputs": {
+    "claude7/classical_ops.json": "2b2ceed9b80f360d26c7b182c2ee7a84209bc190918af2c95d34a7d292688698",
+    "codex/phase7/angle_recurrence.json": "76af4ab42f87e29ea2aaa642bf72fb1f534605b567acd2149a3520745b96b2b6"
+  }
+}

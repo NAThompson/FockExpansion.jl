@@ -1,0 +1,19 @@
+{
+  "codex/phase8/x16_clearing.txt": "6e2c4a81653b8b198ecce6aa4351045b3061634b42c5f50a1f9c43ccbefeed02",
+  "codex/phase8/x16_compare.json": "07c9ef982b2924667be7328a8b4351c955b39f2e081b4034d87b9bf0ce28ff03",
+  "codex/phase8/x16_compare.out": "d22f39d87d26d90554c97a8d7a600b83bd3f40f01684d0e5248703900fdac02b",
+  "codex/phase8/x16_compare.py": "45ca57d0a036b8d20d46f7fd2130b4b7baa247237a3416d140a500ba177de66c",
+  "codex/phase8/x16_connection.txt": "58f11f49bad78f134c09e19a4a63f1e06dc834db5913f64258b02f627d9d0c14",
+  "codex/phase8/x16_export.out": "c19643a2124416a126fb7b650363946ff025f9d1a1f9e60f7aca11c9fc255fc8",
+  "codex/phase8/x16_export.py": "201b61a3152fc79623118a1330dcb19a17b3e0519114b776c9745b1f128b685f",
+  "codex/phase8/x16_output.txt": "500ec02df9e7904603a2da8f81a53906542e060f0f3535e8c2b123974f653285",
+  "codex/phase8/x16_raw55_connection.txt": "63ba50e7c2bac5fd529cb545a2c542d63c630454cf47940e41c22796e7d61888",
+  "codex/phase8/x16_report.md": "536f5838c5febfd0cdfe1cb71f10b198ca1ca115afb694b008e5afe1ef407ad2",
+  "codex/phase8/x16_summary.json": "5cb51347b49b6f192796bc231466352c68a06d7684204ddab07ae799d4a02784",
+  "codex/phase8/x16_verify.out": "ad2ec062554dc37219d2a3bfa5313f854d6515c726c594af97b5e196656727f2",
+  "codex/phase8/x16_verify.py": "402974e8e3418655ffbf15e975fa64f6abe11f5a3bb367422594a6a8a92ec149",
+  "claude8/panel1_connection.json": "c9d901ed65190ec76601641dd2e2052cc8c10406d314f2ac2ee4719c671b4475",
+  "claude8/panel1_fp.py": "2ea5b3880dbf7f2e89cfdb728d7b318fe9155dd51a644d6d96a81cc04aa7d6e5",
+  "claude8/panel1_solve.py": "33ee27dd24a32ba678dcf91415ab7b8b98932b4de56256b82cc7c4d4911769f9",
+  "TASK_codex_16.md": "dbdac1f757ccbea270b15afb618b64aed238a8ca89a9ef8c8a013568a8a06e8c"
+}

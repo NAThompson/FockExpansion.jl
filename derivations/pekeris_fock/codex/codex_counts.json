@@ -1,0 +1,55 @@
+{
+  "P": {
+    "general_count": 57,
+    "general_shell_range": [
+      -3,
+      3
+    ],
+    "fixed_count": 33,
+    "fixed_shell_range": [
+      -2,
+      2
+    ]
+  },
+  "S2P": {
+    "general_count": 225,
+    "general_shell_range": [
+      -5,
+      5
+    ],
+    "fixed_count": 177,
+    "fixed_shell_range": [
+      -4,
+      4
+    ]
+  },
+  "C1": {
+    "general_count": 117,
+    "general_shell_range": [
+      -4,
+      4
+    ],
+    "fixed_count": 117,
+    "fixed_shell_range": [
+      -4,
+      4
+    ]
+  },
+  "C2": {
+    "general_count": 57,
+    "general_shell_range": [
+      -3,
+      3
+    ],
+    "fixed_count": 57,
+    "fixed_shell_range": [
+      -3,
+      3
+    ]
+  },
+  "verification": {
+    "polynomial_action_cases": 12,
+    "log_product_rule_cases": 3,
+    "tail_bound": 8
+  }
+}

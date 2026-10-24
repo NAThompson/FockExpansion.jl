@@ -1,0 +1,10 @@
+{
+  "codex/phase4/input_states/cmin5_N4.txt": "1532a6d5cd1ad8ddeeb1ba1d3391d7126dfd577d3c1dac18ab2be9df15cd3489",
+  "codex/phase4/input_states/cmin5_N8.txt": "d8440c80897fd49298bd939f13526671113b0ed0f595b16cb45279b77a61d9e6",
+  "codex/phase4/input_states/cmin5_N10.txt": "e0c7616b10203519ecc134595db19bf49850a9cf57aeb653cc45d952d3b2a3eb",
+  "codex/phase4/input_states/cmin5_N11.txt": "aae2e93b62d08bade79f6ed243126293d4c692d228558ffe76dc27c082c2b223",
+  "claude4/constrained.jl": "4ae283f2e4a15d19d8d04de69459c68012e2bb57082aebb692a31f6a72809105",
+  "claude4/run4.jl": "c693030b6cf4d9caeacffb02b2e98314e511ebd222f7a6a5c6c0d5349f6fffa5",
+  "codex/phase4/claude_run4_snapshot.out": "28b736651edb91a8c7d157d3ee1c499ae1968cafe4aeff6e092be9ccf5c55166",
+  "codex/phase4/claude_global_snapshot.out": "20c78aa6d07cf088384bc92252ad9440ea72faf6309c1694c70cf23b222cec46"
+}

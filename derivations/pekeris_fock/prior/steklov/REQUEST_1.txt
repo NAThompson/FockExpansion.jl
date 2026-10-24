@@ -1,0 +1,32 @@
+Review request 1 (plan stage). Please review PLAN.md in this directory, critically.
+
+Context: helium ground state, E0 = -2.903724377034119598311 given. Goal: free Fock constants
+(a21 first) by Steklov-Poincare (DtN) matching on the hypersphere R=R*, with interior = Fock
+series (channel-Galerkin cusp-gauge recurrence, reimplemented after
+/Users/nathompson7/Documents/Codex/2026-09-05/how-much-compu/outputs/boundary_matching/cusp_matching.jl
+and probe.jl) and exterior = Ritz solve in Hylleraas-type functions (not hyperspherical channels).
+You wrote the channel code; you know its conventions.
+
+Please check specifically:
+1. Coordinates/measure: dOmega = (8/pi) cos(phi) sin(phi) u dphi du with q=cos(2phi), s=1-u^2,
+   u in [|cos phi - sin phi|, cos phi + sin phi]. Is this the same normalized disk measure as
+   your angular() (uniform on q^2+s^2<1, total 1)? Any sign/Jacobian errors?
+2. Cusp-gauge PDE, Galerkin system, D_ij identity, recurrence: consistent with your cuspcoeff?
+3. Steklov form: B_int = R*^5 [G_U + G (F' F^{-1})] with trace basis exp(R*U) Y_i and a=F^{-1}[t;0]
+   when L < d_int. Is compressing the interior DtN to the trace space T_L (zero trace beyond L)
+   the right Galerkin discretization? Any better choice for recovering a when L<d_int?
+4. Claim: exact S = B_int + A_ext is positive semidefinite at E0 (glued Psi is continuous, in H1,
+   and 2<Psi,(H-E0)Psi> >= 0), and Ritz exterior makes S_h >= S. Correct? Caveats (interior is a
+   finite-channel model, so not an exact solution)?
+5. a21 conversion: a21 = 2 a_2 + Z g (pi+4)/(6 pi) - g^2/8 = total projection <psi20,v>/<v,v>,
+   v = sin(alpha) cos(theta); physical order-4 projections sum_k <U^k/k! Phi_{4-k,0}, Y>. Correct?
+   Note your seed CSV a[2] is the cusp-gauge amplitude of normalized Y_2 = 2s.
+6. Exterior basis and quadrature: anything that will obviously fail (cusp at r1=0 on R>R*,
+   r12=0 points on sphere, Laguerre in R with mixed exponents, linear dependence)?
+7. Validation (i) and (ii): adequate? Suggest a better exactly solvable case with a NONZERO
+   cusp-gauge free constant if you know one.
+8. Anything in the plan that would make the result non-comparable with your channel numbers
+   (9 ch 0.476594728101 ... 169 ch 0.476747806703).
+
+Write your review to REVIEW_1_codex.txt in this directory. Do NOT modify any other file.
+Be concrete: for each point say OK / problem / suggestion, with formulas.

@@ -1,0 +1,33 @@
+{
+  "inputs": {
+    "codex/phase7/connections.json": "93ab2583e59710f2ac40370c638d8d1375afd1b9acfa022e0d2022586c3ccb75",
+    "codex/phase3/panel_connection.py": "78d863024713ec83b2ebef1e484f9631fe0ed2196134094050971d0dc3e48723",
+    "codex/phase5/goal2_combined_exact.py": "2713c0bdde38cbdb8a6c5417f75eaa1534d803a92da39e79d232a1548b491b34",
+    "TASK_codex_15.md": "4c4b614bf0c59271175fb36aa24234d405c23bfef734147dd9f31fcfe40dabf2"
+  },
+  "outputs": {
+    "audit.out": "41605441119b9c5fa71fc0a25a09c16e1152e7f64168de4296396d1c43101be3",
+    "audit.py": "353bf3baa870baff9df5966754e5f3486a5442c0573db723e389aed8a83887be",
+    "build.out": "e56f180967174737abe1541ca20ce68472f832448c595efd0b80b9fbac47746f",
+    "claude_inventory.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "distance_connection.json": "e7494a8207f1bc965fffe99f448cb88cc00129542335daead9617fe378fcc6bc",
+    "distances.out": "eaae8884b4c0c36d6fc824935db6ffcc1d6adb4bd17a179e66c96256860b4399",
+    "export_distances.py": "16807327e938a606e15b1b6a95c169833271473584255af597d7ab511af7c65d",
+    "final_audit.py": "8ed183b35bc136a4a060d338f72133bdbd39fc003d71c890ab206e3f0ddbc623",
+    "outputs.json": "6eb5a315b2e11596a86e12f1925d20a8a23046a430deb5efaca893484b389f76",
+    "outputs.out": "30485cf21dba5111967d5c53b7d854ad0cf0bed5cb01c98a852552a7f9d606ca",
+    "outputs.py": "3072e9e84c08821f9499adc3c209e98de0ca8ddddfce94134be9b4c2ae6971ec",
+    "rational_connection.json": "d64559f5bb83742f3e9ac0120fdf448e06611b7b62f79c5063f1e3a6fa90cccf",
+    "rational_panel.py": "faae305e8933c62ee7dc396f1422d91f487baee66aed471d9006d2ba58320491",
+    "report.md": "8d1fddb0788b2221b5929d2b4f9ded2ed2013cfe4c4a6b51251ff13c623f3d48",
+    "row_clearing.json": "8a1c9cd95edaf8459a2305dc5626b0aa606cb79ce6cf2a1d50833a3c912959bf",
+    "verify.out": "d241b935a6070a8fd852b76b149f8fa23c1a5d45bca65b96e6722b5222faa047",
+    "verify.py": "6fca15c1ef1be1d8a71677b7b6a57d415b4ebe902de2fabceb8b0e4cbbc16f49"
+  },
+  "status": {
+    "rational_connection": "proved and verified",
+    "minimal_weight": "open; delta^4 sufficient",
+    "exact_weighted_polynomial_angular_jet": "open",
+    "claude_panel1_crosscheck": "pending; no panel1_* artifacts"
+  }
+}

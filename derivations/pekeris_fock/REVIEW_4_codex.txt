@@ -1,0 +1,156 @@
+Codex phase-2 review — 2026-10-21 — TASK_codex_4
+
+Position: CO-SIGN the saved order-two recurrence and the substantial finite-basis
+improvement from chi/log(R/s) enrichment, with the count correction and numerical
+qualifications below. DISSENT from faster-than-algebraic convergence, certified
+physical a21 digits, or a new minimality/completeness theorem.
+
+1. Sync 4 recurrence and basis conversion
+
+The independent actual-function verifier uses Codex's earlier distance-Hamiltonian
+P and actual polylogarithms; it imports neither Claude's recurrence generator nor
+Claude's verifier/Gamma. All 48 Hamiltonian actions pass (8 atoms, log powers 0–2,
+2 points; one rational three-term Laguerre polynomial per source), maximum relative
+error 2.33572329193e-39. Exact rational arithmetic evaluates the saved stencil
+coefficients before numerical reconstruction. This tests the saved stencils at
+eps=1/4, E=-eps², Z=2, lambda=1; it is not an exhaustive symbolic identity proof
+for arbitrary indices/eps.
+
+In physical distances, L=la, alpha=al, V=(beP+pi P/2)/r12,
+U=Om+pi lb, Slog=-lR. The 8-by-6 transformation satisfies all 144 rational
+connection identities exactly; actual normalizations are checked at both distance
+orderings. Ltilde=la+((pi-2)/pi)lR gives the minimal physical five-atom set.
+
+CORRECTION: saved JSON has 16/15/8 nonzero sigma2P/C1/C2 blocks, not 17/12/8.
+The 25,955 total offsets and shell half-bandwidth 10 are confirmed. Row factors
+and the coordinate-dependent basis change explain unequal counts. Full block
+comparison and reproducible evidence: codex/phase2/codex_crosscheck2.md,
+sync4_counts.md, sync4_direct.py/.out, sync4_connection.py/.out.
+
+2. Weak form, assembly and quadrature
+
+Independently transforming the physical distance measure gives
+s^5 (1-x²)y/8 ds dx dy, up to the common orientation constant. The kinetic metric
+in (r1,r2,r12) has g11=g22=1, g33=2,
+g13=(r1²+r12²-r2²)/(2r1 r12), g23=(r2²+r12²-r1²)/(2r2 r12).
+Multiplying by that measure gives the seven implemented kinetic weights, with
+the overall kinetic factor 1/2. The potential weight is -Z*y/2+(1-x²)/8.
+The implemented derivative chains, including the derivative of exp(-eps*s),
+are correct. Exact symbolic checks and ten independent Gamma derivatives through
+log power four pass (sync4_weakform.py/.out). The half-triangle factor two is
+appropriate for exchange-even trial states; atom x derivatives are correctly
+combined before folding. No extra factor is missing from the Duffy Jacobian y.
+
+Moment-table assembly applies product-rule atom derivatives and uses radial
+Gamma/Bell moments. Mirroring H and S enforces matrix symmetry; symmetry alone
+cannot test derivatives, quadrature, or the form domain. The zeta(3) series
+converges rapidly enough for these working precisions. The constant Fock-log
+replacement changes the polynomial trial space rather than enlarging it; the
+small-N energy worsening is expected and visible. The atoms2 space contains the
+log2 space at a fixed N, and adds chi and log(R/s) trial terms. These finite
+polynomial/log/physical-chi combinations have integrable corner and collision
+behavior and exponential tails, consistent with form-domain Ritz use.
+
+The tanh–sinh nodes drop boundary regions at 1e-28 and angular differences below
+1e-50. The polynomial moment test is useful but does not bound all atom-derivative
+moments. Gram condition estimates reach about 5.61e48 at N=11; entrywise accuracy,
+linear solve residuals, and discretization error must be distinguished. Raising
+BigFloat precision controls roundoff, not quadrature or atom approximation.
+No rigorous enclosure is produced by the code or this review.
+
+Independent driver sync4_ritz.jl reads Claude's assembly without writing its files,
+sets precision BEFORE including constants, refines tanh–sinh from h=1/16 to 1/24
+and 1/32, extends the tail to 5, and checks Cholesky and generalized residuals.
+The original driver sets precision after inclusion (some constants have default
+256-bit accuracy); that is not the limiting uncertainty of these results.
+Refined N=11 errors are 2.4314823228526578e-17 (384 bits, h=1/24)
+and 2.4314823230015396e-17 (512 bits, h=1/32), differing by 1.49e-27.
+Both Gram Cholesky checks pass; scaled residuals are about 1.2851e-50.
+Detailed refined results are in sync4_ritz24.out and sync4_ritz32.out.
+
+3. Independent a21 finite-part estimator
+
+sync4_a21.jl includes no Claude source. It reimplements chi from the explicit
+Clausen formula and extends Codex's radial Mellin functional to the exported
+(n,p,a,b,atom,coef) states. All atoms2_N2 through atoms2_N11 were evaluated with
+angular orders 24,48,96 at 192 bits, with N=10,11 repeated at 288 bits. The source
+uses each exported variational E; the radius/log conversion and finite parts
+at n=0,1 are retained. A manufactured radial finite-part check independently
+recovers the -b/8 constant. The angular projection normalization is one to about
+2e-15; angular nodes/weights are Float64, so high BigFloat arithmetic does not
+supply arbitrary quadrature precision.
+
+Results at order 96:
+ N=6   0.476833218391...
+ N=7   0.477024773905...
+ N=8   0.476790581413...
+ N=9   0.476791872478...
+ N=10  0.476750180000...
+ N=11  0.476748379513...
+
+These reproduce Claude's numbers. Order 48 versus 96 changes the N=11 value
+by about 8e-15, and 192 versus 288 bits at fixed order is unchanged at 15 printed
+decimals. That is numerical stability of this functional on these trial states,
+not physical accuracy. N=10 -> 11 changes it by 1.800487e-6; relative to the
+supplied 0.47674787900 reference N=11 is high by 5.00513e-7 (about 1.05e-6
+relative). The N=6 -> 7 and N=8 -> 9 reversals preclude a simple monotone bound.
+
+For a prediction without the reference, quote approximately 0.47675 and regard
+about 2e-6 as an empirical uncertainty scale inferred from the last increment;
+this is a heuristic scale, NOT a guaranteed interval. Do not claim more physical
+digits or an a posteriori error bound. The 12 printed decimals are reproducible
+trial-functional values only. The 512-bit, h=1/32 recomputed states also give
+0.476833218391331 (N=6), 0.476790581412819 (N=8), and
+0.476748379513083 (N=11) at order 48; see sync4_a21_refined.out. Better energy does not bound this corner
+functional. The reference comparison shows the realized N=11 error, rather than
+certifying an error estimate from the variational calculation itself.
+
+4. psi30 / atoms4
+
+The Float64 psi30 branch clamps alpha/theta to 1e-12 inside boundaries, uses
+Float64 values and AD gradients for a numerically integrated atom, and zeroes
+non-finite gradients. The resulting value and derivative tables are not proven
+to describe one differentiable trial function. Small node weights do not alone
+bound errors in a severely conditioned pencil. These approximations, rather
+than a failure of the variational principle, are a plausible explanation of the
+N>=8 violation. A definitive attribution to a particular implementation defect
+would require a consistent high-precision value/derivative and quadrature audit.
+The source also supplies E0 and a21 to psi30: those atoms are informed by those
+known constants and cannot independently determine them.
+
+DISSENT from treating positive atoms4 errors at N<=7 as certified results.
+They are exploratory evidence: positivity alone cannot certify consistency, and
+N=7's 2.7e-14 gain lies in a range potentially sensitive to Float64 integration/AD.
+Exclude N>=8 from physical convergence comparisons; do not interpret the N=10
+positive error as recovery of a valid sequence after the preceding violations.
+The chi/lR atoms2 calculations do not use this Float64 psi30 branch.
+
+5. Convergence rate and minimality
+
+At N=11 the saved errors are polynomial 1.4873e-7 (203 functions), log1
+1.4062e-11 (357), log2 1.5746e-12 (469), atoms2 2.4315e-17 (713).
+Equal-N comparisons use different numbers of functions. At roughly comparable
+sizes, atoms2 N=9 (404) gives 3.8700e-15 versus log1 N=11 (357) 1.4062e-11;
+atoms2 N=8 (289) gives 4.5909e-14 versus log2 N=9 (270) 7.5055e-11.
+There is a substantial efficiency gain as well as an equal-N gain.
+
+DISSENT from “faster than algebraic.” A finite table cannot establish this
+asymptotic property. Fits of log(error) versus log(size) give slopes -7.74
+(N=4..11), -7.91 (N=6..11), and -8.45 (N=8..11); the last adjacent effective
+exponent is about 8.35. This is consistent with a higher algebraic order over
+the observed range. No exponential/superalgebraic rate theorem follows.
+
+The existing form-domain admissibility, representation gauges, boundary/branch
+conditions, physical Gram matrices, and conditional form-core hypotheses remain
+unchanged. Numerics do not establish a growing-block Pincherle theorem,
+completeness, or continuity/error certification for a21. The dated update to
+codex/phase2/codex_minimality2.md records the numerical evidence and these limits.
+
+Reproducibility / concurrent activity: during this audit the protected-snapshot
+comparison detected changes to Claude's run_quadcheck.log, run_quadcheck.out and
+atoms2_N11.txt from a concurrent run. No Codex writer targets these files. Final
+functional inputs were copied read-only into codex/phase2/input_states/; their
+SHA256 values are in sync4_input_state_hashes.json. The final all-order audit uses
+those copies, and the independently rebuilt 512-bit state agrees at the printed
+precision. The snapshot is not represented as proof that the entire shared
+workspace stayed unchanged while collaborators were active.

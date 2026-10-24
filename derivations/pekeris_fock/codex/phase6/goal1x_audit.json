@@ -1,0 +1,12 @@
+{
+  "protected_files_snapshotted": 247,
+  "snapshot_differences": [
+    "claude6/guess_line.out",
+    "claude6/guess_line.json",
+    "claude6/edge_expansion.out"
+  ],
+  "ownership_note": "No operation in this task wrote any protected file. Snapshot differences were observed in the shared workspace; unchanged hashes are not asserted for those files. Process inspection was unavailable.",
+  "shared_prefixes_preserved": true,
+  "verification": "goal1x_verify.py: ALL CHECKS PASS; small serial symbolic/scalar checks only",
+  "writes": "Only codex/phase6/goal1x_* and append-only COLLAB.md, THEORY.md, NOTES_codex.md"
+}

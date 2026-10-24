@@ -1,0 +1,36 @@
+Review request 2 (results stage). Code: steklov.jl (interior, trace, matching), exterior_dd.jl
+(Double64 exterior Ritz), production.jl (drivers). Logs: sweep_d_R1.log, sweep_d_R*.log,
+extbasis_R1*.log, energy_check.log, validate_i_dd.log, validate_2s2s*.jl output in RESPONSES.md,
+codex_selection.csv. Figure a21_convergence.png. Your review 1 and my responses: REVIEW_1_codex.txt,
+RESPONSES.md.
+
+Method as built: interior = your cusp-gauge channel Galerkin Fock recurrence (degree d, up to d=48,
+625 channels); trace space T_L = exp(R*U) Y_i, deg<=L; B_int = R*^5[G_U + G F'F^{-1}J] (not
+symmetrized); exterior = Ritz in Double64 with lift exp(S)Y_i, Hylleraas sets (2,kappa,w),(4,4),(8,8)
+integrated analytically in r12, plus "channel corrections" exp(S) Y_i x^(p+1) (R*/R)^(K_i+4),
+x=(R-R*)/R; Schur complement; eigenvector of smallest |lambda| of M^{-1}(B_int+A_ext); a=F\[t;0].
+
+Key claims to check:
+1. a21(d,L) is nearly separable: d-increments ~ d^-5.87 independent of L; L-increments independent
+   of d. Interior channel truncation (d) is the dominant error, NOT the exterior; the 2s x 2s
+   interior-only test shows the same d^-4.8 law. Is this inference sound? Is the d-tail estimate
+   err(48) = (x48-x44)/((48/44)^4.87 - 1) = 2.0e-9 reasonable?
+2. Best values (R*=1): L=12 B12P6 d=48: 0.476747890019; L=14 B10P6 d=48: 0.476747884587; L-step
+   12->14 = -6.2e-9 (10->12: -1.8e-8, 8->10: -4.9e-8). R* spread at L=12,d=40: 0.4767478994 (0.75),
+   0.4767478879 (1.0), 0.4767478781 (1.5). Exterior basis spread at L=12 ~1e-9. My claim:
+   a21 = 0.476747882 +- 1e-8 (8 digits, 0.47674788), consistent with reference 0.476747879.
+   Is the error budget honest? Anything I am double counting or missing (e.g. the sign of the L tail,
+   R* dependence as a separate error, Float64 interior)?
+3. Higher cusp-gauge seeds a3(2,0)=0.0059872(6), a4(0,2)=-0.0090407(56) etc.: note R*=0.75 gives
+   a3 larger by 1.1e-7 than R*=1 and 1.5 (which agree to 8e-9). Explanation? Which R* to trust?
+4. lambda_min at E0 is +1.4e-8 (L=12) and goes down with L; at E0+-1e-6 it is -+2.86e-6;
+   crossing E0+1.1e-8 (L=10). Correct interpretation: trace-truncation residual, not exterior?
+5. Comparison with your channels: at equal d=24 our L=12 value 0.4767478345 vs yours 0.4767478067.
+   Is it fair to say the exterior channel truncation contributed ~3e-8 at d=24, and that the gain
+   from Steklov is mostly that d can be pushed to 48 (only the series is needed)?
+6. Any bug risk you can spot in exterior_dd.jl (correction_block analytic r12 formula,
+   blocks3d_fast gradients, Schur complement) or in interior_setup / match.
+
+Write REVIEW_2_codex.txt here. Do NOT modify any other files. You may run julia --project=. on
+small scripts written to a new file named codex_check_*.jl if you want to verify something
+(keep runs short; heavy exterior runs take minutes).

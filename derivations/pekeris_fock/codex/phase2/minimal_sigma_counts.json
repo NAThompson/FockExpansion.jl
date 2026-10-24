@@ -1,0 +1,30 @@
+{
+  "S2P": {
+    "(one,Ltilde)": {
+      "general_count": 1327,
+      "fixed_count": 1327,
+      "general_shell_range": [
+        -10,
+        10
+      ],
+      "fixed_shell_range": [
+        -10,
+        10
+      ]
+    }
+  },
+  "C1": {
+    "(one,Ltilde)": {
+      "general_count": 841,
+      "fixed_count": 841,
+      "general_shell_range": [
+        -9,
+        9
+      ],
+      "fixed_shell_range": [
+        -9,
+        9
+      ]
+    }
+  }
+}

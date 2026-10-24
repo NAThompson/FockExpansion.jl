@@ -1,0 +1,16 @@
+Run jobs sequentially, from the task directory:
+PYTHONDONTWRITEBYTECODE=1 venv/bin/python codex/phase5/goal2_port_reference.py
+julia --startup-file=no codex/phase5/goal2_port_check.jl
+julia --startup-file=no codex/phase5/goal2_panel_rank.jl
+julia --startup-file=no codex/phase5/goal2_refine.jl
+julia --startup-file=no codex/phase5/goal2_big_panel.jl
+PYTHONDONTWRITEBYTECODE=1 venv/bin/python codex/phase5/goal2_classical_reference.py
+julia --startup-file=no codex/phase5/goal2_classical_check.jl
+julia --startup-file=no codex/phase5/goal2_classical.jl
+PYTHONDONTWRITEBYTECODE=1 venv/bin/python codex/phase5/goal2_classical_exact.py
+PYTHONDONTWRITEBYTECODE=1 venv/bin/python codex/phase5/goal2_radicals.py
+julia --startup-file=no codex/phase5/goal2_combined.jl
+PYTHONDONTWRITEBYTECODE=1 venv/bin/python codex/phase5/goal2_combined_exact.py
+PYTHONDONTWRITEBYTECODE=1 venv/bin/python codex/phase5/goal2_combined_reference.py
+julia --startup-file=no codex/phase5/goal2_combined_check.jl
+PYTHONDONTWRITEBYTECODE=1 venv/bin/python codex/phase5/goal2_verify.py

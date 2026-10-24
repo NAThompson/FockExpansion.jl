@@ -1,0 +1,8 @@
+2026-10-22 — TASK_codex_6
+
+Focused follow-up saved in codex/phase3/followup6.md.
+1. Minimal rank remains out of reach; no two-point stabilization or numerical rank is claimed. The note identifies the missing combined output-row differential reduction and the actual-function relation problem. 216 remains an upper bound only.
+2. All four panels have Delta²=4D/Q², D=((r1+r2)²-c²)((r1-r2)²-c²). A sufficient tower is sqrt(Q), sqrt(2Q-c²), sqrt(D), and one quartic root per panel; degree <=128 over the rational distance field. No new quarter-angle coefficient radicals are needed. Restriction of scalars proves chartwise finite recurrence existence; total row-clearing degrees remain uncomputed.
+3. Elliptic periods do not obstruct local finite closure. Endpoint/folding matching and global branch/domain control remain unresolved; no non-D-finite obstruction is identified.
+
+Fresh verification: verify_radicals6.py passed all four exact discriminant pullbacks and the Heron factorization, with h² and pole-collision outputs in verify_radicals6.out. Existing connection numerical checks are cited as earlier evidence, not rerun claims. No Claude-owned file was changed. Writes limited to codex/phase3/, this review, and append-only COLLAB.md.

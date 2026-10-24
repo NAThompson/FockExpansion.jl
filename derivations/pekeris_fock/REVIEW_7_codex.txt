@@ -1,0 +1,145 @@
+2026-10-22 — TASK_codex_7 — Codex phase-3 review
+
+Verdict: co-sign the finite numerical improvement and the exact parameter-span
+argument, with the limits below. This review does not close the phase-3
+minimal-rank/global-interface research problem.
+
+Scope and reproducibility
+Read COLLAB.md, TASK_codex_7.md, claude3/atoms3.jl, run3.jl, check3.jl/.out,
+param_check.jl/.out, all four run3_*.out and all three a21_*.out present at
+review time, plus the functional and plot source. Input hashes are in
+codex/phase3/review7_input_hashes.json. Claude's concurrent min5psi N10/11
+run had no corresponding completed output in this snapshot; no result from
+that pending run is endorsed here.
+
+1. Atoms, parity, evaluator and independent spot checks — CO-SIGN, numerical.
+Lt implements Ltilde=L+(pi-2)/pi*log(R/s). alp=alpha-pi/2 and U are
+exchange odd; V and Lt are even. build3 uses odd x powers for alp/U and even
+powers for Lt/V, so the products are singlets. Folding to x>=0 and doubling
+is correct for the total weak integrands, including the derivative cross
+terms. Independent signed-distance evaluations verify all four parities at
+two interior points (review7_parity.out). These are checks of the actual
+letter functions, not a global branch/domain theorem.
+
+run3.jl sets precision before include (384 bits by default), sets the psi30
+rtol to 1e-50, and uses the BigFloat/ForwardDiff path. The Float64 helper and
+the disabled zero-gradient block are not used by this driver. check3.out
+reports 30-node value agreement 1.71e-57 between precisions, x-gradient
+finite-difference discrepancy 7.77e-47, and Float64 discrepancy 1.90e-15.
+These interior checks support evaluator consistency, not uniform endpoint
+error bounds. The quadrature excludes very small endpoint strips, so saved
+quadrature refinement remains relevant. min5_h24 repeats the printed min5
+energies, with 448 bits reported in COLLAB; the .out itself does not encode
+precision. An inverse-iteration residual alone does not certify a rigorous
+lower/upper enclosure or prove that the computed root is the lowest root.
+
+NEW independent code: codex/phase3/review7_independent.jl includes NO Claude
+source and does NOT use Claude's matrices, moment tables, cache, Ritz solver
+or a21 implementation. It reads exported coefficients, implements its own
+four letter atoms and their AD derivatives, sums the reconstructed state
+and its three distance derivatives at angular nodes, and integrates the
+Coulomb weak form with exact radial Gamma/log moments. This checks a state's
+Rayleigh quotient independently, rather than re-solving its minimization.
+N4: E-E0=3.243224269326528e-7 at tanh-sinh h=1/12, only 8.85e-26 from the
+exported energy; h=1/8 differs from the export by -1.23e-18.
+N8: E-E0=2.793186177764504e-16 at h=1/12, 8.88e-26 from the export.
+At h=1/16 the error is 2.793186184884678e-16, 8.01e-25 from the
+export. Agreement supports about eight significant digits of this energy
+error; the two differences do not decrease monotonically, so no certified
+quadrature bound is inferred. See review7_energy8.out.
+
+The independent Mellin finite-part implementation gives min5 N8 a21 =
+0.476738492494392, 0.476738492494394, 0.476738492494387 at Gauss orders
+24,48,96, matching Claude's 0.476738492494 to its printed precision.
+P_v[v] is within about 2e-15 of one. Quadrature nodes/eigensolver are Float64
+before conversion to BigFloat; these checks support approximately 1e-14
+numerical stability of this trial functional, not 77-digit quadrature.
+No large Ritz matrix or psi30 table was built for these independent checks.
+Commands and all numerical evidence are retained under codex/phase3/.
+
+2. Old sub-E0 energies — CO-SIGN mechanism, qualify causal isolation.
+The variational upper bound holds for every nonzero form-domain trial
+function, regardless of the E/a21 parameters used to define it. Parameter
+inputs cannot themselves defeat that theorem. BigFloat reevaluation removes
+the reported negative errors: atoms2psi N8/9/10 now has positive errors
+6.8279e-16, 1.0588e-17, 2.1588e-19. This strongly supports numerical
+contamination in the old Float64 implementation, consistent with finite
+value errors, inconsistent/clamped/zeroed gradients and severe conditioning.
+It does not separately identify the contribution of each defect, nor does
+positivity alone prove an exact variational enclosure. AD differentiation
+of a consistent approximate atom would still define a legitimate trial
+function; the problem is inconsistent form evaluation/numerical error, not
+merely the use of an approximate function.
+
+3. E0/a21 independence — CO-SIGN EXACTLY for these finite trial spans.
+The repository psi30_parts has all E,a21 dependence explicitly in `state`;
+its classical and elliptic terms are independent of both. With Q=r1^2+r2^2,
+S=r1+r2,c=r12, homogenization gives
+ d(R^3 psi30)/dE = Z*S*(2Q+r1*r2)/18-c*(6Q-c^2)/72,
+ d(R^3 psi30)/da21 = -Z*S*(Q-c^2)/2+c*(6Q-5c^2)/12.
+Both are exchange-even homogeneous cubics. Fresh exact SymPy checks are in
+review7_algebra.py/.out. The Float64 least-squares residuals in param_check
+are supporting evidence, not the proof.
+For every enriched term s^n*x^a*y^b*psi30h, build3 has n>=3 and a+b<=n-3.
+Multiplying either cubic by s^(n-3)*x^a*y^b yields only plain-space terms
+s^n*x^j*y^k, j even, j+k<=n. Those functions already belong to the included
+polynomial space (n<=N-2<=N). Changing E/a21 therefore preserves the exact
+finite span for both atoms2psi and min5psi; this is stronger than saying
+that parameter inputs do not violate the upper bound. The Ritz minimizer
+and its a21 functional are independent of those atom parameters in exact
+arithmetic. Numerical conditioning may still change computed answers.
+The supplied reference E0 is used to display energy errors, not predicted
+independently to all its digits.
+
+4. Slopes, comparisons, a21 — CO-SIGN finite evidence; DISSENT asymptotic claim.
+From min5 N4..11, adjacent log(error)/log(size) slopes are
+ -7.5921, -9.9287, -9.5002, -12.5498, -13.8262, -15.1402, -10.5151.
+Thus there is clear finite-range steepening beyond the former roughly -8
+slope, especially N7..10, but no monotone continuing steepening and no
+superalgebraic theorem. The last interval flattens substantially.
+The adjacent natural-log(error)/size slopes are
+ -.13065, -.08932, -.05015, -.04289, -.03259, -.02575, -.01336.
+They strictly increase: the piecewise-linear semilog curve versus BASIS
+SIZE is convex throughout this table. It does not straighten into evidence
+for a fixed exponential rate. This observation concerns sampled points,
+not an asymptotic classification. See review7_tables.out.
+
+min5 improves substantially on the earlier chi/log(R/s) choice. Different
+N have different sizes: e.g. min5 N9 has 502 functions and error 2.3206e-18,
+whereas atoms2psi N10 has 579 and 2.1588e-19. psi30 reduces the atoms2 N10
+error by about 10^3 (using phase-two data). On min5 the added psi30 terms
+improve E by under 4% through N9, despite adding basis functions. Co-sign
+'nearly redundant for energy in the tested spaces', not functional
+membership in the order-two module or exact redundancy. The a21 values
+can worsen when psi30 is added to min5, and energy improvement does not
+certify a21 accuracy.
+
+Honest a21: min5 N11 gives 0.476747380331, about 4.99e-7 below the supplied
+reference 0.47674787900; its last increment is 2.1121e-6. atoms2psi N10
+gives 0.476747597577, about 2.81e-7 below reference; its last increment is
+1.5067e-6. min5psi N9 gives 0.476741711448, still about 6.17e-6 below.
+The independently stable trial functional's printed digits are NOT all
+physical digits. Without comparison to a supplied answer, quote about
+0.47675 with an empirical uncertainty scale of a few 1e-6; no certified
+interval or six-decimal physical accuracy follows. The two best sequences
+agree more closely than their last increments, which is encouraging but
+not an error bound.
+
+5. Codex's phase-3 status — unchanged and incomplete.
+psi30 has an explicit finite local algebraic connection; restriction of
+scalars and denominator clearing give finite local polynomial differential
+and Laguerre stencils on nonsingular charts. The 216-generator combined
+algebraic-field bound is not a minimal rank. Minimal rank, derivative-row
+stabilization, global endpoint/electron-fold interfaces, actual global atom
+basis, and expanded global stencil counts/bandwidth remain open.
+psi41^(2) has a finite holonomic extension route via its elementary 1D
+Feynman integral, with endpoint and harmonic normalization retained;
+membership in the psi30 module is unproved. psi40 has a further Green/direct-
+image route, not an explicit reduced connection; its a40/a42 harmonic data
+must be specified. Neither fixed-order route proves a finite all-order
+alphabet, tower convergence, form-core completeness, growing-block
+Pincherle selection, or a21 continuity from energy error.
+
+Writes are confined to REVIEW_7_codex.txt, codex/phase3/, appended
+NOTES_codex.md and append-only COLLAB.md. Claude-owned files and outside
+references were read only.

@@ -1,0 +1,10 @@
+# Run from the authorized working directory. Each job finishes before the next.
+# PYTHONDONTWRITEBYTECODE avoids writes beside read-only imported sources.
+PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 venv/bin/python codex/phase7/connections.py > codex/phase7/connections.out 2>&1
+PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 venv/bin/python codex/phase7/angle_recurrence.py > codex/phase7/angle_recurrence.out 2>&1
+PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 venv/bin/python codex/phase7/line_audit.py > codex/phase7/line_audit.out 2>&1
+PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 venv/bin/python codex/phase7/verify.py > codex/phase7/verify.out 2>&1
+PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 venv/bin/python codex/phase7/fresh_line_check.py > codex/phase7/fresh_line_check.out 2>&1
+PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 venv/bin/python codex/phase7/fixed_endpoint_check.py > codex/phase7/fixed_endpoint_check.out 2>&1
+# line_audit.py initially freezes Claude's samples; subsequent checking should use
+# the saved line_inputs.json if concurrent source files change.

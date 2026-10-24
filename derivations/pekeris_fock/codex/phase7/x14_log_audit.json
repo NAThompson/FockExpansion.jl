@@ -1,0 +1,14 @@
+{
+  "COLLAB.md": {
+    "prefix_bytes": 79835,
+    "prefix_sha256": "21484f2cce69270cc5eebfbff61e3430e75729b07189374f4e065d6214243b00",
+    "append_bytes": 2685,
+    "prefix_preserved": true
+  },
+  "THEORY.md": {
+    "prefix_bytes": 16793,
+    "prefix_sha256": "a2278644c37a45a8f0470a3cc8013defafdb54532ec832c4ca861c57c0eec7cc",
+    "append_bytes": 2685,
+    "prefix_preserved": true
+  }
+}

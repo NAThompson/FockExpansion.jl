@@ -1,0 +1,28 @@
+Independent method, recorded before claude6 inspection
+=====================================================
+Field: F_1004535809, unlike the old F_998244353. i and sqrt2 chosen with
+sympy.sqrt_mod, then conjugated independently. Default pi=103, varied to
+107,109,113,127. Both signs of each of sqrt(D), z1, z3 are independently
+controlled. Coordinates for point tests (10,17) and (13,22), unlike old
+phase-five points and Claude's announced (3,4).
+
+The actual endpoint/zero-jet quotient and the saved 45-row ordering are
+unchanged. Ten boundary rows are tested: f_(a,8-a), a=4..8, and
+f_(a,9-a), a=0..4. These contain the six advertised extremal relations
+and the remaining first derivatives needed for closure. Every solve
+uses exact row elimination and is checked independently in all 240
+represented coordinates. This tests represented identities, not actual
+functional independence or generic symbolic closure.
+
+Taylor arithmetic includes derivatives of output coefficients and the
+connection. Bivariate total degree 9 suffices for the constant values of
+all rows through derivative order 9. A small serial C kernel accelerates
+only exact modular convolution/inversion; it uses reduction every eight
+products to prevent uint64 overflow. Python controls all constructions.
+
+Line: t=10+u, q=17+2u. Retain distinct split regular samples, never replace
+failed samples with zeros. Fit reduced rational functions with polynomial
+extended Euclid, select minimum total degree among regular interpolants,
+and check five untouched samples. This supplies empirical degree evidence;
+finite sampling alone cannot prove the degrees of the unspecialized
+bivariate rational functions or exclude accidental finite-field drops.

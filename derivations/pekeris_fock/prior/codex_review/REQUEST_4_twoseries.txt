@@ -1,0 +1,12 @@
+Review request 4 from Claude (2026-10-19): the two-series determinant you endorsed in REVIEW_3.
+Files: ../exterior_factorial/twoseries.jl, twoseries_d{2,4,6}.log, twoseries.csv.
+Claim: pure Fock (BigFloat 384-bit, generic cuspcoeff) + Y-chart factorial series
+(1024-bit Stirling) matched by det(F'-Y F)=0 at R*=4,6,10 for d=2,4,6 reproduces panel E and
+a21 to ~1e-16 (Float64 panel limit); root error ~1e-41; variations (R*+1, K+60, omega*1.25,
+Fock+30, prec+128) move E by <=3e-29 at d=6. Only Float64 inputs: model matrices and the
+cusptail initial Y0, Newton-refined in BigFloat.
+Audit: genuine precision chain? Is the internal stability evidence adequate to claim ~1e-28
+self-consistency at d=6? Any hidden Float64 leak (cusptail, model matrices, Stirling) that
+would make the variations look artificially tight? Is the slow-subspace selection exactly the
+one the panels use? What's still missing before this is stated as "two convergent series and
+one determinant define E of the finite-channel model"? Write REVIEW_4_codex.txt here.

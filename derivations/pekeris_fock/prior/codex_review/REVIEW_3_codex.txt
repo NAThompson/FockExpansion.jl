@@ -1,0 +1,314 @@
+Review of REQUEST_3_plucker.txt — 2026-10-19
+
+Verdict
+
+(ii) is correct as a representation of the fixed finite-channel boundary
+problem, PROVIDED the exterior factorial series converges at the chosen
+matching radius and the root is isolated. Computing E and the regular
+origin amplitudes together in sufficient precision removes the purported
+fundamental origin-data barrier. This does not remove numerical conditioning,
+angular-model error, or the need to establish exterior convergence. The
+current matching code is not an arbitrary-precision implementation of this
+proposal.
+
+(i) is a plausible explanation of the observed slow Plucker convergence,
+not a demonstrated convergence theorem. In particular, the data establish
+neither a positive Plucker abscissa nor a zero one. Zero is the natural
+candidate for this homogeneous regular-singular problem. There is a much
+more concrete route to proving it than fitting angles: derive the linear
+Borel equation and bound its growth at infinity. The apparent positive
+abscissae are entirely compatible with large powers of log K.
+
+For d=6 at R*=10, a useful starting prescription for approximately 16-digit
+work is a genuinely BigFloat interior at 256 bits and Fock order 200,
+followed by precision/order checks of the determinant, root, and null vector.
+Order 180 may suffice; order 160 is marginal for an absolute 1e-12 full-state
+target. These are numerical starting settings, not certified error bounds
+or a claim that 256 bits suffice for every exterior coefficient conversion.
+
+I read the plucker sources, logs, CSVs and figure, the earlier reviews, and
+the underlying interior recurrence. I ran audit3.jl locally (audit3.log,
+512 bits, and audit3_256.log, 256 bits). No files in ../exterior_factorial
+were modified. The checks use the same supplied model matrices; they do
+not independently validate the angular discretization or physical branch.
+
+1. Code audit: the main algebra is correct
+
+The first-order blocks have the right signs. The additive compound is
+constructed by differentiating each wedge factor, which is the additive,
+not multiplicative, compound. Lexicographic ordering is used consistently.
+The graph-recovery sign (-1)^(m-j) and complementary-minor pairing sign
+(-1)^(sum(S)+m(m+1)/2) are correct.
+
+With B0=C0-sigma I and B1=C1-beta I, the normalized equation is
+ xi' = (B0+B1/R+C2/R^2) xi.
+Its recurrence is
+ B0 xi_n = ((beta-n+1)I-C1) xi_{n-1} - C2 xi_{n-2}.
+The solvability condition gives beta=w'C1 xi0/(w'xi0). Finalizing xi_{n-1}
+by adding alpha xi0 gives exactly the implemented denominator (n-1)w'xi0.
+The loop runs through N+1, so all RETURNED coefficients through xi_N are
+finalized. This fixes the endpoint issue previously found in per_exponent.
+The rank-one regularization Ms+xi0*w' is valid without requiring w'xi0=1.
+
+Independent local checks at 512 bits gave:
+ beta=0.9108379336484201;
+ beta-tr(Y1) approximately 6.0e-154;
+ recurrence residual/norm(xi_n) at n=1,2,20,60 at most 1.3e-153;
+ random-frame compound derivative residual about 1.6e-58 (step 1e-60);
+ determinant/minor pairing residual about 1.5e-154.
+The identity beta=tr(Y1) is a useful independent normalization check: the
+scalar top-block determinant of a frame grows with logarithmic derivative
+tr(Y), so its power at infinity is tr(Y1). There is no beta sign error.
+The Stirling conversion and Pochhammer indexing are also consistent.
+
+The left inverse iteration has a robustness limitation, not an observed
+failure: it uses random initialization and a fixed Float64 literal 1e-200
+shift. It is not precision-scaled, and accuracy of its result depends on
+the eigenspace conditioning. Check the left residual and w'xi0 explicitly;
+use a bordered solve or adaptive shift for a reusable implementation.
+The tests above found no resulting defect at these parameters.
+
+2. The angle is correct, but it cannot measure scalar convergence
+
+proj_dist is the Hermitian projective sine distance. The residual-vector
+formula is preferable to sqrt(1-|dot|^2) at small angles. It correctly
+ignores any nonzero scalar, including sign/phase, and is appropriate for
+comparing subspaces in homogeneous coordinates.
+
+That invariance is exactly why it is NOT a convergence test for xi with its
+specified infinity normalization. A sequence c_K xi_ref with c_K divergent
+would have zero angle. A large scalar truncation error parallel to xi_ref
+is invisible. Moreover, truncated compound sums need not be decomposable;
+one should monitor Plucker-relation residuals before interpreting a finite
+sum as an actual frame. Graph ratios alone do not test decomposability.
+
+Record scalar-normalized vector errors against a consistently normalized
+linear-compound reference, raw component/tail increments, norm growth, and
+Plucker relations as well as angles. For matching, also record the pairing
+error and its derivative with respect to E.
+
+The summary's comparison of the two methods mixes a bounded angle and an
+unbounded matrix norm. It is not a common error metric or timing benchmark.
+At omega=.224, K=800, R=.5, the supplied CSV/log give angle .21, Y recovered
+FROM PLUCKER error about 8.1, and DIRECT Y-chart error 8.4e4. Thus the claim
+that Plucker is worse at every R<=3 is false if it means boundary-map error.
+At R=1 the analogous errors are .17 versus .27. At R=1.5,2,3 the direct
+Y-chart is substantially more accurate. Neither representation gives high
+accuracy at .5 at this tested order, but there is no universal dominance.
+"Nothing converges usefully below 1.5" needs an accuracy target and a term
+budget; it is not a mathematical conclusion.
+
+3. What the origin singularity actually says
+
+The displayed A2/R^2 makes the first-order system look irregular at zero,
+but use Z=(Phi,R Phi') instead. Then
+ Z' = [H/R + J + R L] Z,
+ H = [0 I; Lambda -4I],
+ J = [0 0; -D -2U],   L = [0 0; -T 0].
+This is regular singular (Poincare rank zero). Its indicial roots are
+ K_i and -K_i-4. Exterior powers remain regular singular in these variables.
+Returning to (Phi,Phi') multiplies a minor with r derivative rows by R^-r.
+The additional R^-beta gauge changes powers, and exp(-sigma R) is analytic
+and nonzero at zero. One therefore expects powers and logarithms, not a
+new finite positive-R singularity of the homogeneous vector.
+
+For d=2, K=[0,2,4,4]. A generic most singular all-irregular wedge, in the
+all-derivative minor, has exponent -sum(K)-5m=-30. After the power gauge,
+xi can therefore contain R^-q with q=30+beta=30.9108379. This is an upper
+candidate singular power, not proof its connection coefficient is nonzero
+in the selected exterior solution. At an exact matched energy the exterior
+space intersects the regular interior space, so the all-irregular
+connection determinant vanishes; leading powers can disappear. Individual
+components/projections may also cancel. Logarithmic resonances add further
+factors. There is ample room for substantial finite-order transients.
+
+Here is the relevant asymptotic calculation. If xi contains c R^-q, its
+Laplace Borel density behaves like c t^(q-1)/Gamma(q). Under
+ t=-log(1-u)/omega
+this is a power of log(1/(1-u)), not an algebraic pole (1-u)^-p. For q>1,
+the leading Taylor coefficients of this endpoint behavior are proportional
+to (log k)^(q-2)/k. The factorial tail is consequently of the form
+ K^(-R/omega) (log K)^(q-2)
+up to constants, lower log powers, and any extra log-log factors inherited
+from origin logarithms. The corresponding local fitted abscissa is
+ p_eff approximately omega (q-2)/log K,
+even though its limit is zero. Its drift with omega is expected. The
+candidate generic log power here is about 28.91; cancellation and
+preasymptotic behavior can readily change an effective 19–24 fit.
+This calculation concerns scalar components/tails in their asymptotic
+regime. Fitting projective errors at angle .1–.5 is not a measurement of q.
+
+At R=3 the Y-chart errors are at the Float64 reference floor; at R=5 both
+methods hit it. Fitting a slope to that floor gives p_eff=R and has no
+convergence meaning. The figure's rising Y abscissa at R=3 is this artifact.
+
+4. A concrete route to the Plucker abscissa
+
+Let xi=xi0+Laplace[h], with h(t)=sum xi_{n+1} t^n/n!. Borel-transform the
+normalized equation after multiplying by R^2. Away from t=0, it gives
+ (t I+B0) h'' + (2I+B1) h' + C2 h = 0.
+Its finite candidate singularities are t=sigma-lambda(C0), including zero;
+the selected formal branch is analytic at zero. For the tested d=2 spectrum,
+the nonzero candidates are negative real, beginning at -3.556. This linear
+equation is more informative than a finite scalar Pade plot: it identifies
+all possible finite singular locations of this Borel system.
+
+The logarithmic map sends |u|<1 into Re(t)>-log(2)/omega. At omega=.224 the
+left boundary is about -3.094, strictly to the right of the nearest
+candidate. Thus no nonzero finite Borel singularity enters the disk. The
+remaining issue is growth as u approaches 1, i.e. t tends to infinity in a
+horizontal strip. A polynomial/logarithmic bound on h there, as suggested
+by the regular-singular origin after the shear, gives a convergent factorial
+series for every real R>0. One can then prove the zero abscissa (provided
+an actual origin singularity remains) and logarithmic tail estimates.
+
+This is my preferred theorem candidate and proof route. I have not supplied
+the required uniform Borel-growth proof or a certified bound in this
+review. Regularity of xi away from zero, Pade poles, and finite K data
+alone cannot substitute for it. A positive factorial abscissa is not
+logically ruled out just by pole-free finite-R continuation: factorial
+convergence also depends on transformed-Borel analyticity/growth. For THIS
+linear regular-singular model, zero has a strong structural explanation;
+there is no numerical evidence here requiring a genuine positive abscissa.
+
+Pade details: the [60/60] nearest poles match the negative-gap picture.
+However [40/40] in the supplied log also produces +.581 and -2.989 poles.
+They are inconsistent with the exact candidate set and illustrate spurious
+Pade roots. The code gives no final root residuals, convergence report,
+or numerator-zero/Froissart check. Do not promote “only negative poles at
+[60/60]” to a global Borel analyticity or growth certificate. Negative-axis
+finite Borel singularities themselves do not determine the Laplace
+abscissa; growth at positive Borel infinity is crucial.
+
+5. Y-chart abscissa: rightmost pole is an obstruction, not yet an equality
+
+A genuine pole p of Y forces the abscissa of a single factorial
+representation on a right half-plane to be at least Re(p). Otherwise the
+convergent representation would be analytic through that pole. The known
+d=2 pair with Re(p)=.637277 is therefore a genuine lower obstruction for
+this chart. The scalar factorial expansion of 1/(R-p) makes its contribution
+explicit: the tail is proportional to K^((p-R)/omega).
+
+Equality with the supremum of all pole real parts is a reasonable theorem
+candidate only with additional assumptions: control ALL poles, the origin
+boundary behavior, growth needed for Laplace inversion, and analyticity
+and boundary bounds of the transformed Borel function for the chosen
+omega. Under suitable such assumptions the expected threshold is the
+maximum of the origin boundary 0 and the rightmost pole real part.
+The nearest pole found by a bounded scan is not necessarily the rightmost.
+Complex pole pairs also cause log-K oscillations and large constants;
+finite-range log-error slopes need not equal their envelope exponent.
+No supplied data prove this equality, particularly for d=6.
+
+6. Two convergent series can define the finite-model eigenvalue
+
+Let F(E,R) be the regular interior frame and G(E,R) the selected exterior
+frame. For m channels the condition is
+ det [ F(E,R*)  G(E,R*) ; F'(E,R*)  G'(E,R*) ] = 0.
+Equivalently, if the chosen exterior top block is invertible, use
+ det(F'-Y F)=0. This avoids forming F^-1. The exterior Plucker pairing is
+the homogeneous version. Recover the interior amplitudes from the null
+vector after solving for E, with a fixed amplitude normalization.
+
+The determinant vanishing is independent of matching radius for exact
+solutions, by invertible linear evolution and Abel's identity. Series that
+converge locally uniformly in E near an isolated simple root can therefore
+be used to compute it. The Fock representation is generalized Frobenius,
+with logarithms: calling the solution “entire” is literally incorrect at
+zero. For this finite ODE with no other finite coefficient singularities,
+the regular logarithmic expansion has no finite positive-R convergence
+barrier on the chosen logarithmic sheet. This is sufficient for matching.
+
+The distinction from propagating uncertain E and a is decisive. If those
+are supplied with fixed error, outward continuation can magnify it beyond
+a requested tolerance. If they are unknowns solved consistently in higher
+precision, the same amplification is a condition number to budget for,
+not an impossibility. Additional losses from nonnormality, powers of R,
+frame conditioning, near-multiple roots, and a poorly chosen amplitude
+normalization must also be included. There is no universal exact loss
+formula involving just one gap.
+
+R*=3 for d=2 and R*=8–10 for d=6 are useful empirically supported working
+radii for the tested term counts. They are not proven convergence
+boundaries. Nor does “two-series determinant” constitute a closed form
+in a stronger classical special-function or finite-expression sense.
+It is a legitimate implicit convergent-series characterization when its
+convergence hypotheses hold. It does not solve the full untruncated
+helium problem or establish a speed advantage over panels.
+
+7. d=6 at R*=10: measured Fock order and precision budget
+
+I streamed the same Fock recurrence in BigFloat through N=280, retaining
+two seed columns rather than storing an N-squared coefficient tensor. One
+seed was the supplied approximate cuspsolve amplitude; the other was a
+normalized random vector. The test includes values and first derivatives,
+and the original logarithmic terms. At 512 bits, combined (Phi,Phi')
+errors against N=280 were:
+
+ order N     supplied approximate amplitude     generic normalized seed
+    120                  5.85                       1.09e7
+    140                  1.48e-8                    2.35e-2
+    160                  2.25e-18                   3.14e-12
+    180                  2.89e-29                   3.65e-23
+    200                  4.15e-41                   4.80e-35
+    220                  8.25e-54                   8.86e-48
+
+The 256-bit rerun reproduced the displayed order comparisons through N=220
+to the printed three-digit accuracy. At larger orders some differences
+reach the arithmetic floor; a zero difference there is not a tail bound.
+This compares order behavior, not high-precision roots or all final digits
+across the two precisions.
+
+These are truncation comparisons at the supplied Float64 energy for two
+seeds, not uniform operator bounds over all interior seeds or a high-
+precision eigenvalue calculation. The approximate matched seed is NOT an
+accurate slow solution at R=10: its final norm is about 2.6e5 because the
+input E/a errors have already generated fast contamination. Its small
+truncation errors do not validate that approximate physical solution.
+
+For the generic seed, sum of norms of all evaluated Fock terms was about
+1.08e24; for the approximate matched seed it was 3.62e18. This illustrates
+the arithmetic scale to budget for. The d=6 A0 spectra in this test are
+ slow: -.28096 to .57473; fast: 3.37756 to 4.93239.
+A conservative spectral separation over R=10 is about 5.213*10/ln(10)
+=22.6 decimal digits, or 75 bits. To retain 16 digits of a selected slow
+state, start with roughly 40 significant digits PLUS guard digits for
+powers, nonnormality, matrix conditioning, and root extraction. At 256
+bits there are about 77 decimal digits; 192 bits may work, while 128 bits
+is marginal. For roughly 30-digit work, start with 384 bits and N=220,
+then verify. The order table is evidence for these choices, not a proof
+of a minimal required order or precision.
+
+Use the entire interior matrix and check its matching singular values,
+the energy derivative, and the amplitude vector under N and precision
+increases. Arbitrary precision applied after a Float64 recurrence does
+not help. The exterior Stirling transformation has its OWN cancellation
+budget (the prior d=6 experiments used 768–1024 bits), and must also retain
+that precision through the determinant. A 256-bit interior recommendation
+is not a recommendation to reduce exterior working precision to 256 bits.
+
+8. What the current matching experiment proves
+
+The results at rm=1,2,3 credibly show decreasing error against the panel
+implementation of the same finite model: approximately 4.5e-5, 1.1e-10,
+and indistinguishable Float64 energies respectively. They are a useful
+cross-check of the representation, not a verified arbitrary-precision root.
+
+interior_wedge calls cuspcoeff and evalseries in Float64 and only THEN
+converts [F;D] to BigFloat. E and the secant iterates are Float64;
+f_plucker and f_panel explicitly return Float64. The rm=3 panel pairing
+residual is 6.3e-14 even though the energy step stops below 1e-15. The
+secant routine checks step size, not residual/slope-based energy error.
+Thus identical 15-decimal energies do not establish a 1e-15 error bound.
+At R=3 the angle 5.9e-14 and the recovered-Y error 4.1e-15 differ because
+projective/frame conditioning and direction of error matter. State-specific
+pairing error may be smaller still.
+
+For a convincing implementation of (ii), make cuspcoeff, evalseries, E,
+the scalar matching function and root finder genuinely generic in precision;
+retain exterior precision; recover a with a high-precision null solve; and
+vary Fock order, factorial order, precision and matching radius. Use a
+residual divided by a checked nonzero energy derivative to estimate root
+error. Keep this numerical error separate from the fixed Float64 angular
+matrix/model error. None of these requirements calls for modifying the
+mathematical two-series construction.

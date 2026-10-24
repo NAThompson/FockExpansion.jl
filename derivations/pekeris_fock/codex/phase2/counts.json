@@ -1,0 +1,845 @@
+{
+  "S2P": {
+    "(one,one)": {
+      "general_count": 1819,
+      "fixed_count": 1617,
+      "general_shell_range": [
+        -11,
+        11
+      ],
+      "fixed_shell_range": [
+        -10,
+        10
+      ],
+      "coordinate_bounds": [
+        [
+          -8,
+          8
+        ],
+        [
+          -8,
+          8
+        ],
+        [
+          -7,
+          7
+        ]
+      ],
+      "differential_monomials": 416
+    },
+    "(one,L)": {
+      "general_count": 1299,
+      "fixed_count": 1299,
+      "general_shell_range": [
+        -10,
+        10
+      ],
+      "fixed_shell_range": [
+        -10,
+        10
+      ],
+      "coordinate_bounds": [
+        [
+          -7,
+          7
+        ],
+        [
+          -7,
+          7
+        ],
+        [
+          -6,
+          6
+        ]
+      ],
+      "differential_monomials": 114
+    },
+    "(one,x)": {
+      "general_count": 1321,
+      "fixed_count": 1321,
+      "general_shell_range": [
+        -10,
+        10
+      ],
+      "fixed_shell_range": [
+        -10,
+        10
+      ],
+      "coordinate_bounds": [
+        [
+          -7,
+          7
+        ],
+        [
+          -7,
+          7
+        ],
+        [
+          -6,
+          6
+        ]
+      ],
+      "differential_monomials": 118
+    },
+    "(one,V)": {
+      "general_count": 1371,
+      "fixed_count": 1371,
+      "general_shell_range": [
+        -10,
+        10
+      ],
+      "fixed_shell_range": [
+        -10,
+        10
+      ],
+      "coordinate_bounds": [
+        [
+          -7,
+          7
+        ],
+        [
+          -7,
+          7
+        ],
+        [
+          -7,
+          7
+        ]
+      ],
+      "differential_monomials": 131
+    },
+    "(one,U)": {
+      "general_count": 1407,
+      "fixed_count": 1407,
+      "general_shell_range": [
+        -10,
+        10
+      ],
+      "fixed_shell_range": [
+        -10,
+        10
+      ],
+      "coordinate_bounds": [
+        [
+          -8,
+          8
+        ],
+        [
+          -8,
+          8
+        ],
+        [
+          -7,
+          7
+        ]
+      ],
+      "differential_monomials": 156
+    },
+    "(one,Slog)": {
+      "general_count": 1237,
+      "fixed_count": 1237,
+      "general_shell_range": [
+        -10,
+        10
+      ],
+      "fixed_shell_range": [
+        -10,
+        10
+      ],
+      "coordinate_bounds": [
+        [
+          -7,
+          7
+        ],
+        [
+          -7,
+          7
+        ],
+        [
+          -5,
+          5
+        ]
+      ],
+      "differential_monomials": 109
+    },
+    "(L,L)": {
+      "general_count": 683,
+      "fixed_count": 571,
+      "general_shell_range": [
+        -8,
+        8
+      ],
+      "fixed_shell_range": [
+        -7,
+        7
+      ],
+      "coordinate_bounds": [
+        [
+          -5,
+          5
+        ],
+        [
+          -5,
+          5
+        ],
+        [
+          -5,
+          5
+        ]
+      ],
+      "differential_monomials": 170
+    },
+    "(x,x)": {
+      "general_count": 683,
+      "fixed_count": 571,
+      "general_shell_range": [
+        -8,
+        8
+      ],
+      "fixed_shell_range": [
+        -7,
+        7
+      ],
+      "coordinate_bounds": [
+        [
+          -5,
+          5
+        ],
+        [
+          -5,
+          5
+        ],
+        [
+          -5,
+          5
+        ]
+      ],
+      "differential_monomials": 170
+    },
+    "(x,U)": {
+      "general_count": 461,
+      "fixed_count": 461,
+      "general_shell_range": [
+        -6,
+        6
+      ],
+      "fixed_shell_range": [
+        -6,
+        6
+      ],
+      "coordinate_bounds": [
+        [
+          -5,
+          5
+        ],
+        [
+          -5,
+          5
+        ],
+        [
+          -5,
+          5
+        ]
+      ],
+      "differential_monomials": 45
+    },
+    "(V,V)": {
+      "general_count": 1819,
+      "fixed_count": 1617,
+      "general_shell_range": [
+        -11,
+        11
+      ],
+      "fixed_shell_range": [
+        -10,
+        10
+      ],
+      "coordinate_bounds": [
+        [
+          -8,
+          8
+        ],
+        [
+          -8,
+          8
+        ],
+        [
+          -7,
+          7
+        ]
+      ],
+      "differential_monomials": 435
+    },
+    "(V,U)": {
+      "general_count": 1357,
+      "fixed_count": 1357,
+      "general_shell_range": [
+        -10,
+        10
+      ],
+      "fixed_shell_range": [
+        -10,
+        10
+      ],
+      "coordinate_bounds": [
+        [
+          -8,
+          8
+        ],
+        [
+          -8,
+          8
+        ],
+        [
+          -6,
+          6
+        ]
+      ],
+      "differential_monomials": 122
+    },
+    "(U,U)": {
+      "general_count": 683,
+      "fixed_count": 571,
+      "general_shell_range": [
+        -8,
+        8
+      ],
+      "fixed_shell_range": [
+        -7,
+        7
+      ],
+      "coordinate_bounds": [
+        [
+          -5,
+          5
+        ],
+        [
+          -5,
+          5
+        ],
+        [
+          -5,
+          5
+        ]
+      ],
+      "differential_monomials": 170
+    },
+    "(Slog,Slog)": {
+      "general_count": 683,
+      "fixed_count": 571,
+      "general_shell_range": [
+        -8,
+        8
+      ],
+      "fixed_shell_range": [
+        -7,
+        7
+      ],
+      "coordinate_bounds": [
+        [
+          -5,
+          5
+        ],
+        [
+          -5,
+          5
+        ],
+        [
+          -5,
+          5
+        ]
+      ],
+      "differential_monomials": 170
+    }
+  },
+  "C1": {
+    "(one,one)": {
+      "general_count": 1309,
+      "fixed_count": 1309,
+      "general_shell_range": [
+        -10,
+        10
+      ],
+      "fixed_shell_range": [
+        -10,
+        10
+      ],
+      "coordinate_bounds": [
+        [
+          -7,
+          7
+        ],
+        [
+          -7,
+          7
+        ],
+        [
+          -6,
+          6
+        ]
+      ],
+      "differential_monomials": 121
+    },
+    "(one,L)": {
+      "general_count": 817,
+      "fixed_count": 817,
+      "general_shell_range": [
+        -9,
+        9
+      ],
+      "fixed_shell_range": [
+        -9,
+        9
+      ],
+      "coordinate_bounds": [
+        [
+          -6,
+          6
+        ],
+        [
+          -6,
+          6
+        ],
+        [
+          -4,
+          4
+        ]
+      ],
+      "differential_monomials": 14
+    },
+    "(one,x)": {
+      "general_count": 861,
+      "fixed_count": 861,
+      "general_shell_range": [
+        -9,
+        9
+      ],
+      "fixed_shell_range": [
+        -9,
+        9
+      ],
+      "coordinate_bounds": [
+        [
+          -6,
+          6
+        ],
+        [
+          -6,
+          6
+        ],
+        [
+          -4,
+          4
+        ]
+      ],
+      "differential_monomials": 18
+    },
+    "(one,V)": {
+      "general_count": 931,
+      "fixed_count": 931,
+      "general_shell_range": [
+        -9,
+        9
+      ],
+      "fixed_shell_range": [
+        -9,
+        9
+      ],
+      "coordinate_bounds": [
+        [
+          -6,
+          6
+        ],
+        [
+          -6,
+          6
+        ],
+        [
+          -5,
+          5
+        ]
+      ],
+      "differential_monomials": 21
+    },
+    "(one,U)": {
+      "general_count": 963,
+      "fixed_count": 963,
+      "general_shell_range": [
+        -9,
+        9
+      ],
+      "fixed_shell_range": [
+        -9,
+        9
+      ],
+      "coordinate_bounds": [
+        [
+          -7,
+          7
+        ],
+        [
+          -7,
+          7
+        ],
+        [
+          -5,
+          5
+        ]
+      ],
+      "differential_monomials": 22
+    },
+    "(one,Slog)": {
+      "general_count": 727,
+      "fixed_count": 727,
+      "general_shell_range": [
+        -9,
+        9
+      ],
+      "fixed_shell_range": [
+        -9,
+        9
+      ],
+      "coordinate_bounds": [
+        [
+          -6,
+          6
+        ],
+        [
+          -6,
+          6
+        ],
+        [
+          -3,
+          3
+        ]
+      ],
+      "differential_monomials": 12
+    },
+    "(L,L)": {
+      "general_count": 419,
+      "fixed_count": 419,
+      "general_shell_range": [
+        -7,
+        7
+      ],
+      "fixed_shell_range": [
+        -7,
+        7
+      ],
+      "coordinate_bounds": [
+        [
+          -4,
+          4
+        ],
+        [
+          -4,
+          4
+        ],
+        [
+          -4,
+          4
+        ]
+      ],
+      "differential_monomials": 42
+    },
+    "(x,x)": {
+      "general_count": 419,
+      "fixed_count": 419,
+      "general_shell_range": [
+        -7,
+        7
+      ],
+      "fixed_shell_range": [
+        -7,
+        7
+      ],
+      "coordinate_bounds": [
+        [
+          -4,
+          4
+        ],
+        [
+          -4,
+          4
+        ],
+        [
+          -4,
+          4
+        ]
+      ],
+      "differential_monomials": 42
+    },
+    "(V,V)": {
+      "general_count": 1297,
+      "fixed_count": 1297,
+      "general_shell_range": [
+        -10,
+        10
+      ],
+      "fixed_shell_range": [
+        -10,
+        10
+      ],
+      "coordinate_bounds": [
+        [
+          -7,
+          7
+        ],
+        [
+          -7,
+          7
+        ],
+        [
+          -6,
+          6
+        ]
+      ],
+      "differential_monomials": 118
+    },
+    "(V,U)": {
+      "general_count": 897,
+      "fixed_count": 897,
+      "general_shell_range": [
+        -9,
+        9
+      ],
+      "fixed_shell_range": [
+        -9,
+        9
+      ],
+      "coordinate_bounds": [
+        [
+          -7,
+          7
+        ],
+        [
+          -7,
+          7
+        ],
+        [
+          -4,
+          4
+        ]
+      ],
+      "differential_monomials": 20
+    },
+    "(U,U)": {
+      "general_count": 419,
+      "fixed_count": 419,
+      "general_shell_range": [
+        -7,
+        7
+      ],
+      "fixed_shell_range": [
+        -7,
+        7
+      ],
+      "coordinate_bounds": [
+        [
+          -4,
+          4
+        ],
+        [
+          -4,
+          4
+        ],
+        [
+          -4,
+          4
+        ]
+      ],
+      "differential_monomials": 42
+    },
+    "(Slog,Slog)": {
+      "general_count": 419,
+      "fixed_count": 419,
+      "general_shell_range": [
+        -7,
+        7
+      ],
+      "fixed_shell_range": [
+        -7,
+        7
+      ],
+      "coordinate_bounds": [
+        [
+          -4,
+          4
+        ],
+        [
+          -4,
+          4
+        ],
+        [
+          -4,
+          4
+        ]
+      ],
+      "differential_monomials": 42
+    }
+  },
+  "C2": {
+    "(one,one)": {
+      "general_count": 955,
+      "fixed_count": 955,
+      "general_shell_range": [
+        -9,
+        9
+      ],
+      "fixed_shell_range": [
+        -9,
+        9
+      ],
+      "coordinate_bounds": [
+        [
+          -6,
+          6
+        ],
+        [
+          -6,
+          6
+        ],
+        [
+          -5,
+          5
+        ]
+      ],
+      "differential_monomials": 23
+    },
+    "(L,L)": {
+      "general_count": 251,
+      "fixed_count": 251,
+      "general_shell_range": [
+        -6,
+        6
+      ],
+      "fixed_shell_range": [
+        -6,
+        6
+      ],
+      "coordinate_bounds": [
+        [
+          -3,
+          3
+        ],
+        [
+          -3,
+          3
+        ],
+        [
+          -3,
+          3
+        ]
+      ],
+      "differential_monomials": 7
+    },
+    "(x,x)": {
+      "general_count": 251,
+      "fixed_count": 251,
+      "general_shell_range": [
+        -6,
+        6
+      ],
+      "fixed_shell_range": [
+        -6,
+        6
+      ],
+      "coordinate_bounds": [
+        [
+          -3,
+          3
+        ],
+        [
+          -3,
+          3
+        ],
+        [
+          -3,
+          3
+        ]
+      ],
+      "differential_monomials": 7
+    },
+    "(V,V)": {
+      "general_count": 931,
+      "fixed_count": 931,
+      "general_shell_range": [
+        -9,
+        9
+      ],
+      "fixed_shell_range": [
+        -9,
+        9
+      ],
+      "coordinate_bounds": [
+        [
+          -6,
+          6
+        ],
+        [
+          -6,
+          6
+        ],
+        [
+          -5,
+          5
+        ]
+      ],
+      "differential_monomials": 21
+    },
+    "(U,U)": {
+      "general_count": 251,
+      "fixed_count": 251,
+      "general_shell_range": [
+        -6,
+        6
+      ],
+      "fixed_shell_range": [
+        -6,
+        6
+      ],
+      "coordinate_bounds": [
+        [
+          -3,
+          3
+        ],
+        [
+          -3,
+          3
+        ],
+        [
+          -3,
+          3
+        ]
+      ],
+      "differential_monomials": 7
+    },
+    "(Slog,Slog)": {
+      "general_count": 251,
+      "fixed_count": 251,
+      "general_shell_range": [
+        -6,
+        6
+      ],
+      "fixed_shell_range": [
+        -6,
+        6
+      ],
+      "coordinate_bounds": [
+        [
+          -3,
+          3
+        ],
+        [
+          -3,
+          3
+        ],
+        [
+          -3,
+          3
+        ]
+      ],
+      "differential_monomials": 7
+    }
+  }
+}

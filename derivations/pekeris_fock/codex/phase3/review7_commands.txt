@@ -1,0 +1,15 @@
+Run from the task directory. All Julia jobs use one thread and disable startup
+and compiled-module caches. No Claude source is included by these scripts.
+
+JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 julia --startup-file=no --compiled-modules=no --project=/Users/nathompson7/FockExpansion.jl codex/phase3/review7_independent.jl > codex/phase3/review7_independent.out 2>&1
+CHECK_N=8 JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 julia --startup-file=no --compiled-modules=no --project=/Users/nathompson7/FockExpansion.jl codex/phase3/review7_independent.jl > codex/phase3/review7_energy8.out 2>&1
+JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 julia --startup-file=no --compiled-modules=no --project=/Users/nathompson7/FockExpansion.jl codex/phase3/review7_parity.jl > codex/phase3/review7_parity.out 2>&1
+venv/bin/python codex/phase3/review7_algebra.py > codex/phase3/review7_algebra.out
+venv/bin/python codex/phase3/review7_tables.py > codex/phase3/review7_tables.out
+
+Energy code integrates a single exported state, with no dense Ritz matrices or
+atom caches. Atom evaluation uses this code's distance formulas and ForwardDiff;
+radial integration uses this code's Gamma/log moments. N4 and N8 only.
+The a21 Gauss nodes originate in a Float64 symmetric eigensolver; this limits
+its numerical agreement to roughly 1e-14 despite BigFloat arithmetic thereafter.
+The Julia dependency emits an OpenSpecFun import warning; jobs exit zero.

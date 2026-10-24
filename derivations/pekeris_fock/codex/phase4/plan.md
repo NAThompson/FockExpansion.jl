@@ -1,0 +1,6 @@
+# TASK 8 implementation brief
+Independent source: own phase-2 distance chi formula and own phase-3 weak-form/moment code; read-only repository psi20 formula for convention. No Claude phase-4 source until implementation and first results saved.
+Use s=r1+r2,x=(r1-r2)/s,y=r12/s, integrate 0<x<y<1 and double by exchange symmetry. Exact radial Gamma/log moments; tanh-sinh angular quadrature. Seed exp(-eps*s)[1+s*(psi10/s+eps)+s²*(psi20/s²+eps*psi10/s+eps²/2)+s²*psi21/s²*log R], with a21=0. Separate D exp(-eps*s). Enrich with all exchange-even monomials s^n x^a y^b, a+b<=n, n=3..N. Small N=3..6 initially, one job/thread. Cholesky and shifted inverse iteration at BigFloat precision; no external cache writes.
+Checks: independent ray expansion, angular step refinement, Ritz residual, positive Gram and shifted-H Cholesky, nested energies, snapshot hashes. Cross-review Claude only after independent implementation/results.
+
+Independence boundary: constrained.jl, check_seed.jl (passing), and N3/N4 h8 results were saved before reading claude4/constrained.jl and run4.jl. Claude's space includes log/atom enrichments; own polynomial space differs. Use direct exported-state Rayleigh quotients and raywise jet extraction at matching N4/N8 for cross-check, without including its assembly/source.

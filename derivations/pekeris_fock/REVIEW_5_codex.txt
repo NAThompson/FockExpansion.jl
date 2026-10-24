@@ -1,0 +1,42 @@
+TASK_codex_5 — 2026-10-22 — mathematical handoff, partial completion
+
+ESTABLISHED ON NONSINGULAR INTERIOR CHARTS
+1. R^3 psi30 at general Z,E,a21 is explicitly decomposed into a polynomial,
+   classical angle/Clausen/log content, and four N0/N2 panels, in distances.
+   Five polynomial homogenization identities pass exactly.
+2. An explicit outer (b,y) Pfaffian connection is derived for 13 generating
+   states with exp(t atan q+s atan(q/h))/sqrt(T). Its five relevant jets form
+   a finite 65-state padded system. Every entry is specified by rational
+   formulas in explicit algebraic roots. Initial data and the finite-part
+   convention fix the intended solution. This is not merely an ODE in q.
+3. Both outer equations pass 312 numerical component/jet comparisons per
+   step size across both endpoint choices; centered-difference errors decrease
+   fourfold. Moment reconstructions agree with direct integration ~1e-43.
+   Full 65x65 connection curvature decreases fourfold to 1.12e-16.
+4. Full reconstructed classical/state/elliptic/value parts match three
+   repository BigFloat evaluations to about 48 digits, with both distance
+   orderings, non-helium Z,E,a21, and Z=0. Float64 max difference 6.06e-15.
+   The classical formula is explicitly inherited from earlier workspace;
+   no independent rediscovery is claimed. New panel code imports no Claude code.
+
+LIMITATIONS / REQUIREMENTS NOT COMPLETED
+- No minimal combined atom set or minimality proof. At most 216 algebraic-field
+  generators suffice chartwise after explicit eliminations; this is not a
+  rational rank and is very likely redundant.
+- No expanded global Laguerre recurrence counts or shell bandwidth. The
+  rational connection denominators and finite chartwise clearing route are
+  supplied. Restricting scalars and resolving upper-limit/folding interfaces
+  remain necessary before asserting a global finite polynomial matrix system.
+  The numerical connection counts 406/333 are unrelated to stencil counts.
+- psi41^(2)'s actual elementary one-dimensional Feynman integral supports a
+  finite holonomic extension in principle. psi40's recursive Green direct
+  image supports a further extension, with singular-normalization qualifications.
+  Neither is shown to lie in this order-three module. Exact harmonic projection
+  constants and psi40's a40,a42 data must be specified separately.
+
+Therefore I do not mark TASK_codex_5 fully complete and do not co-sign a
+minimality, global stencil, convergence, or new physical-digit claim.
+
+Files and reproducible commands: codex/phase3/README.md.
+No Claude-owned file was modified. /Users/nathompson7/FockExpansion.jl and
+the earlier outputs were read only; all explicit writes stayed in the allowlist.

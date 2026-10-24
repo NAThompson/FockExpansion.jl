@@ -1,0 +1,25 @@
+{
+  "saved_utc": "2026-10-22T15:55:57.179525+00:00",
+  "sha256": {
+    "codex/phase6/goal2x_independent.json": "b1ee2ae05bfc849410597f2cd1534226ac4290d4e06ee67e9c6b82fd3766ac89",
+    "codex/phase6/goal2x_step1.md": "9f2948bdfc72bb7d1609915723bfd2cfde521399d9d647d701f7ce6a3d6983a2",
+    "codex/phase6/goal2x_fast.c": "e506ec0fc1ee8c3a6023a68529ca6dd35e8ea3a603ccb3906a4c5cacb15cde2e",
+    "codex/phase6/goal2x_method.txt": "23a77b2ce09bf9da17fbdaf36a84f1639f033317acaba18207a46315400b6c58",
+    "codex/phase6/goal2x_fast.dylib": "147c4ec60a0cb9634038f619d4acf8ea983adb46ee552048b51a2163d1c274b8",
+    "codex/phase6/goal2x_line.json": "d178c8a42f89bc47204ad535c767761a02ee192bde18cd2ca9d59e1ad4754578",
+    "codex/phase6/goal2x_rational.py": "f1f1f79993cecba08cab01550ecba3f82b82c53e2c2aa480ba52220f58e20dcd",
+    "codex/phase6/goal2x_first.json": "569468ffb3c0c9b22b7817d2579ba5286463b76c61e3675ae8c8d3efcdfdac0d",
+    "codex/phase6/goal2x_constants.py": "6ef6b6f903491aba08632110f081aea294f1a55828c0e2f6a9bf39e2742eee08",
+    "codex/phase6/goal2x_constant_field.md": "89f0cbe1dec2ed9d7234c37261132e9df46dffe4544e8fc32766c2a307d49908",
+    "codex/phase6/goal2x_independent.py": "934c60f35fc2a5eefaf46bf2504db47aca6d9fcbd290f92f6ace7aba9eb3a277",
+    "codex/phase6/goal2x_line.out": "11c940884462bed98287e81acf298b0ee8e2f5287ee841754fe45b9827e49edb",
+    "codex/phase6/goal2x_independent.out": "409d196545702d0f8cd9f55de8431ef66cf358dd8c5edb60c42b91e38c45b090",
+    "codex/phase6/goal2x_line.py": "1c25d94d24dd827678fbeb0806222f3f1654ca63305cd20f5739a18f9f6d4c35",
+    "codex/phase6/goal2x_plan.txt": "b4595909d23ee669efa43fb3a676c5788ab3e926bea1f2222f483c5e628cf5f0",
+    "codex/phase6/goal2x_profile.out": "4d697c1dd3cea82461b4efdfb679bb7da680e26fc98f36b59669b8b8a02efb86",
+    "codex/phase6/goal2x_probe.py": "4446872e28d8be9452173814c22d5b1a1b1a2df0c394c67de9250abac0725c42",
+    "codex/phase6/goal2x_constants.out": "65927066d045e54dbe77d0d4640e63423fb2651fdddaa9f9d1f9d05ad83a0448",
+    "codex/phase6/goal2x_constants.json": "0cd55aad034620bd32fc03c190ceceb7eb7fb94970b46631b67d20a3d588d6e3",
+    "codex/phase6/goal2x_first.out": "a41d3aa2bd4ab841621ee0637cfd60b2e9d61e99870aff67895d9898a910e3fc"
+  }
+}

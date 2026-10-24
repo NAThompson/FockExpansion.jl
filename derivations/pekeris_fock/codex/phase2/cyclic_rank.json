@@ -1,0 +1,22 @@
+{
+  "vectors": [
+    "1",
+    "z",
+    "da z",
+    "db z",
+    "daa z",
+    "dab z",
+    "dbb z",
+    "Slog"
+  ],
+  "chosen": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    7
+  ],
+  "determinant": "-4096*pi/21021",
+  "qualification": "Rank in the presented differential module; actual-function independence is proved separately in minimal_rank.md."
+}

@@ -1,0 +1,121 @@
+REVIEW OF PLAN.md — 20 October 2026
+
+Overall: proceed as an exploratory hybrid method, with corrections to the variational claims and comparison protocol. The coordinates, cusp recurrence, and a21 conversion agree with the referenced code. The largest conceptual problem is treating the boundary flux of the unweighted cusp-channel model as the physical interior energy. A second important issue is that the quoted channel sequence uses a different fixed-energy selection principle.
+
+Sources inspected: PLAN.md, REQUEST_1.txt, and the referenced boundary_matching/{probe.jl,cusp_matching.jl,fixed_energy_matching.jl,fixed_energy_matching.csv}. This is an analytical plan review, not a numerical convergence certification.
+
+1. Coordinates and measure — OK, with a qualification about quadrature.
+
+q = cos(2 phi), s = 1-u^2 gives
+  |d(q,s)/d(phi,u)| = 8 cos(phi) sin(phi) u.
+Thus dOmega = dq ds / pi on q^2+s^2 < 1, exactly angular()'s normalized uniform disk measure. The Jacobian determinant is positive in the stated orientation; absolute values handle integration orientation. The disk has area pi, hence total measure 1. Also
+  dOmega = sin(alpha)^2 sin(theta) d(alpha) d(theta) / pi.
+Exchange is q -> -q, s unchanged, so half-domain integration doubled is correct for exchange-even integrands, including products of the retained even harmonics. The factor multiplying R^5 is a constant rescaling of the physical six-dimensional measure; use it consistently in volume and surface forms.
+
+Coulomb factors cancel against the volume weight for these integrals. This does NOT make every unweighted coefficient or derivative analytic: W and the Hylleraas direction cosines have coalescence denominators. Analyticity should be asserted for the weighted, algebraically simplified matrix integrands, with u = cos(phi)-sin(phi)+2 sin(phi) x on 0 <= phi <= pi/4. Here the Coulomb and direction-cosine denominators do cancel. Cancel them symbolically before evaluation to avoid 0/0 and loss of accuracy. For the proposed integer-power bases, fixed R*>0 and this split, angular spectral convergence is plausible; verify it separately for U, C, W and the exterior matrices. The statement does not establish a uniform rate in basis degree or on the infinite radial interval.
+
+2. Cusp PDE, D, and recurrence — OK if C is the Coulomb angular potential, not its negative.
+
+Write H = -Delta/2 + C(Omega)/R, with
+  C = -Z(1/cos(phi)+1/sin(phi)) + g/u.
+Since Delta S = 2C/R, conjugation by exp(S) cancels the Coulomb term, leaving exactly the stated PDE. W = 2Z^2+g^2/2-Zg(rhat1-rhat2).rhat12 has the correct sign and factor. Lambda^2 Y_i = lam_i Y_i, lam_i=K_i(K_i+4).
+
+The product identity Delta_Omega(U Y_j) gives
+  D_ij = <Y_i,2 grad_Omega U.grad_Omega Y_j>
+       = (lam_j-lam_i+5) U_ij - 2 C_ij,
+using Delta_Omega U = 2C-5U. This is cuspmodel's identity with C=base.V. D is generally NOT symmetric; D[:,1]=0 exactly.
+
+For coefficient vectors c[n,k] multiplying R^n (log R)^k, use
+  (n(n+4)I-lam)c[n,k] + (2n+4)(k+1)c[n,k+1]
+    + (k+1)(k+2)c[n,k+2]
+  = -(2(n-1)U+D)c[n-1,k] - 2(k+1)U c[n-1,k+1]
+    - (W+2E I)c[n-2,k].
+This matches cuspcoeff, including its resonance handling. At n=K_i the nonlog coefficient in row i is the free seed; the log coefficient is determined by compatibility. Preserve the labels, harmonic signs, and normalizations from harmonic_values, and set the regular-solution seed matrix to the identity at resonances. Require N >= max K = 2 d_int, and test additional N increments. A fixed N=50 cannot support arbitrarily large d_int. Rolling storage of the previous two radial orders is sufficient for the recurrence, but each order includes all log powers and all seed columns; avoid assuming that storing only low n eliminates all large-memory work.
+
+3. Trace compression and recovery — OK as a conforming trace restriction; suggestion to test a different reduction.
+
+Let J embed the retained trace coefficients into the full m-dimensional channel space. With Q=F' F^{-1}, where prime here means radial derivative, the exact matrix dimensions are
+  B_LL = R*^5 [ (G_U)_LL + G_{L,m} Q_{m,m} J ].
+This equals the stated expression with Q_{m,L}; do not replace it by G_LL Q_LL. Even when Phi has zero high-channel boundary values, its radial derivative generally does not.
+
+The corresponding seeds are a=F^{-1}Jt, computed by a linear solve, never by forming an inverse. This is a legitimate Galerkin restriction of a well-defined full DtN to exp(R*U) times the low harmonics. It imposes a hard zero on the high cusp-gauge trace, not on the high physical harmonics: multiplication by exp(R*U) mixes physical harmonics. At finite L the true trace normally is not in this space. Hence even an exact interior/exterior pair need not have a null vector on T_L at E0.
+
+For reliable seed recovery, increase L independently and monitor a21, not just lambda_min. A useful alternative is to retain a larger trace space and eliminate high trace variables by a Schur complement of the TOTAL matching form, where that high block is invertible/coercive. This optimizes high traces instead of forcing them to zero. Schur-complementing only the interior would impose a different, unjustified boundary condition. Also consider trace spaces adapted to computed regular solutions and a stable QR/SVD-scaled interior fundamental matrix. F can become ill-conditioned from R*^K scaling, particularly at small R* and high degree. A small trace error can produce a large seed error.
+
+4. Steklov positivity and variational bounds — OK for exact operators, PROBLEM for the proposed channel flux.
+
+Define the physical doubled energy form
+  Q_D(u,v)=int_D [grad u.grad v+2(V-E)uv] dtau.
+For exact interior and exterior solutions with common trace t,
+  Q_int(Psi,Psi)=int_boundary Psi d_R Psi,
+  Q_ext(Psi,Psi)=int_boundary Psi (-d_R Psi).
+The exterior normal points toward decreasing R. Thus B_int+A_ext is the correct sign. The glued function is in H1, and at the exact ground energy its quadratic form is nonnegative. Write 2 q_{H-E0}[Psi], rather than a literal operator inner product: a normal-derivative jump generally means the glued function is not in the operator domain of H.
+
+At E0 each fixed-trace Dirichlet problem is well posed for finite R*>0; the zero-trace exterior form is positive/coercive, although its smallest eigenvalue can be small for a small excluded ball. Exact S has the ground-state trace as a null vector in the FULL trace space. Restricted S_L need not have a null vector. A conforming exterior Ritz minimization with EXACT trace and EXACT integrals gives A_ext,h >= A_ext in quadratic-form order. Consequently exact-interior S_L,h >= S_L >= 0. Nested exterior spaces improve downward; changing L, cutoffs, exponents or quadrature need not produce a monotone numerical sequence.
+
+However, cuspmodel projects the conjugated strong equation with the unweighted angular inner product. Physical energy uses exp(2RU)-weighted tests. The reconstructed finite-channel Psi is not an exact interior solution, and its residual is not orthogonal to the physical test space needed for Green's identity. Symmetrizing its flux does not fix this.
+
+More explicitly, for r=(-Delta+2(V-E))Psi,
+  Q_int(Psi,Psi) = B_flux(Psi,Psi) + int_int Psi r dtau.
+The missing residual term can have either sign. Hence sym(B_flux)+A_ext,h has no guaranteed positivity, upper-bound energy, or monotonicity in E. Symmetry defect is useful but cannot bound the symmetric residual error. A tiny defect does not certify the answer. Small negative eigenvalues need not signal an exterior implementation error.
+
+A concrete variational repair is to evaluate the actual physical interior energy matrix of the reconstructed regular solutions and use that in place of sym(B_flux), with the trace constraint imposed exactly. This gives a conforming global trial family and nonnegative Q at E0 (up to series/quadrature error), though it is no longer the channel DtN. Alternatively construct the interior by a symmetric physical weak Galerkin solve. Compare the energy matrix and flux matrix as a diagnostic.
+
+For exact DtNs, on pole-free intervals, dS/dE is negative: at fixed trace the derivative of the summed forms is -2 times the total squared L2 norm of the harmonic extensions. That supports the stated decreasing eigenvalue property with fixed trace metric. It is not a theorem for the symmetrized channel flux. An energy crossing is a useful diagnostic, but convergence to E0 additionally needs interior, exterior AND trace convergence. Minimizing t'St subject to t'Mt=1 is equivalent to the generalized eigenproblem; it is not the same as minimizing under a_1=1 away from an exact null vector.
+
+5. Reading constants — OK with normalization and log-scale qualifications.
+
+With a_1=1, Phi_00=1 and Phi_10=0. Since Y_2=2s and <s^2>=1/4,
+  a21 = <psi20,s>/<s,s>
+      = 2a_2 + 2<U^2/2,Y_2>
+      = 2a_2 + Zg(pi+4)/(6pi) - g^2/8.
+For example U^2/2 contains a g^2(1-s)/8 term, which contributes -g^2/8, confirming that sign. The cross-term integral uses
+  <sqrt(1+sqrt(1-q^2))*sqrt(1-s),s> = -(pi+4)/(12pi).
+The formula is a TOTAL projection, including the projection of any chosen particular solution. It need not equal a conventionally named homogeneous integration constant in a different decomposition of psi20.
+
+At order four,
+  <psi_40,Y> = sum_{j=0}^4 <U^j Phi_{4-j,0}/j!,Y>
+is correct. The exponential has no logs, so logarithmic coefficients do not contribute to this nonlog coefficient at a fixed convention. Use the full angular U in this restoration, not powers of the truncated multiplication matrix PUP: P U^j P generally differs from (PUP)^j. Normalize first, and retain all low-order channel coefficients needed for the projection. Fix R=sqrt(r1^2+r2^2) in bohr and log R exactly; changing to log(R/R0) shifts the reported nonlog free constants. Name the order-4 targets by both labels and normalized polynomials. Distinguish radial-log index k from the dummy exponential power j.
+
+6. Exterior basis and quadrature — workable, with numerical issues to address.
+
+The Hylleraas gradient formula is correct, including the factor 2 on u12 v12 and positive c2=(r2^2+r12^2-r1^2)/(2r2 r12). Individual factors can be singular at coordinate boundaries; evaluate their weighted combinations as discussed in point 1. For S states the pair cusps are represented by these coordinates; a missing cusp factor affects convergence, not H1 admissibility. The coalescence r12=0 on the matching sphere is not a fatal singularity for this weak formulation.
+
+The exp(S) lift is square-integrable for helium: U=-Z(cos phi+sin phi)+g u/2 is strictly negative. Check this condition before reusing the lift for arbitrary parameters. The alternate lift needs gamma>0 and exact angular/radial derivatives. Lift independence holds for complete correction spaces; at finite Omega it is a convergence test, not an equality to demand at roundoff.
+
+For helium kappa=sqrt(-2(E+2)) is approximately 1.3444 as stated, using the He+ threshold -Z^2/2=-2. These exponents supply plausible tails but do not establish fast convergence. Pair cusps and disparate length scales remain despite the absence of a triple-coalescence Fock singularity outside R*.
+
+Gauss-Laguerre integrates exp(-t) f(t). After R=R*+t/beta the implementation must compensate by exp(t)/beta. A matrix entry with decay exp(-a(phi,u)R) has residual exp((1-a/beta)t); mixed exponents and the lifts require a uniform lower bound on a. Choose beta and rescale evaluation to avoid exponentially large/small intermediates, and converge radial order separately. Analyticity alone on an unbounded interval does not guarantee the claimed practical convergence rate.
+
+Discard identically zero/duplicate symmetrized functions (especially i=j and exponent swaps), normalize basis columns before rank decisions, and report retained ranks/cutoffs. Eigen-truncation of a correctly assembled positive A_bb defines a subspace and is variational. A numerical pseudoinverse of an indefinite or inaccurately integrated A_bb does not provide that guarantee. Form a consistent retained correction basis for all blocks. High precision helps cancellation only if quadrature, exponent constants, and matrix assembly also use adequate precision. Monitor conditioning and cutoff sensitivity rather than switching blindly to Double64.
+
+7. Validation — useful but insufficient; additional exact nonzero cusp-gauge test.
+
+(i) The independent 1s x 1s ground state is excellent for signs, normalization and flux, but with the exp(S) lift the exact state already lies in the lift space. Use the alternate lift to exercise the correction solve, as intended. Neither a universal 1e-13 eigenvalue tolerance nor 1e-12 seed tolerance is justified without conditioning and quadrature checks. In this g=0 test a21=0 is also protected by the absence of s-dependence; check nontrivial q-dependent coefficients and matrix identities too.
+
+(ii) U=0 is a useful separate physical-gauge test, but requires changing the PDE: the term -2C Phi/R returns. Do NOT merely put U=0 in the canceled cusp PDE or use W=|grad S|^2 with the old D identity. Use probe.jl's ungauged recurrence. This validation tests a different angular model and does not by itself validate nonzero seeds of the helium cusp recurrence.
+
+An exact nonzero cusp-gauge test in the SAME Coulomb family is the independent-electron 2s x 2s state:
+  g=0, E=-Z^2/4,
+  Psi=(1-Zr1/2)(1-Zr2/2) exp[-Z(r1+r2)/2], Psi(0)=1.
+Keep the actual nuclear cusp gauge S=-Z(r1+r2). Then
+  Phi=product_{i=1,2} [(1-x_i)exp(x_i)], x_i=Zr_i/2,
+  Phi_20=-Z^2/8,
+  Phi_40=-Z^4 q^2/128.
+In the code Y_(2,0)=4q^2-1 (unit norm), so its free K=4 seed is
+  a_(2,0)=-Z^4/512, equal to -1/32 for Z=2.
+This is a nonzero known CUSP-GAUGE seed. It supplies exact Fock coefficients and boundary traces for testing recurrence and extraction as d_int increases. It is an excited state with nodes: the ground-state PSD and lambda_min selection arguments do not apply, and the exterior form need not be coercive. Use it as a manufactured trace/flux test or select the appropriate excited branch with pole checks. Its a21 is still zero. It does not supply a nonzero ground-state a21 for interacting helium.
+
+Also add independently refined angular and radial quadrature, the exact Green identity/residual diagnostic, N convergence, a known-trace F^{-1} round trip, exterior monotone enrichment where spaces are nested, L convergence, lift convergence, and sensitivity of a21 to matching radius and small boundary perturbations. Good energy alone is insufficient evidence for a local coefficient.
+
+8. Comparability to the quoted channel numbers — PROBLEM unless the selection rule is made explicit.
+
+The 9-channel value 0.476594728101 is directly in fixed_energy_matching.csv at d=4, R*=0.75 and E=E_REFERENCE. It is NOT the generalized-eigenvector selection proposed here. fixedfit minimizes
+  ||G^(1/2) (F' F^{-1}-Y_outer) y||_2
+subject to e_1^T F^{-1}y=1, with the finite cusp-channel exterior and its physical boundary metric. The new plan minimizes a symmetrized energy-flux Rayleigh quotient and then normalizes a_1. At finite angular truncation and nonzero mismatch these generally produce different a21, even with the very same interior and exterior. Thus equal-d_int disagreement cannot be assigned solely to the exterior basis. The inspected CSV stops at 81 channels; I have not independently traced the stated 169-channel number to its generating run.
+
+For a controlled comparison first reproduce fixedfit at the same d, R*=0.75, E, N, angular quadrature and channel exterior. Compare its least-squares extraction against the proposed eigenvector extraction using that SAME exterior. Only then replace the exterior with the Hylleraas Ritz map. Report the selection-rule effect separately, and repeat in L and d_int. At L<d_int the forced-zero high cusp-gauge trace is another change from the original full-channel fit.
+
+Additional conventions: d=4,8,12,16,24 means 9,25,49,81,169 exchange-even channels; maximum K=2d. Preserve labels [(l-j,j) with even l-j], positive norms, Y_2=2s, a_1=1, and the full U restoration formula. Assemble U,C,W to converged accuracy; the original code mixes specially weighted disk Coulomb quadrature and split W quadrature, so identical channel count alone does not mean identical matrices. Parse E0 at the working precision if going beyond Float64; the old Float64 constant is explicitly not a high-precision enclosure.
+
+Recommended revision before implementation: retain the coordinate/recurrence design; replace guaranteed PSD/monotonicity claims by exact-operator statements plus explicit finite-model diagnostics, or use the physical interior energy matrix; specify how trace restriction and seed conditioning are assessed; and add the controlled extraction-rule comparison and the 2s x 2s seed test.

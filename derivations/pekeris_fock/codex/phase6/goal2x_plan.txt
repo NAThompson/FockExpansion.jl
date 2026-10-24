@@ -1,0 +1,6 @@
+TASK_codex_12 independent test plan (before reading claude6):
+1. Load Codex phase-five connection in isolated module namespaces, replace finite field by 1004535809, vary pi and both constant embeddings, and control the three radical choices independently.
+2. Generate the saved 45 derivative rows and all missing first derivative boundary rows. Solve in the 240-state endpoint quotient with exact modular elimination and verify every represented coordinate.
+3. Test independent points and branch/constant embeddings. Probe minimal rational degrees on a generic line using exact samples, independent held-out samples and explicit degree-search qualifications.
+4. Save independent code/results/report BEFORE reading claude6. Then compare and check any available reconstruction at fresh points.
+All computation serial, no agents, no writes outside this directory. Disable bytecode generation.

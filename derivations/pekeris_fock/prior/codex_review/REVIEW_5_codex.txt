@@ -1,0 +1,312 @@
+Review of REQUEST_5_proof.txt — 2026-10-20
+File reviewed: ../proof/EXTERIOR_CONVERGENCE.md (line numbers below).
+
+Verdict
+
+The central linear Borel/factorial argument works: under the separated
+m-versus-m spectral split, the canonically normalized compound solution
+has an absolutely convergent factorial representation throughout Re R>0.
+Defective slow eigenvalues do not obstruct this argument. This is a real
+advance over the earlier numerical evidence.
+
+The draft is not correct verbatim. Repair the Abel factor, the proof that
+the slow wedge belongs to the compound slow line, parameter uniformity
+and normalization, the quantifier on truncated roots, and the Y-chart
+hypothesis. These repairs preserve the two-convergent-series conclusion
+locally near any gap point and simple matching zero. The theorem proves
+a convergence half-plane Re R>0, not that its abscissa is exactly zero.
+
+I did not modify ../proof or ../exterior_factorial. This is a mathematical
+review, not a new numerical validation of the supplied gap or eigenvalue.
+
+1. Simplicity: yes, including defective blocks (lines 50–53, 93–98)
+
+The triangularization proof is correct. Each different m-element index
+set replaces r>=1 slow roots by r fast roots and raises the real part of
+the sum by at least r*g. There is just one all-slow index set, even when
+individual slow roots repeat. Thus sigma has algebraic multiplicity one.
+Equivalently, the top exterior power of the generalized slow spectral
+space is one-dimensional; its nilpotent contribution vanishes.
+
+Be explicit that w is a complex-linear left eigenvector (row vector),
+and P=xi0*w/(w*xi0). For complex data, use compatible left/right spectral
+vectors rather than silently treating a transpose as a Hermitian adjoint.
+A real gap split is conjugation invariant, so sigma and beta are real at
+real E, although individual roots may be nonreal.
+
+The phrase "g=0, E=-4 control ... is covered" is ambiguous: if g means
+the spectral gap defined here, it contradicts (G). If it means the model's
+coupling constant, rename it, and explicitly retain a positive spectral
+gap for that control. A repeated slow zero alone says nothing about the
+location of the fast roots.
+
+2. Formal recurrence and Fuchsian Borel equation: correct
+
+The recurrence and beta solvability condition are correct. Equation (2)
+is indeed satisfied by the formal Borel series; no prior convergence or
+actual Laplace transform is needed for this formal coefficient identity.
+The low-order boundary identities needed to recover the original equation
+are, explicitly,
+
+ B0*xi0=0,
+ B0*h(0)+B1*xi0=0,
+ B0*h'(0)+(I+B1)*h(0)+C2*xi0=0.
+
+Equation (2) alone has other solutions; retaining these identities and
+the prescribed formal germ is essential to identification.
+
+For z=(h,h'), the residue at zero is
+
+ Q = [ 0       0 ; -P*C2    -P*(2I+B1) ].
+
+Its rank is exactly one: P*B1*P=0 by the definition of beta, whereas
+P*(2I+B1)*P=2P. In fact Q^2=-2Q, so its eigenvalues are -2 and 0. This
+also gives a short convergence justification: write t*z'=M(t,E)*z,
+M(0,E)=Q(E). The coefficient equations involve nI-Q for n>=1; these
+are invertible and their inverses are O(1/n). The ordinary Fuchsian
+majorant argument gives convergence of the prescribed formal series,
+uniformly on smaller disks and on compact local parameter sets. There
+is no hidden irregular singularity at zero, even if other compound
+blocks are defective. Other finite Borel singularities can be irregular;
+that does not affect this argument.
+
+Local convergence plus continuation in the disk with its center removed,
+and removability of the canonical germ at the center, gives radius at
+least min_{sigma'!=sigma}|sigma-sigma'| >= g. The claim is a lower bound;
+some candidate singularities can be removable for this particular h.
+
+The global continuation wording at lines 58–60/130 should specify a
+branch anchored at the germ at zero. Standard ODE continuation directly
+applies along paths avoiding Sigma UNION {0}; it does not automatically
+say that arbitrary branches obtained by winding around Sigma are regular
+when returned to zero. A sufficient and clean statement for this proof is:
+"The germ h extends single-valuedly and holomorphically to Re t>-g."
+Here zero is removable for the selected germ and there are no other
+singularities in the half-plane. More global claims are unnecessary.
+
+3. Growth lemma: correct, with minor details to add
+
+The shear gives precisely O(|t|^(-1/2))+O(|t|^(-1)) coefficients.
+Horizontal integration in a fixed strip produces exp(C sqrt(|t|)) times
+a power, rather than exp(C|t|). Take T0>theta as well as T0>2||B0||,
+and use the principal square root on the right half-plane. The compact
+base-set bound must include h' as well as h. Analyticity supplies both.
+The shear bounds h' as well, and equation (2) bounds h'' for large t.
+Consequently all boundary terms in the later integrations by parts vanish.
+
+For parameter-uniform constants, first choose a local holomorphic
+normalization and a common spectral gap margin; see section 7 below.
+A continuous arbitrary real normalization is not enough for analyticity.
+
+4. Delta domain, transfer, and factorial summation: yes
+
+The stated image of the unit disk is correct. The larger Delta domain
+can be justified particularly simply: choose eta>0 with
+log(2+eta)/omega < g, and choose 0<eta'<pi/2. Throughout the proposed
+Delta domain, |1-u|<2+eta and |arg(1-u)|<pi/2+eta'. Hence
+Re t> -log(2+eta)/omega > -g and |Im t|<(pi/2+eta')/omega.
+This supplies the full dented disk, not just a real approach to u=1.
+Near 1, Re t tends to +infinity, so the strip growth lemma applies.
+The omitted factor |t|^c is harmless: its logarithm is O(log log(1/|1-u|)),
+which is still sub-polynomial in 1/|1-u|.
+
+The O-transfer step is valid componentwise. For any fixed epsilon>0,
+phi(u)=O((1-u)^(-epsilon)) in a Delta domain implies
+c_k=O(k^(epsilon-1)). One may take 0<epsilon<1 and arbitrarily small;
+there is no excluded polynomial-exponent issue in this use. An applicable
+primary reference is Flajolet–Odlyzko, "Singularity analysis of generating
+functions," SIAM J. Discrete Math. 3 (1990), 216–240, Theorem 1:
+https://algo.inria.fr/flajolet/Publications/FlOd90b.pdf
+The draft's Flajolet–Sedgewick VI.3 is the appropriate kind of O-transfer
+citation. The conclusion uses analyticity in the entire Delta domain;
+a bound only on u in (0,1) would not suffice.
+
+For complex x=R/omega, replace the unsigned expression
+sum |c_k| B(k+1,x) by sum ||c_k|| |B(k+1,x)|. On compact subsets of
+Re x>0 the gamma quotient is uniformly O(k^(-Re x)). Thus, taking
+epsilon<inf Re x, the terms are bounded by C*k^(-1-Re x+epsilon).
+For interchange with the integral use the positive majorant
+sum ||c_k|| B(k+1,Re x), or equivalently
+sum ||c_k|| u^k=O((1-u)^(-epsilon)). This rigorously handles complex R.
+The Stirling formula and the factor 1/omega are correct.
+
+5. Identification: conclusion correct; one proof step needs replacement
+
+Integration by parts and Watson's lemma work with the derivative bounds
+from section 3. Specify R^beta=exp(beta*Log R), using the holomorphic Log
+on Re R>0 that is real on positive R.
+
+Uniqueness follows from the one-dimensional compound dichotomy below
+Re sigma+g/2. However lines 182–183 assert more than the given leading
+asymptotic: two solutions with the same leading term have difference
+o(e^(Re sigma R)*R^(Re beta)), not necessarily
+ o(e^(Re sigma R)*R^(Re beta-1)). The weaker estimate already puts the
+difference in the same one-dimensional slow line and proves uniqueness.
+
+The substantial missing justification is lines 187–189. The definition
+of S_E only bounds individual columns by max_S Re lambda+delta. Wedge
+norm submultiplicativity therefore gives m*max_S Re lambda+m*delta,
+NOT Re sigma+m*delta. When slow rates differ these are different.
+
+Repair: apply asymptotic block diagonalization for the separated slow
+and fast spectral groups to A0+O(1/R). In coordinates tending to a fixed
+spectral splitting, the selected block is A_S+o(1). If H(R) is its
+fundamental matrix, Liouville's formula gives
+
+ det H(R) = const * exp(integral tr(A_S+o(1)) dR)
+          = exp(sigma R+o(R)) times a nonzero constant.
+
+The coordinate maps and their exterior powers remain bounded, so the
+slow wedge is O(exp((Re sigma+epsilon)R)) for every epsilon>0. It lies
+in the unique compound slow line. This argument works for defective
+A_S and nonreal spectra, and proves decomposability of Xi_rec.
+Use a separated-block/dichotomy theorem rather than unqualified scalar
+Levinson asymptotics for defective blocks. Also define S_E using a fixed
+0<delta<g (or state independence of this choice); this avoids ambiguity
+about the sign of delta in the current definition.
+
+6. Interior Frobenius series: correct with explicit conventions
+
+The matrices H,J,L and exponents K_i,-K_i-4 are correct. State explicitly
+that K_i are the fixed nonnegative integer channel labels. The regular
+space has dimension m for this system, with the stated resonant seed
+normalization. "Regular" here permits the forced logarithms; it should
+not be interpreted as holomorphic at R=0 or automatically smooth there.
+
+Regular-singular Frobenius convergence extends to every finite radius
+on a chosen logarithmic sheet, since the coefficient matrices have no
+other finite singularity. Logarithmic degree is bounded in this finite
+regular-singular system. Parameter-uniform majorants, with the seed
+normalization fixed analytically in E, justify differentiating the series
+and using it in a holomorphic matching function. State local uniformity
+in R away from zero as well as E. No convergence at infinity is asserted.
+
+"Coddington–Levinson Ch. 4, Thm 4.x" is an unfinished citation, and the
+Balser and Wasow references lack sufficiently precise bibliographic data
+to verify the claimed locations. Replace these by actual edition/theorem
+references or include the short Fuchsian majorant argument. I have not
+verified the asserted chapter/section numbers in those books; they should
+not be presented as checked citations.
+
+7. Uniformity and analyticity in energy: local repairs required
+
+In (c), g means g(E), so choosing omega at one E does NOT authorize
+local-uniform claims over all of {Re R>0} x J. Correct options:
+
+ * Define J_omega={E in J: g(E)>log(2)/omega}, and assert local uniformity
+   there; or
+ * restrict to a compact energy set with positive minimum gap g0 and
+   take omega>log(2)/g0.
+
+For a simple zero E*, first fix omega>log(2)/g(E*). Continuity supplies
+an energy neighborhood with a strict common margin. Then complexify E
+in a sufficiently small disk. Use the Riesz spectral projector to select
+the same group, and sigma=tr(A0*P_S); individual eigenvalues need not be
+analytic at internal crossings. The compound eigenvalue remains simple.
+Choose xi0(E) holomorphically, e.g. impose a fixed linear functional
+ell(xi0)=1 where ell is nonzero at E*. This also makes beta, the formal
+coefficients, and the canonical Borel germ holomorphic. Do not normalize
+by a Euclidean norm, a phase chosen pointwise, or a top minor that might
+vanish. Uniform Fuchsian and strip estimates on a slightly smaller complex
+disk then give uniform factorial convergence there. This supplies the
+complex neighborhood needed for root convergence; uniform convergence
+only on real compact subsets of J does not supply it by itself.
+
+"Any frame G_E" is appropriate for the zero condition at a fixed energy,
+but not for analyticity in E: an arbitrary E-dependent rescaling may be
+nonanalytic. Use an analytic frame or the canonical compound section.
+Changing analytic frames multiplies the matching function by an analytic
+nonvanishing factor, not necessarily an E-independent constant.
+
+8. Abel's identity and truncated zeros
+
+At line 40 the sign is wrong. If M=[F G;F' G'], then
+(det M)'=tr(A)*det M. The invariant scalar is
+
+ exp(-integral_{R0}^R tr A(s) ds)*det M(R)
+ = exp(2 tr(U)(R-R0))*(R/R0)^(5m)*det M(R).
+
+The same sign needs correction at line 205. At a fixed matching radius
+this error does not change zeros, but it invalidates the asserted radius
+independence of the displayed definition. The raw complementary-minor
+pairing differs from the invariant determinant by this explicit nonzero
+factor. The previously checked minor signs remain consistent.
+
+Line 84 must say "for all sufficiently large N_F and K," not "each
+truncation." Choose a small closed disk about E* containing no other
+exact zeros and no zeros on its boundary. Uniform holomorphic convergence
+and Rouche's theorem give exactly one zero counting multiplicity for all
+N_F>=N0, K>=K0; it converges to E*. Hurwitz gives the same conclusion
+with the appropriate multiplicity formulation, but Rouche makes the
+two-index assertion immediate. A complex simple zero produces a real
+nearby truncated zero if the normalization/truncations respect real
+conjugation symmetry; state this if the intended zeros are real energies.
+
+9. Remark 1: ratios work, but the graph hypothesis is additional
+
+The minor-ratio description of Y is correct wherever Xi_top!=0.
+However (G) does not imply xi0,top!=0 or existence of a slow solvent Y0.
+For an explicit symmetric-pencil counterexample take m=2,
+U=diag(2,-2), T=diag(3,3), D=0 and any allowed diagonal Lambda.
+The roots are -3,-1 in channel 1 and 1,3 in channel 2. The m=2 split
+has gap 2, but its slow generalized space is the two-dimensional phase
+space of channel 1. Its projection to the top Phi coordinates has rank
+one. Thus xi0,top=0 and no slow graph Y0 exists. This example fits the
+stated matrix hypotheses (take W=3I and E=0 locally).
+
+Add the transversality hypothesis det(projection_top|S(A0))!=0 to this
+part of the remark. The compound theorem itself needs no such hypothesis.
+A zero of Xi_top is a chart failure; some individual minor ratios may
+have removable singularities there, so avoid labeling every denominator
+zero as a pole of every entry.
+
+The inference "positive-real asymptotic, hence finitely many poles in
+Re R>=delta" is not valid from a real-ray asymptotic alone. It is,
+however, repairable using estimates already available here. Integration
+by parts gives
+
+ xi(R)=xi0+h(0)/R+(1/R)*integral_0^infinity exp(-Rt)h'(t)dt.
+
+For Re R>=delta>0, the integral is bounded uniformly by
+integral exp(-delta*t)||h'(t)||dt<infinity. Hence
+xi(R)=xi0+O_delta(1/|R|) uniformly throughout that closed half-plane.
+Under the added nonzero-top-minor hypothesis, xi_top is bounded away
+from zero there for sufficiently large |R|. The remaining region is
+compactly contained in Re R>0, so it has only finitely many zeros.
+This proves the desired finiteness statement with the missing hypothesis
+and complex-uniform estimate supplied.
+
+The pole obstruction for a DIRECT Y factorial series is valid. Equality
+of its abscissa with a pole boundary remains unproved. Nonlinear Borel
+singularities are generally governed by graph linearization eigenvalue
+differences (fast-minus-slow differences, with the appropriate negative
+Borel sign), and their additive combinations. Those need not equal the
+full compound set sigma-sigma'. Avoid asserting that precise singularity
+set without a derivation. Also, pole locations alone need not determine
+a factorial-series abscissa without a separate infinity-growth argument.
+
+10. Remark 2 and final recommended claim
+
+The tail estimate is valid as an upper bound:
+for each epsilon>0 the tail is O(K^(-Re R/omega+epsilon)), locally
+uniformly with the corresponding parameter margins. It gives no lower
+bound and does not establish an EXACT abscissa of zero. Replace
+"the theorem's abscissa is 0" by "the series converges absolutely for
+Re R>0 (its abscissa is at most 0)." Special solutions can even make
+the series terminate. For example m=1, U=0, T=-1, D=5, Lambda=0 has
+slow solution Phi=exp(-R), beta=0, and h identically zero at that energy.
+Its compound correction series terminates despite a positive gap.
+
+With the repairs above, the defensible result is:
+
+For fixed finite-channel matrices and fixed integer channel labels, near
+each energy satisfying the separated m/m gap, choose omega with a strict
+local common gap margin and fix analytic seed/exterior normalizations.
+The regular Fock series and the canonical linear-compound factorial
+series converge locally uniformly (also in complex energy near that
+point), and their complementary-minor pairing defines the exact finite
+model matching condition at every positive matching radius. Near a simple
+zero, all sufficiently large two-index truncations have one nearby zero
+converging to it. This establishes the two-series determinant construction
+for the linear Plucker representation. It does not establish convergence
+of the directly computed nonlinear Y factorial expansion.

@@ -1,0 +1,9 @@
+{
+  "prime": 998244353,
+  "lambda_values": [
+    2026,
+    2039
+  ],
+  "coefficients_checked": 988,
+  "method": "own Taylor rows and independent modular elimination; every 240-state coordinate checked"
+}

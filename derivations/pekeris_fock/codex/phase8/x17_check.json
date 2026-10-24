@@ -1,0 +1,49 @@
+{
+  "blocks": [
+    {
+      "block": [
+        "sigma2P",
+        "K_A0",
+        "K_A0"
+      ],
+      "derivative_coefficients": 10,
+      "monomials": 437
+    },
+    {
+      "block": [
+        "sigma2P",
+        "F0",
+        "K_A0"
+      ],
+      "derivative_coefficients": 4,
+      "monomials": 431
+    },
+    {
+      "block": [
+        "C1",
+        "F0",
+        "K_A0"
+      ],
+      "derivative_coefficients": 1,
+      "monomials": 76
+    },
+    {
+      "block": [
+        "C1",
+        "K_A0",
+        "K_A0"
+      ],
+      "derivative_coefficients": 4,
+      "monomials": 118
+    }
+  ],
+  "claude_selected_term_lines": 1062,
+  "peak_rss_bytes": 140525568,
+  "elapsed_seconds": 68.70658206939697,
+  "inputs": {
+    "codex/phase8/x16_connection.txt": "58f11f49bad78f134c09e19a4a63f1e06dc834db5913f64258b02f627d9d0c14",
+    "claude8/panel3_terms.txt": "b7af3de0377d9240631dd4fc89cba3266a538a27e65810bd8b661bbce67efbd7",
+    "claude8/panel3_rowfactors.json": "cd49af3b2ec9115c729230208743211a3c2766a27df983046e0d37b3aac43528",
+    "codex/codex_derive.py": "fb4912878ca153c6142fdb6315d8e54cbecd783d2e6f1df1d0dcb87fe6ed937b"
+  }
+}

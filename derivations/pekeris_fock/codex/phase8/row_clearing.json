@@ -1,0 +1,277 @@
+{
+  "0": {
+    "atom": "J_A0",
+    "factor": "c*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 5
+  },
+  "1": {
+    "atom": "J_A1",
+    "factor": "c*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 5
+  },
+  "2": {
+    "atom": "J_A2",
+    "factor": "c*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 5
+  },
+  "3": {
+    "atom": "J_B1",
+    "factor": "c*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 5
+  },
+  "4": {
+    "atom": "J_B2",
+    "factor": "c*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 5
+  },
+  "5": {
+    "atom": "K_A0",
+    "factor": "c*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 5
+  },
+  "6": {
+    "atom": "K_A1",
+    "factor": "c*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 5
+  },
+  "7": {
+    "atom": "K_B1",
+    "factor": "c*(-c**2 + 2*x**2 + 2*y**2)**3",
+    "degree": 7
+  },
+  "8": {
+    "atom": "Q0_A0",
+    "factor": "2*c*x*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 8
+  },
+  "9": {
+    "atom": "Q0_A1",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 9
+  },
+  "10": {
+    "atom": "Q0_A2",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 9
+  },
+  "11": {
+    "atom": "Q0_B1",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 9
+  },
+  "12": {
+    "atom": "Q0_B2",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 9
+  },
+  "13": {
+    "atom": "Q1_A0",
+    "factor": "2*c*x*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 8
+  },
+  "14": {
+    "atom": "Q1_A1",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 9
+  },
+  "15": {
+    "atom": "Q1_A2",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 9
+  },
+  "16": {
+    "atom": "Q1_B1",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 9
+  },
+  "17": {
+    "atom": "Q1_B2",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 9
+  },
+  "18": {
+    "atom": "Q2_A0",
+    "factor": "2*c*x*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 8
+  },
+  "19": {
+    "atom": "Q2_A1",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 9
+  },
+  "20": {
+    "atom": "Q2_A2",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 9
+  },
+  "21": {
+    "atom": "Q2_B1",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 9
+  },
+  "22": {
+    "atom": "Q2_B2",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 9
+  },
+  "23": {
+    "atom": "Q3_A0",
+    "factor": "2*c*x*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 10
+  },
+  "24": {
+    "atom": "Q3_A1",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 11
+  },
+  "25": {
+    "atom": "Q3_A2",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 11
+  },
+  "26": {
+    "atom": "Q3_B1",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 11
+  },
+  "27": {
+    "atom": "Q3_B2",
+    "factor": "2*c*x*y*(-c + x - y)*(-c + x + y)*(c + x - y)*(c + x + y)*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 11
+  },
+  "28": {
+    "atom": "U0_A0",
+    "factor": "c*y*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 4
+  },
+  "29": {
+    "atom": "U0_A1",
+    "factor": "c*y*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 4
+  },
+  "30": {
+    "atom": "U0_A2",
+    "factor": "c*y*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 4
+  },
+  "31": {
+    "atom": "U0_B1",
+    "factor": "c*y*(-c**2 + x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 6
+  },
+  "32": {
+    "atom": "U0_B2",
+    "factor": "c*y*(-c**2 + x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 6
+  },
+  "33": {
+    "atom": "U1_A0",
+    "factor": "c*y*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 4
+  },
+  "34": {
+    "atom": "U1_A1",
+    "factor": "c*y*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 4
+  },
+  "35": {
+    "atom": "U1_A2",
+    "factor": "c*y*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 4
+  },
+  "36": {
+    "atom": "U1_B1",
+    "factor": "c*y*(-c**2 + x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 8
+  },
+  "37": {
+    "atom": "U1_B2",
+    "factor": "c*y*(-c**2 + x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 8
+  },
+  "38": {
+    "atom": "V0_A0",
+    "factor": "c*y*(x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 6
+  },
+  "39": {
+    "atom": "V0_A1",
+    "factor": "c*y*(x**2 + y**2)*(-c**2 + x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 8
+  },
+  "40": {
+    "atom": "V0_A2",
+    "factor": "c*y*(x**2 + y**2)*(-c**2 + x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 8
+  },
+  "41": {
+    "atom": "V0_B1",
+    "factor": "c*y*(x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 6
+  },
+  "42": {
+    "atom": "V0_B2",
+    "factor": "c*y*(x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 6
+  },
+  "43": {
+    "atom": "V1_A0",
+    "factor": "c*y*(x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 8
+  },
+  "44": {
+    "atom": "V1_A1",
+    "factor": "c*y*(x**2 + y**2)*(-c**2 + x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 10
+  },
+  "45": {
+    "atom": "V1_A2",
+    "factor": "c*y*(x**2 + y**2)*(-c**2 + x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 10
+  },
+  "46": {
+    "atom": "V1_B1",
+    "factor": "c*y*(x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 8
+  },
+  "47": {
+    "atom": "V1_B2",
+    "factor": "c*y*(x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 8
+  },
+  "48": {
+    "atom": "FP_B1",
+    "factor": "c*(-c**2 + 2*x**2 + 2*y**2)**2",
+    "degree": 5
+  },
+  "49": {
+    "atom": "E_A0",
+    "factor": "c*x",
+    "degree": 2
+  },
+  "50": {
+    "atom": "E_A1",
+    "factor": "c*x",
+    "degree": 2
+  },
+  "51": {
+    "atom": "E_A2",
+    "factor": "c*x",
+    "degree": 2
+  },
+  "52": {
+    "atom": "E_B1",
+    "factor": "c*x*(x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 6
+  },
+  "53": {
+    "atom": "E_B2",
+    "factor": "c*x*(x**2 + y**2)*(-c**2 + 2*x**2 + 2*y**2)",
+    "degree": 6
+  },
+  "54": {
+    "atom": "F0",
+    "factor": "1",
+    "degree": 0
+  }
+}

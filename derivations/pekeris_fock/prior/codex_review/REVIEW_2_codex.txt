@@ -1,0 +1,360 @@
+Review of REQUEST_2_numerics.txt — 2026-10-19
+
+Verdict
+
+The main useful result is the switch from individual exponential columns to
+an asymptotic expansion of the selected slow-subspace boundary map. The
+Riccati recurrence and unsigned-Stirling conversion are correct. The
+numerics provide a useful independent exterior construction at sufficiently
+large R, and the matching experiment is credible for the reported E and a21.
+
+However, “diverges at R=1,” “d=6 needs R>=8–10,” and the attribution to poles
+at large imaginary height are not established convergence statements. In
+particular the d=2 pole that was found cannot explain divergence at R=1.
+The d=6 matching numbers also greatly overstate the accuracy of the WHOLE
+boundary map if read that way. There is no demonstrated improvement in
+speed, error control, or full-helium accuracy over panels.
+
+I read the supplied source, logs, CSV data, figure, the underlying
+cusp_matching.jl/probe.jl, and REVIEW_1. I made no changes in
+../exterior_factorial. Local diagnostic scripts and logs are:
+ audit_checks.jl / audit_checks.log
+ audit_poles.jl / audit_poles.log
+ audit_matching_d2.log
+The scripts use the same model matrices, so these checks are independent
+of the summation/continuation in relevant places, not independent checks
+of the angular model or its physical boundary selection. This is a
+numerical and mathematical audit, not a certified convergence proof.
+
+1. Algebra: the boundary-map expansion is the right improvement
+
+For Y=Phi' Phi^{-1}, substitution gives
+ Y'+Y^2+(5/R+2U)Y-Lambda/R^2+D/R+T=0.
+Writing L(H)=(Y0+2U)H+H Y0, the coefficient equations in exterior_lib.jl
+are correct, including the separate n=1 equation and the +(Lambda) at n=2.
+The vectorization/Kronecker Sylvester operator has the correct ordering.
+Newton refinement of the slow solvent is also consistent with this L.
+
+There is a concrete reason the small slow-slow gaps disappear. With
+A0=[0 I; -T -2U], use coordinates (Phi, Phi'-Y0 Phi). The constant system
+is block triangular with diagonal blocks Y0 and -(2U+Y0). Thus the latter
+has the fast eigenvalues, whereas Y0 has the slow eigenvalues. Eigenvalues
+of L are lambda_slow-lambda_fast. These, rather than internal slow-root
+differences, are the primary candidate Borel singularities for the map.
+For the tested real spectra the candidates are negative. Nonlinear Borel
+convolutions can generate additive combinations of these locations; the
+list of singularities is not necessarily JUST the pairwise gaps.
+
+The measured gaps 3.5560, 3.1121, 2.8028 are sensible primary analyticity
+scales. Calling them exact Borel radii still requires a nonzero singularity
+at the nearest candidate. An invertible Sylvester operator plus coefficient
+ratios is evidence, not that proof. The gain comes from representing a
+subspace invariant under changes of column basis, eliminating internal
+slow-mode connection ambiguities.
+
+2. Stirling conversion and omega: no algebraic bug found
+
+With the stated Laplace convention,
+ Y-Y0 = integral exp(-Rt) yhat(t) dt,
+ yhat(t)=sum_j Y_{j+1} t^j/j!,
+set t=-log(1-u)/omega. Then
+ Y-Y0 = (1/omega) integral_0^1
+          (1-u)^(R/omega-1) yhat(-log(1-u)/omega) du.
+Using L(u)^j/j!=sum_k |s(k,j)| u^k/k! gives exactly
+ B_k=sum_{j=0}^k |s(k,j)| omega^(-j-1) Y_{j+1},
+ Y=Y0+sum_k B_k/(R/omega)_{k+1}.
+The beta integral cancels the k!, so its absence in B_k is correct. The
+indexing in factorial_coeffs and the Pochhammer updates are correct.
+
+A negative Borel singularity t=-g maps to u=1-exp(omega*g). Keeping it
+outside |u|<1 requires omega*g>log(2). The implemented choice
+omega=1.15 log(2)/g satisfies this, even after the displayed rounding.
+The nearest candidate maps to about -1.219. Thus omega is not accidentally
+inverted. It is a heuristic choice, not an optimum or a convergence
+certificate: transformed-Borel growth at u=1 and all other singularities
+must also be controlled. Larger omega changes both the singularity geometry
+and the algebraic convergence rate; one should compare fixed-accuracy cost,
+not assume that a larger scale is uniformly better.
+
+There is substantial cancellation in the coefficient conversion. Running
+at high precision is necessary, and production calculations should retain
+precision until the final matching calculation. factorial_partial_sums,
+factorial_Y, and taylor_connect return Float64 matrices. In particular the
+high-precision factorial value is rounded BEFORE the long Taylor step.
+This prevents an arbitrary-precision accuracy claim for the complete path.
+It is consistent with the reported double-precision goals.
+
+3. Riccati poles: real, but the claimed convergence explanation is wrong
+
+The first-order linear system has rational coefficients singular only at
+R=0 in the finite plane. Its continued solution frame has no finite
+singularity away from zero on a chosen branch. A zero of det(Phi), however,
+can create a pole in Y=Phi' Phi^{-1}; it is a coordinate singularity of the
+subspace, not a singularity of the full solution frame.
+
+I independently checked the three scan candidates by integrating only to
+a safe complex center, expanding the LINEAR fundamental matrix there, and
+finding its singularity as a zero of that matrix determinant (via the
+smallest singular vectors). Halving the RK4 step from .004 to .002 gave:
+ d=2: R approximately 0.637277253968 + 1.850962298017 i
+ d=4: R approximately 1.405225189970 + 4.163131106851 i
+ d=6: R approximately 0.55950387010  + 3.47330214316  i
+Conjugates follow from real coefficients. These are stable approximate
+zeros, not validated enclosures or an exhaustive enumeration of poles.
+The original coarse Riccati scan therefore found genuine nearby features,
+but max-norm peaks/blow-up alone would not have certified poles.
+
+The distinction between Re(p) and Im(p) is essential. An exact scalar
+example in THIS factorial basis is
+ 1/(R-p) = sum_{k>=0} (p/omega)_k /
+                        [omega (R/omega)_{k+1}].
+For a generic nonterminating case, its kth term is proportional to
+ k^((p-R)/omega-1), and the remainder after K terms is proportional to
+ K^((p-R)/omega). This expansion converges for Re(R)>Re(p), although the
+function is regular at many other points outside that half-plane.
+The imaginary part creates logarithmic oscillations and can produce
+very large prefactors through Gamma(p/omega). It does not by itself set
+an abscissa equal to |p|, or to |Im(p)|.
+
+Consequences:
+ * The displayed d=2 pole has Re(p)=.6373<1. It cannot explain divergence
+   at R=1. It predicts potentially slow, oscillatory algebraic convergence
+   from its contribution, including at R=.75, not fast convergence.
+ * The d=4 pole has Re(p)=1.4052>1. An actual uncancelled pole there rules
+   out a single convergent factorial representation of Y on a right
+   half-plane extending past that pole to R=1. This IS a genuine obstruction
+   to this particular chart/basis, despite regularity along the real axis.
+ * The displayed d=6 pole has Re(p)=.5595<1. Its imaginary height can cause
+   difficult transients, but it does not explain an abscissa near 8–10.
+
+My d=2 rerun used coefficients through order 802 at 3072-bit precision:
+ omega=.224, R=1: errors at K=100,300,400,600,800 were
+   3.3726, .72507, .72180, .35724, .27265.
+ omega=.224, R=2: errors at K=100,300,800 were
+   7.066e-6, 1.898e-8, 6.769e-11.
+At R=.75 the errors oscillate around O(100) through K=800. Changing omega
+to .3 also gives a slowly decreasing, oscillatory R=1 sequence overall.
+These tests do not prove convergence, but emphatically do not establish
+the advertised d=2 divergence. The original log already showed a falling
+R=1 error from K=50 to 300.
+
+“d=6 needs R>=8–10” is defensible only as a practical radius for obtaining
+near-machine accuracy with about 260 terms in these experiments. Even the
+supplied d=6 R=5 sequence decreases from 11 to .53 to .0022; calling it
+divergent would be unwarranted. Poles above |Im R|=6 are a plausible source
+of large transient constants, but their existence/location and relevance
+were not tested by scan_poles.jl (which stops at 6). A convergence threshold
+requires rightmost pole locations and/or transformed-Borel growth bounds,
+not just imaginary heights. The finite-order data do not distinguish all
+these possibilities.
+
+4. Representations without these chart poles
+
+Yes, one can remove the artificial finite-R singularities from the
+REPRESENTATION of the subspace, though this does not automatically prove
+that one factorial series converges down to .5.
+
+Let X be the full 2m by m slow solution frame satisfying X'=A(R)X.
+It retains rank m away from zero, since linear evolution is invertible.
+It is holomorphic on a simply connected domain avoiding zero; globally
+one must allow monodromy/logarithms, or work on the universal cover of C*.
+It has no compulsory poles at zeros of its top m by m block. Its columns
+still have internal normalization/connection issues at infinity, so
+columnwise asymptotic summation is not the best way to exploit this fact.
+
+The homogeneous Plucker vector
+ Xi = X_1 wedge ... wedge X_m
+represents the same Grassmannian point and satisfies the LINEAR compound
+system Xi'=A^[m](R) Xi. Its coefficient singularities are again only at
+zero. Individual minors can vanish, but all cannot vanish together.
+Normalizing by a minor reintroduces poles; retaining homogeneous
+coordinates avoids this. Factoring exp(R sum(lambda_slow)) and a nonzero
+power gauge on a chosen branch does not introduce finite zeros/poles.
+The constant compound eigenvalues are sums of m characteristic roots.
+The selected all-slow sum is separated from other choices by replacements
+of slow roots with fast roots, so the nearest candidate differences again
+involve the slow-fast gap rather than the small slow-slow gaps.
+
+This gives a concrete promising route to a pole-free homogeneous exterior
+expansion. It is not yet a convergence theorem for this matrix model:
+one must establish the normalized asymptotic solution, its Borel domain
+and growth, and factorial tail bounds. Analyticity of a function on a slit
+plane by itself does not establish convergence of a particular factorial
+basis. There can also be poor conditioning when recovering Y from a small
+chosen minor, even when Xi is regular.
+
+The full compound system costs binomial(2m,m) coordinates: 70 for d=2,
+48,620 for d=4, and 601,080,390 for d=6. Thus full Plucker evolution is a
+useful small-model experiment, not an attractive naive d=6 algorithm.
+More practical choices are an atlas of local graph charts, a transported
+frame with QR/pivoting, or structured low-rank compound methods.
+
+A constant slow-fast block transformation also helps: express the subspace
+as a graph of fast coordinates over slow coordinates in an eigenbasis of
+A0. Its leading graph is zero and the Sylvester gaps are explicit. But
+this merely changes which projection can become singular; it does not
+prove a globally nonsingular single graph. Likewise (cI-Y)^(-1) is the
+chart Phi(c Phi-Phi')^(-1). It can remove some old poles and introduce
+zeros of det(c Phi-Phi'). Failure for c=4,8,16 and two omega values is
+not a no-go theorem for all charts or homogeneous representations.
+
+For reaching R=.5 NOW, the existing linear-frame Taylor continuation is
+already a sound route: from any positive R1 its guaranteed analytic disk
+|R-R1|<R1 contains every 0<R<R1. It crosses Riccati chart poles without
+expanding Y through them. Large order/precision and final inversion
+conditioning must be controlled; several short panels usually cost less
+than one long expansion. There is no need to prove a new global factorial
+theorem merely to continue the selected finite-model subspace to .5.
+
+5. Matching: the reported scalar agreement is credible, with a major caveat
+
+The supplied matching logs do report |dE|=4.0–4.5e-12 and
+|da21|=2.9–3.1e-14 for all three d values. Both solvers stop at mismatch
+2e-11, so same-sign energy differences of that size do not measure the
+factorial truncation error. They are consistent with different stopping
+points. Re-solve both with tighter tolerances and vary K, Taylor order,
+R1, precision, and rm before assigning extra digits.
+
+The d=6 whole-map accuracy is much worse than those scalar differences.
+I isolated the Taylor error by starting at R1=9 with the accurate PANEL
+value, rather than a factorial approximation. At R0=1 I obtained:
+ Taylor order      norm(Y_Taylor-Y_reference)
+     320                 1.4304e-4
+     420                 6.0230e-8
+     460                 2.1062e-9
+     520                 1.1325e-11
+     600                 1.1840e-14
+This reproduces the supplied taylor_rerun.log trend and shows that order
+420 does not give a 1e-12 boundary map. The initial R1 error is not the
+cause of this discrepancy.
+
+Nevertheless, applying that matrix error to the normalized null vector
+of the panel matching matrix gave only about 2e-16 at orders 320–600.
+The relevant small matching eigenvalue also stayed within about 1e-15.
+Thus the large map error lies almost entirely in directions irrelevant
+to this matched state. This explains the apparently contradictory energy
+agreement; it is not evidence that the Taylor or matching code is broken.
+It also means E and a21 alone are weak tests of the full exterior map.
+Report both the full-map norm and the state-specific action/residual.
+
+The Taylor recurrence itself agrees with direct substitution into the
+linear ODE and with the panel recurrence. Its guaranteed convergence disk
+is determined by zero, rather than Riccati poles. The method is a high-order
+ODE continuation, even when compressed into one Taylor expansion. It is
+not simply “Fock plus one global factorial series.”
+
+6. Finite-rmax boundary error: conclusion mostly right, statement too broad
+
+At d=2, R=12, I reproduced an approximately 6e-17 difference between the
+40-term asymptotic sum and the rmax=30/order=30 panel reference. The default
+rmax=24 panels agree there to about 1e-16. This supports the claim that
+the two-term endpoint initialization is not the accuracy bottleneck at
+small matching radius in this test. Backward propagation suppresses
+errors that change the slow/fast graph.
+
+But the TWO-TERM boundary value itself is not that accurate. At d=2,
+R=12, its difference from the high-order value is about .0725; at R=24
+it is about .0177. Those are endpoint errors, subsequently damped inward.
+At the endpoint R=24 the default cuspexterior literally returns that
+two-term approximation. Do not extend the small-rm accuracy claim to all R.
+
+Nor was the quoted 8e-17 result demonstrated for every d. In my check the
+40-term R=12 asymptotic sum differs from the refined panels by about
+4.6e-16 for d=4 but 3.4e-8 for d=6. The default and refined panels at R=12
+for d=6 agree to about 1.6e-14. An asymptotic truncation must be selected
+and checked separately at each d and R; a fixed order 40 is not a
+uniform accuracy prescription. None of these comparisons is a rigorous
+bound, although the agreement at rm=1 under parameter changes is strong
+practical evidence.
+
+7. Per-exponent test: useful evidence, with one endpoint-coefficient defect
+
+The recurrence and solvability correction in per_exponent.jl agree with
+REVIEW_1 after beta=-mu. The close-root numbers are good evidence for
+actual slow-slow Borel obstructions in these examples. However:
+ * .088, .032, .0019 are the smallest gaps across the selected columns,
+   not the radius of every column (the log itself shows different radii).
+ * A ratio over orders 100–120 is an estimate, not an exact radius theorem.
+ * formal_solution(...,N) leaves h_N's free null component uncorrected.
+   It fixes h_{n-1} at iteration n, so the last returned coefficient has
+   only the chosen transverse component. The radius estimate compares
+   finalized h_100 with unfinished h_120. Compute through N=121 before
+   using h_120, or estimate entirely from completed interior coefficients.
+   This can affect the quoted finite-order ratios even though it does
+   not invalidate the evident small-gap scale.
+
+For nonminimal slow columns there are also candidate POSITIVE-axis Borel
+singularities from still slower columns. A direct real-axis Borel integral
+needs prescriptions/cancellations; a small Taylor radius alone is not the
+whole problem. “Per-column hopeless” is too strong as a mathematical
+statement, but a direct common factorial construction of all columns is
+clearly poorly suited to these spectra. The subspace formulation is a
+substantive improvement.
+
+8. Sensitivity and coefficient type: supports REVIEW_1 point 2, with its caveats
+
+sensitivity.jl measures RELATIVE response: it divides perturbation norms
+by norm(Phi) and 1e-12. The a perturbation has relative norm 1e-12 and the
+E perturbation is relative in E. The generic recurrence is consistent
+with cuspcoeff. High-precision evaluation separates this conditioning
+experiment from ordinary floating-point cancellation.
+
+The experiment strongly supports generic loss of tail accuracy from
+uncertain origin data. It does not restore the original absolute
+impossibility claim, and it does not show a universal exponent 2*kappa.
+Exact data and arbitrary precision remain different from uncertain data;
+special perturbations tangent to the selected solution remain exceptions.
+
+The last-interval logarithmic slopes of the a amplification are about
+3.95 (d=2) and 4.53 (d=4). The corresponding largest-fast minus largest-slow
+gaps printed by this code are about 4.36 and 4.38, respectively. These
+are broadly comparable finite-R rates, not numerical confirmation of
+an exact equality. Powers of R, competing modes, perturbation projections,
+and nonnormality matter over .5<=R<=6. Larger-R fits require more accurate
+baseline E and amplitudes so that the denominator is still the desired
+slow solution rather than its own growing contamination.
+
+The “type” plots need more care. At n=170 the selected-a estimates are
+4.325 (d=2) and 4.494 (d=4); the generic matrix estimates are 4.394 and
+4.758, versus largest root moduli 4.712 and 4.858. These are compatible
+with a fast spectral scale, but do not establish the limiting numbers.
+The max over log powers k is not itself the growth type of the evaluated
+sum of c_nk R^n(log R)^k: cross-k cancellation and continuation on different
+logarithmic sheets matter. Moreover the supplied a and E are approximate,
+so tiny unwanted fast components can control very-high-order behavior.
+The generic norm also converts coefficients to Float64 before measuring
+them, limiting meaningful extrapolation to much larger n.
+
+Thus the sensitivity data confirm the practical conditioning mechanism
+in REVIEW_1 point 2, not an inability of exact analytic continuation or
+resummation to reach any prescribed finite R. Coefficient growth alone
+would not prove that conditioning conclusion.
+
+9. What is valuable versus panels, and what to do next
+
+Valuable here:
+ (a) A well-defined algebraic expansion of the invariant boundary map,
+     free of the tiny internal slow gaps that obstruct columnwise work.
+ (b) A usable large-R factorial initialization that avoids specifying a
+     finite-rmax two-term boundary value, conditional on its convergence.
+ (c) A cross-check of the panel exterior and a clear illustration that
+     full-map and state-specific matching accuracies can differ enormously.
+ (d) Concrete chart poles and a promising small-d homogeneous-coordinate
+     experiment to distinguish chart limitations from intrinsic ones.
+
+Not established: a global two-series closed form down to arbitrary R0>0,
+a convergence certificate at .5, a computational advantage over panels,
+or any improvement to the finite angular model's physical threshold.
+The hybrid still performs ODE continuation and shares the same interior
+recurrence, angular discretization, and slow-subspace selection as panels.
+Its logged matching costs (7,57,330 seconds) are not a matched-accuracy
+benchmark against panel costs.
+
+My next experiment would be d=2 homogeneous Plucker coordinates, with the
+minimal compound exponential removed: compare factorial partial sums near
+R=.5,1 with the current Y chart, varying precision and omega. In parallel
+at the mathematical level, determine the transformed-Borel boundary
+growth; do not infer an abscissa from a few hundred terms. For a practical
+solver I would keep short linear-frame panels/QR continuation, improve
+the infinity initialization if needed, and report separate exterior-map,
+state-residual, root-finder, and angular-truncation error budgets.

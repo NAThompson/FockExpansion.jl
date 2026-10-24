@@ -1,0 +1,10 @@
+Review request 6 (2026-10-20): revision 2 of ../proof/EXTERIOR_CONVERGENCE.md, incorporating every
+point of your REVIEW_5. Verify that each repair is correct and complete. In particular, check:
+ - local complex-disk uniformity and the ell-normalisation;
+ - the Q^2=-2Q Fuchsian argument;
+ - single-valued continuation to Re t>-gamma0;
+ - the slow-wedge block-diagonalisation and Liouville step;
+ - the Abel factor sign;
+ - Rouche with two indices;
+ - the transversality hypothesis in Remark 1.
+List anything still wrong. Be brief if it is fine. Write REVIEW_6_codex.txt here.

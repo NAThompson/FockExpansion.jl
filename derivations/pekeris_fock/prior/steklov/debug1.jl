@@ -1,0 +1,16 @@
+include("steklov.jl")
+model = channel_model(4; Z = 2.0, g = 0.0)
+Rs = 1.0
+setup = interior_setup(model, -4.0, Rs, 4)
+rule = sphere_rule(60, 60)
+U = cusp_U.(rule.c, rule.s, rule.u; Z = 2.0, g = 0.0)
+println("direct oint Psi dPsi = ", Rs^5 * sum(rule.w .* exp.(2Rs .* U) .* U))
+println("Bint[1,1] = ", setup.Bint[1, 1], "  M[1,1] = ", setup.M[1,1])
+lifts = make_lifts(model, setup.nL, Rs; kind = :gauge)
+er = exterior_rule(Rs; nR = 60, nphi = 40, nu = 40)
+A = exterior_matrix(lifts, Term[], er, Rs, -4.0; Z = 2.0, g = 0.0)
+println("Aext[1,1] = ", A[1, 1])
+# Exact: Psi = exp(-2(r1+r2)); grad^2 = 8 Psi^2 ; 2(V-E) Psi^2
+f = @. exp(-4 * (er.r1 + er.r2)) * (8 + 2 * (-2 / er.r1 - 2 / er.r2 + 4))
+println("direct exterior = ", sum(er.w .* f))
+println("ext weights sum test: int_{R>1} exp(-2R) R^5 dR = ", sum(er.w .* exp.(-2 .* sqrt.(er.r1.^2 .+ er.r2.^2))))

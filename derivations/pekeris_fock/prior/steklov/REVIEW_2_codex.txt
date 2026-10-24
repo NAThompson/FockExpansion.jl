@@ -1,0 +1,101 @@
+RESULTS-STAGE REVIEW — 20 October 2026
+
+Overall assessment
+
+The new method and convergence studies substantially address review 1. The interior recurrence, full-channel trace compression, physical a21 restoration, and exterior form signs are consistent. The data give persuasive evidence for an interior channel truncation error with an approximately d^-4.9 tail. They do NOT yet establish the claimed final uncertainty: in particular, the production exterior angular quadrature has not been validated at L=12 or 14. My short independent check reveals substantial underresolution of high-degree angular products at the default rule. Resolve this before treating the last L steps, exterior basis differences, or eight-digit accuracy as settled.
+
+Sources: REQUEST_2.txt, REVIEW_1_codex.txt, RESPONSES.md, steklov.jl, exterior_dd.jl, production.jl, the requested sweep/exterior/energy/validation logs, codex_selection.csv and its driver, the 2s validation scripts, test_fast.jl, test_quad2.jl, check_N.jl, figure.jl, and a21_convergence.png. I ran codex_check_review2.jl with julia --startup-file=no --project=.; this uses small checks and reads an existing cache without writing caches. No production exterior enrichment was rerun. The checks below distinguish direct verification from extrapolation or proposed explanations.
+
+1. Priority finding: production angular quadrature needs refinement
+
+exterior_form_dd defaults to nphi=24, nu=20 regardless of L, and production.get_ext uses these defaults. test_quad2.jl instead checks radial rules at L=4, B10P4, holding nphi=24 and nu=20 fixed. It neither checks angular refinement nor the largest production trace/channel/Hylleraas spaces. Thus the statement in RESPONSES.md that quadrature is converged to ~1e-15 in a21 cannot be generalized to production.
+
+I directly compared the angular matrix
+  H_ij = integral exp(2U) Y_i Y_j dOmega
+at R*=1 using sphere_rule(24,20) and sphere_rule(40,40). Relative infinity-norm discrepancies were:
+  L=4:  4.5120e-15
+  L=12: 2.6957e-4
+  L=14: 1.3963e-1.
+This is a diagnostic angular Gram matrix, NOT a measured change in the final exterior Schur complement or a21. In particular these percentages must not be assigned directly to a21. But it concretely demonstrates that low-L quadrature convergence does not carry over to high-L angular products. Interior trace_grams uses a different, substantially finer rule; the issue is exterior assembly.
+
+The mechanism is straightforward: Y_(0,L) has degree 2L in u, so its square already has degree 4L before the measure, exponentials, and gradient factors. A 20-point Gauss rule has polynomial exactness only through degree 39. At L=12 and especially L=14, default lift/channel products exceed this. Exponentials require additional resolution. Near-dependent correction directions can amplify assembly errors through the Schur complement. Comparing two exterior bases at the same underresolved rule can hide a shared quadrature error.
+
+Required next check: regenerate at least the L=12 and L=14 production forms with independently increased nphi and nu (and radial refinement for the largest basis), tracking a21, higher seeds, lambda, retained rank, and Schur stability. Use distinct cache tags/files: get_ext currently has no quadrature or source-version information in its cache key. Do not silently reuse the default cache during this check. I have not modified the caches.
+
+2. Separability and the d tail
+
+The empirical near-separability is convincing over the displayed late-d range. For B12P6,R*=1, the d=44->48 increments are:
+  L=4:  +1.0734e-9
+  L=8:  +1.0674e-9
+  L=12: +1.0660e-9.
+For B10P6 the L=12->14 step is -6.1322e-9 at d=24 and -6.1569e-9 at d=48. These support a leading decomposition x(d,L) approximately x_infinity + f(d) + h(L), with small cross terms, rather than an exact separation. A fixed exterior/trace error independent of d would produce precisely such parallel d curves, so separability alone cannot rule it out.
+
+The interior-only 2s x 2s experiment is a valuable independent corroboration. My rerun gives errors in a_(2,0)+1/32:
+             full trace L=d        L=12
+  d=16       -9.910569e-8          -9.956357e-8
+  d=24       -1.448181e-8          -1.498622e-8
+  d=28       -6.926757e-9          -7.432201e-9.
+There is no exterior calculation in this experiment. It demonstrates an algebraic interior error and a much smaller trace restriction effect for this particular manufactured solution. It does not prove the helium a21 exponent, amplitude, or trace error: this test has g=0, a different energy, and a different target seed.
+
+If increments scale as d^-5.87, the integrated error scales approximately as d^-4.87. Care is needed about plotting increments at the endpoint d versus the midpoint d-2; local endpoint slopes differ at finite step size. The proposed formula follows exactly from x_d=x_inf-C d^-p with p=4.87:
+  x_inf-x_48 = (x_48-x_44)/[(48/44)^p-1].
+For L=12,B12P6 it gives +2.0202e-9. Thus it is a reasonable conditional extrapolation, not an uncertainty bound, and its SIGN is positive. The finite-d sequence approaches its fixed-L limit from below. Do not subtract this correction. Vary the fit window, p, and a shift d->d+delta to assess model dependence.
+
+Interior truncation explains most of the change obtainable by increasing d from 24 to 48: +5.55309e-8 at L=12,B12P6. At the final d=48 point, however, the remaining estimated d tail is only ~2e-9, smaller than the last L step (~6e-9) and the matching-radius spread. Therefore 'interior truncation dominates the remaining final error' is not supported. It dominated the earlier progression.
+
+3. Final value, L-tail sign, radius dependence, and rounding
+
+Compare L at the SAME exterior specification. B10P6,d=48 has
+  L=12: 0.4767478907442
+  L=14: 0.4767478845873,
+so the step is -6.1569e-9. Comparing L=12 B12P6 against L=14 B10P6 mixes a basis change of about 0.7e-9 into the L step. At L=14,d=24, B12P6-B10P6 is -0.6824e-9. The observed L tail is downward, opposing the upward d tail. Neither sign is guaranteed by a variational theorem for this nonsymmetric interior model or for a local coefficient.
+
+As an illustration only, geometrically continuing the last L-step ratios near 0.34 gives a remaining L>=14 correction around -3e-9. Starting from L=14 B10P6, adding the d tail and this L correction gives roughly 0.4767478834, before exterior basis and quadrature corrections. This makes the proposed center 0.476747882 plausible; it does not uniquely determine it. An algebraic L-tail model can give a different correction. The present data are not a rigorous extrapolation enclosure.
+
+The d=40,L=12,B10P6 radius values span 2.13311e-8 from R*=0.75 to 1.5. These are fixed-resolution results, not three converged limits. They mix d, trace, exterior approximation, quadrature, and numerical sensitivity, all of which depend on radius. Radius dependence is a combined consistency diagnostic, not an independent physical error source. Treating its full spread as a systematic envelope can be conservative; adding it in quadrature as an independent random uncertainty to all those component errors double-counts correlated effects. Apply like-for-like convergence corrections at each radius before comparing limits.
+
+My verdict on 0.476747882 +/- 1e-8: plausible as a provisional empirical estimate, but not yet validated as an honest encompassing error bar because high-L exterior quadrature and exterior saturation remain unresolved. Agreement with the supplied reference 0.476747879 is encouraging, not an independent error estimate. I would retain 'approximately 0.47674788' with an explicit provisional-accuracy statement, then reassess after angular refinement. Do not claim eight correctly rounded decimal places: the stated interval [0.476747872,0.476747892] does not even fix rounding to eight decimal places. The gray +/-1e-9 reference band in the figure also needs a documented basis if presented as reference uncertainty.
+
+Float64 interior arithmetic is a separate verification question, not a demonstrated 1e-8 error. At R*=1,d=16,L=12, my N=60 versus N=80 runs both give a21=0.47674750318627657, cond(F)=11.5261. Solving the identical stored F and boundary vector in BigFloat changes the low seed by only 5.55e-17. This supports the low-degree implementation but does not validate recurrence rounding at d=48 or ill-scaled radii. Check production d=48 with scaled columns and higher-precision recurrence/assembly, not only a higher-precision solve of an already rounded F. A small channel ODE residual does not measure the omitted angular PDE residual and can mask column-dependent errors through its normalization.
+
+4. Higher seeds and which radius to trust
+
+At d=40,L=12,B10P6, a3 is
+  R*=0.75: 0.005987370132
+  R*=1.00: 0.005987256999
+  R*=1.50: 0.005987248891.
+The 0.75 offset persists as d increases: it is not plausibly just the few-e-9 remaining d tail. At R*=0.75 the L=10->12 a3 change is only about -2e-9, so the observed trace-degree step does not explain a 1.1e-7 offset either. This points toward radius-dependent exterior approximation/numerical sensitivity, while leaving a shared trace or quadrature bias possible. It is not a diagnosed bug.
+
+Extraction of a K=4 seed from a small sphere is intrinsically more sensitive to absolute trace/derivative errors through R*^4 scaling; the chosen finite exterior bases also need not be equally accurate at different radii. The R*=0.5 data, with a3 near 0.0059958, reinforce the need for radius-specific exterior convergence checks. Smaller radius and smaller channel ODE residual do not guarantee better recovered seeds.
+
+R*=1 is the sensible working choice, supported by its agreement with 1.5 and moderate column scaling, but neither radius is certified. At R*=1,L=12,d=48, changing B10P6 to B12P6 changes a3 by -7.744e-9, substantially more than the corresponding a21 change. Converge each seed independently. Label a3 explicitly as a_(2,0) and a4 as a_(0,2), and distinguish these cusp-gauge seeds from physical order-four projections. Write uncertainty in explicit +/- form: a3=0.0059872(6) conventionally means +/-6e-7, while -0.0090407(56) means +/-5.6e-6, which may be much looser than intended.
+
+5. lambda and the energy crossing
+
+energy_check.log has the expected sign: lambda is positive below E0 and negative above E0, with slope -2.863911 and the L=10,d=32 crossing at E0+1.091e-8. The spectral gap to lambda2~7.0643 supports following an isolated near-zero branch in that particular run. This is a useful consistency diagnostic, not an energy bound or a coefficient error estimate.
+
+It is too strong to identify the residual as 'trace truncation, not exterior.' At d=48,L=12, B10P6 gives lambda=1.394592e-8 and B12P6 gives 1.142903e-8: the exterior specification alone changes it by 2.51689e-9. At L=14,d=24 the exterior change is 2.39860e-9. There are also finite-d changes and the unresolved quadrature contribution. The safe description is a combined matching residual, with evidence for a trace-related component because it falls with L. For exact operators the energy derivative is negative; the finite nonsymmetric flux map retains no general variational guarantee. Cancellation can make lambda small without making a local seed accurate.
+
+6. Comparison with the old channel exterior
+
+The new selection-rule test usefully shows that changing least-squares to mismatch eigenvector selection is negligible by d=12-16 in the tested old channel model. This addresses the main concern in review 1, although it was not directly tested at d=24.
+
+The difference 0.4767478344884-0.476747806703 is +2.77854e-8. It is fair to report this as the observed equal-d improvement for these configurations. It is not a controlled measurement of exterior channel truncation alone: the plotted old value uses R*=0.75 and the new value uses R*=1, and the new trace is restricted to L=12 whereas the old calculation uses all channels. For perspective, at d=24 the new B10P6,L=12 value itself changes by +1.9101e-8 between R*=1 and 0.75. That radius effect is comparable to the purported isolated exterior effect.
+
+To attribute an exterior error, hold d,R*,E,interior matrices,N,trace restriction and extraction rule fixed, then swap only the exterior map. Meanwhile, the practical conclusion is well supported: pushing the interior recurrence from d=24 to 48 produces +5.55e-8, about twice the quoted equal-d difference, and the method permits interior enrichment without recomputing a huge exterior channel propagation. 'Much of the practical gain comes from independently increasing d' is fair; assigning exactly 3e-8 to the old exterior is not.
+
+7. Code inspection and independent checks
+
+No sign/indexing error found in the requested analytic formulas:
+
+* correction_block: with k,k' the r12 powers, the measure yields integrals I_(k+k'+1), the Coulomb term I_(k+k'), and r12-gradient terms I_(k+k'-1). The direction cosines give (r1^2-r2^2)I_(k+k'-1)+I_(k+k'+1) for r1 and its sign-reversed difference for r2. These match the code, including the factor 2 on the pure r12 gradient. The dummy I_-1 is used only with zero coefficients when k=k'=0. My small Double64 comparison against 3D Gauss integration for k=0,1,4 gives relative disagreement 3.97e-31, at identical radial/phi nodes. This checks the analytic r12 reduction, not radial/angular production convergence.
+
+* eval3d!/blocks3d_fast: dq,ds,dR, d[(R-R*)/R]/dR=R*/R^2, and the channel radial power derivative are correct. The weighted matrix contractions include both mixed gradient terms. Analytic values/gradients versus ForwardDiff for selected low and highest L=14 harmonics and p=0,2 agree to max absolute 9.25e-33 at a representative interior point. This is a targeted derivative check, not a full production fast/slow assembly comparison.
+
+* exterior_steklov_dd: Jacobi scaling and X=L\(sc.*Atb'), S=Att-X'X implement the correct Schur complement. The eigen fallback implements a retained positive correction subspace. However, Cholesky success alone does not establish sufficient precision. The fallback silently drops negative directions, and rank alone does not reveal their magnitude. Production B12P6 repeatedly drops 15 directions: diagnose whether these are harmless dependencies or assembly errors using eigenvalues, solve residuals, refinement, and cutoff/precision sensitivity. Mixing an analytic 2D block with underresolved 3D cross blocks can destroy consistency of the assembled energy form. Double64 cannot repair quadrature error.
+
+* interior_setup: Ein, full m-by-nL derivative solve, G times that derivative, GU and R*^5 are dimensionally and algebraically correct. The seed solve and gauge restoration are consistent. Explicitly reject L>d and unsupported gauge symbols rather than silently changing the requested space/model if these APIs are generalized.
+
+* match: nonsymmetric selection is appropriate to the stated model, but there is a latent failure path: it warns for a complex eigenvector, then discards its imaginary part and all eigenvalue imaginary parts and proceeds. A selected complex branch should cause a failed diagnostic rather than a plausible real coefficient. Track eigenpair residual, imaginary eigenvalue, gap/branch continuity, and the normalization denominator a[1]. The returned t is not rescaled with a, so callers must not treat it as the boundary trace of the normalized a without applying that factor. This does not affect current physical_constants.
+
+Recommended order of remaining work: validate high-L exterior angular and radial integration with fresh caches; demonstrate Schur rank/precision stability at the largest basis; repeat final L and radius comparisons using those forms; then reassess the extrapolated uncertainty. The algebraic interior tail is credible. The final eight-digit claim remains provisional until these production-level checks are done.

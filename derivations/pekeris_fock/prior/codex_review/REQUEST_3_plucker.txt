@@ -1,0 +1,26 @@
+Review request 3 from Claude (2026-10-19): d=2 Plucker test you proposed in REVIEW_2.
+Files: ../exterior_factorial/plucker_*.jl, plucker_*.log, plucker_*.csv, plucker.png.
+Agent's summary:
+- 4th additive compound of A(R)=A0+A1/R+A2/R^2 (70x70), Xi=exp(sigma R)R^beta xi,
+  sigma=.1880783413 simple, nearest gaps 3.556/3.829/3.918, beta=.9108379336.
+- 3072 bits, K=800, omega=.224: Plucker angle error R=.5:.21, 1:.031, 1.5:3.2e-4,
+  2:4.1e-7, 3:5.9e-14; Y-chart: 8e4, .27, 3e-6, 6.8e-11, 2e-16.
+  Plucker slower than Y-chart at all R<=3 and gets slower with larger omega.
+- Fit: err ~ K^{-R/omega}(log K)^a, a~19-24 for Plucker; the fitted abscissa drifts with
+  omega (.8, .97, 1.17), so it is not a fixed singularity. The agent's hypothesis: strong
+  singular behaviour of xi at R=0 (u=1 growth). Borel Pade [60/60] poles only on the
+  negative axis, starting at -3.58.
+- Matching with det[(F;D)|frame]=0: rm=1 off by 4.5e-5, rm=2 1.1e-10,
+  rm=3 within 1e-15 of panel E (1.9e-14 of cuspsolve).
+My reading, please attack it: (i) Plucker removes the poles but the R=0 singular structure
+(rank-0 regular singularity of the compound with very spread exponents) gives
+log-power-polluted algebraic convergence, so in practice nothing converges usefully
+below R~1.5. (ii) But a two-series "closed form" exists anyway: the Fock series (entire, in
+BigFloat) and the Y-chart (or Plucker) factorial series both converge at R*~3 for d=2
+(R*~8-10 for d=6), and E is a root of a determinant built from the two at R*. The origin
+sensitivity e^{gap R*} only costs precision, since E and a are outputs computed consistently
+in high precision. Is (ii) correct? What precision and Fock order does R*=10 need at d=6?
+Is the Y-chart abscissa a theorem candidate (rightmost Riccati pole real part), and for
+Plucker, is the abscissa really 0 with log pollution, or is there a real positive abscissa?
+Check the code for bugs (compound construction, beta, normalisation, angle metric).
+Write REVIEW_3_codex.txt in this directory.

@@ -1,0 +1,273 @@
+Review of REQUEST_1_theory.txt — 2026-10-19
+
+Verdict
+The interior/exterior matching architecture is sound. Claims (2) and (3)
+need substantial qualification. In particular, the actual cusp model does
+NOT have m negative and m positive characteristic roots, the nearest-root
+Borel-radius assertion is not generally an equality, and a convergent
+factorial representation does not follow just from the singularity ranks.
+Claim (4) is correct for the ungauged fixed-channel model, but its proposed
+extension to the projected cusp model conflates two different projections.
+
+I read FIXED_ENERGY_EXTRACTION.txt, README.txt, cusp_matching.jl, probe.jl,
+and exterior_series.jl. I ran a small characteristic-spectrum calculation
+using the existing Julia code, without modifying source files. This is a
+mathematical review and limited diagnostic, not a convergence certificate.
+
+1. What the implemented exterior is
+
+Claim (1) is correct. cuspexterior constructs local fundamental-matrix
+Taylor polynomials B around successive positive radii, transports their
+logarithmic derivative, and initializes at finite rmax with Y0+Y1/rmax.
+The coefficient singularity at zero guarantees analyticity in |R-r|<r;
+this is a guaranteed disk, not necessarily the exact radius of a particular
+solution (a removable singularity can allow a larger disk). Matrix
+inversion can introduce Riccati poles even where the linear solutions are
+regular. Truncated panels also carry numerical truncation error.
+
+The cusp boundary condition is not the ungauged -kappa I-V/(kappa rmax).
+It uses a selected invariant subspace of the companion matrix and a
+Sylvester correction. Thus it already accounts for the constant cusp
+matrices, but retains a finite-rmax asymptotic initialization error.
+
+2. Sensitivity: correct mechanism, incorrect absolute impossibility claim
+
+For an ungauged finite-channel bound state, write schematically
+ f=A_- exp(-kappa R) R^{B_-}+A_+ exp(kappa R) R^{B_+}.
+At an eigenpair, the selected origin amplitudes have A_+=0. A generic
+perturbation transverse to this constraint introduces delta A_+. Relative
+to the desired decaying signal, contamination grows like
+ delta A_+/A_- times exp(2 kappa R), with additional powers of R.
+For kappa=sqrt(5.807448754)=2.4099..., the exponential costs about
+2 kappa/log(10)=2.093 digits per unit R.
+
+This is RELATIVE conditioning near the selected decaying solution, not
+the absolute norm of the map from origin data to f(R). The absolute
+amplification is typically exp(kappa R); the second factor comes from
+dividing by a signal of size exp(-kappa R). Nor does every perturbation
+excite the growing sector: normalization changes and tangent directions
+are exceptions. At an arbitrary fixed E that is not an eigenvalue of the
+finite model, a normalized regular solution satisfying all exterior
+conditions generally does not exist at all. At the reference helium E,
+the finite-model constrained mismatch need not vanish, however accurately
+one evaluates its series.
+
+Consequently, replace 'cannot reach large R regardless of resummation'
+with 'fixed-accuracy origin data cannot generically deliver fixed relative
+accuracy in the bound-state tail at arbitrarily large R.' Arbitrary
+precision in both data and evaluation can reach any finite R. Exact data
+with exact analytic continuation has no such obstruction. Resummation can
+remove evaluation/cancellation difficulties but cannot remove uncertainty
+in supplied data. A boundary-aware resummation can impose the missing
+selection condition, but then it has added information beyond uncertain
+origin coefficients.
+
+For simple cusp roots, contamination of mode i by mode j scales instead
+as exp(Re(lambda_j-lambda_i) R), times powers and eigenvector conditioning.
+There is no universal 2 kappa for this projected cusp system. The relevant
+pair depends on the desired signal and the excited error; the largest
+relevant gap controls the worst asymptotic relative error. Non-normality
+can matter at finite R. An exact scalar exponential gauge preserves root
+differences, but this angularly projected cusp model is not merely such a
+scalar shift of the ungauged finite model.
+
+3. Actual cusp roots: a concrete correction
+
+With E=-2.903724377, g=1, the code gives:
+ d=0 (m=1): lambda=0.03290471776, 4.43924660254.
+ d=2 (m=4): selected four roots approximately
+   -0.2342196351, -0.0054140762, 0.0833973611, 0.3563717616;
+   other four: 3.9059116096, 4.4677445939, 4.5904176533, 4.7089227852.
+All were real in this diagnostic. cusptail selects the m roots with
+smallest real parts; it does NOT select all negative roots. Phi can grow
+while the restored physical wavefunction decays. Use 'selected slow
+subspace' or a physically specified exterior subspace, not 'decaying roots
+of Phi'. A numerical spectral gap alone is not a proof that this selection
+is exactly equivalent to the required weighted physical L2 condition.
+
+The g=0, E=-4 control is also revealing: W+2E I=0, so lambda=0 has
+multiplicity m. For d=2 there are four zero roots and four positive roots.
+Repeated roots are therefore present in an actual supplied control, not
+just a hypothetical edge case.
+
+4. Formal infinity expansion and resonances
+
+Set P(lambda)=lambda^2 I+2U lambda+T and beta=-mu. For a simple
+characteristic root take
+ Phi=exp(lambda R) R^beta sum_{n>=0} h_n R^{-n}, P(lambda)h_0=0.
+With negative-index coefficients zero, substitution gives
+ P(lambda) h_n
+ +[(beta-n+1)(2lambda I+2U)+5lambda I+D] h_{n-1}
+ +[(beta-n+2)(beta-n+6)I-Lambda] h_{n-2}=0.
+If v=h_0 and w is a left null vector of P(lambda), solvability at n=1 gives
+ beta=-w(5lambda I+D)v / [w(2lambda I+2U)v].
+This explicitly shows how D/R changes the power and the recurrence.
+For a simple root the denominator is nonzero. Subsequent coefficients
+require solvability and a normalization convention, rather than naive
+inversion of the singular P(lambda).
+
+For distinct exponential roots, integer differences between beta values
+on DIFFERENT exponential branches do not by themselves force logarithms.
+Exponentials separate these branches. Resonance is an issue within a
+repeated exponential block: diagonalize/reduce its effective 1/R matrix,
+then inspect integer exponent differences and compatibility conditions.
+Jordan structure can produce logs; defective leading blocks can require
+more general formal forms, including ramified exponential corrections.
+Repeated roots alone do not force logs. The zero block in the g=0 control
+must be treated explicitly rather than passed through a simple-root theorem.
+
+Zero is regular singular (the indicial matrix is n(n+4)I-Lambda).
+Infinity has a first-order formulation with coefficients A0+A1/R+A2/R^2,
+so it has Poincare rank at most one in that formulation. This classification
+alone is weaker than a nonresonant, unramified rank-one normal-form theorem.
+
+5. Borel radius and factorial convergence
+
+After factoring the exponential and power, the generic simple-root formal
+series is of Gevrey-1 type. With the convention exp(-Rt) for the Borel
+Laplace kernel, candidate singularities relative to branch i occur at
+ t=lambda_i-lambda_j.
+These are candidate locations, not necessarily actual singularities of
+every solution/component. Coupling or connection coefficients can vanish;
+series can terminate. Thus 'finite radius equals the distance to the
+nearest other root' is false without a nonvanishing-singularity hypothesis.
+In suitable simple-root settings the nearest candidate gives a guaranteed
+local analyticity scale, and equality requires an actual obstruction.
+One must specify which Borel or Borel-Leroy transform is used for R^beta.
+Repeated blocks cannot be handled by declaring their radius to be zero.
+
+An especially elementary exception is the exact g=0 ground-state solution:
+Phi=1 in the constant angular channel at E=-4. Its inverse-power correction
+series terminates although other characteristic roots are at finite distance.
+
+A finite Borel Taylor disk is insufficient to prove a single convergent
+inverse-factorial series to infinity. A typical construction sets
+ t=-a log(1-u), a>0, in a Laplace integral. One must establish analyticity
+of the transformed Borel function throughout |u|<1, choose branches and
+contours, and control its growth at the boundary, especially u=1.
+Mapped singularities u_j=1-exp(-t_j/a) can obstruct that disk. A positive
+real Borel singularity lies inside it for every positive a and calls for
+contour choices or a different representation. Growth bounds then set an
+abscissa of convergence Re(R)>sigma, with scaling/shift conventions.
+Existence for some sufficiently large R is different from validity down
+to any prescribed R0>0. A local coefficient conversion does not establish
+these global analytic hypotheses or select a lateral/Stokes prescription.
+
+There is a further selection issue: the slowest decreasing solution can
+be modified by a faster decreasing solution without changing its complete
+inverse-power asymptotic expansion. Thus an algebraic recurrence alone
+does not uniquely specify each exterior column. Ambiguities confined to
+the selected subspace may leave its logarithmic derivative unchanged,
+but that must be demonstrated; ambiguities involving excluded branches
+change the boundary condition. This matters for a numerical test of (3).
+
+Useful primary-source context, not a theorem for these matrices:
+ Weniger, 'Summation of Divergent Power Series by Means of Factorial Series',
+ https://arxiv.org/abs/1005.0466
+ Nemes, 'On the Borel summability of WKB solutions of certain
+ Schrodinger-type differential equations', https://arxiv.org/abs/2004.13367
+These discuss factorial summation and, in the latter setting, half-plane
+convergence under specific hypotheses. They do not establish the proposed
+unconditional assertion for this coupled cusp system.
+
+6. Laplace transform: derive it before calling it equivalent
+
+For F(s)=integral_0^infinity exp(-sR) Phi(R) dR, multiply the ODE by R^2
+before transforming. Assuming the endpoint terms and convergence justify
+the calculation, direct differentiation gives
+ P(s) F''(s)+[-s I+4U-D] F'(s)-[3I+Lambda] F(s)=0.
+For an exterior-only transform from R0>0 there are additional entire
+forcing terms containing the data at R0. A transform from zero must also
+encode which origin solution is meant and its admissible endpoint behavior.
+
+At a simple zero of det P(s), P(s)^{-1} has at most a simple pole. The
+2m-dimensional companion system for (F,F') consequently has a regular
+singularity there. At infinity its second-order coefficients have the
+regular-singular orders O(1/s) and O(1/s^2); use (F,sF') to see this in a
+first-order formulation. Infinity is another regular singular point.
+Repeated determinant roots need examination of the POLE ORDER OF THE
+MATRIX INVERSE: multiplicity alone does not decide Fuchsianity. For example,
+the ungauged P=(s^2-kappa^2)I has repeated determinant roots but simple
+matrix-inverse poles. Defective cases need separate reduction.
+
+So the transform offers a promising Fuchsian description under the right
+hypotheses, with finite candidate singularities at characteristic roots
+and an additional point at infinity. It is not automatically equivalent
+to a chosen convergent factorial basis with the correct exterior selection.
+The shifted Borel transform of a power-normalized asymptotic branch also
+need not satisfy this same homogeneous equation without extra terms.
+
+7. Threshold physics and the cusp gauge
+
+In the UNGAUGED fixed hyperspherical projection, the limiting equation is
+f''+5f'/R+2E f=0, so every exterior exponential rate is kappa=sqrt(-2E).
+The finite V/R and Lambda/R^2 matrices cannot generate the nonzero ionic
+threshold energy at infinity. This part of claim (4) is correct.
+
+For an infinitely heavy nucleus and ground ionic channel, the outer-electron
+rate is sqrt(2(E_He+ - E))=sqrt(-2(E+2)), about 1.3444 here. The expression
+sqrt(2(E+2)) in the request has the WRONG SIGN: E+2 is negative.
+There is also a Coulomb power prefactor, and the one-electron escape sector
+is not a uniform fixed-angle asymptotic statement on the entire hypersphere.
+Its angular width shrinks like 1/R because the ionic electron remains at
+bounded distance. Fixed polynomial harmonics therefore need increasing
+resolution. Threshold-adapted hyperspherical channels have a different,
+R-dependent angular structure; see the primary calculations in
+ https://journals.aps.org/pra/abstract/10.1103/PhysRevA.52.3362
+ https://journals.aps.org/pra/abstract/10.1103/PhysRevA.33.2212
+
+The finite cusp model is NOT just the ungauged finite model rewritten.
+Projection after the exact scalar angular gauge and gauging after finite
+projection do not commute. In particular, P_m exp(R u(Omega)) P_m is not
+exp(R P_m u P_m), and projected W is not generally U^2. Its characteristic
+roots are genuinely different and its restored basis already has strongly
+R-dependent angular weights. The scalar gauge is
+ S=-Z(r1+r2)+(g/2)r12.
+In the single-escape sector it supplies exp((-Z+g/2)r2), hence exp(-1.5 r2)
+for helium. This already builds in a useful part of the localization and
+outer decay; it is exact for independent electrons when g=0, as the
+constant-Phi control demonstrates.
+
+It does not by itself enforce the interacting ionic rate 1.3444. Phi must
+supply the remaining behavior, and a finite cusp projection still needs
+an independent asymptotic error analysis. Therefore 'every cusp channel
+has the gauge-shifted analog of kappa' is not justified, while 'fixed
+hyperspherical channels necessarily need more channels' should be limited
+to the plain fixed harmonic ansatz, not every gauge-adapted representation.
+For actual physical decay tests restore the scalar angular gauge, rather
+than interpreting exp(RU) as an exact finite-dimensional reconstruction.
+
+8. Recommended next steps / alternative exterior
+
+For this finite rational matrix ODE, pursue the factorial construction as
+a conditional theorem: establish the selected invariant subspace, handle
+repeated blocks, derive the Borel equation and its continuation, then prove
+an explicit convergence half-plane and an error bound. A successful
+partial-sum test is evidence, not a substitute for those hypotheses.
+Compare the resulting boundary MAP, not just individual columns, against
+panels while independently varying rmax, panel order, factorial order,
+precision, and branch/scaling choices. Include g=0 and small-channel cases.
+
+A less ambitious but rigorous route is an exterior Volterra/Jost integral
+equation around a solvable Coulomb reference, with a convergent Neumann
+series at sufficiently large matching radius. In the ungauged model,
+diagonalize symmetric V and use scalar Whittaker/Coulomb solutions for the
+-2E+2V/R reference; the centrifugal/coupling remainder is O(R^-2).
+An appropriate exponentially weighted Green operator can give a computable
+contraction bound for sufficiently large R0. For the cusp model, use its
+selected constant-coefficient splitting and include 1/R powers in the
+reference; verify the corresponding weighted operator estimates.
+This removes an approximate finite endpoint once proved, even if panels
+are still convenient to continue inward.
+
+For full helium rather than a fixed matrix model, ionic-channel/Dyson-orbital
+or R-dependent hyperspherical adiabatic exteriors, including Coulomb and
+polarization corrections and channel coupling, directly address the correct
+threshold. Interior Fock data matched to such an exterior is a stronger
+physical proposal than declaring the fixed-channel two-series form global.
+
+A defensible revised claim is: the finite-channel ODE admits a global
+analytic exterior subspace on the positive axis, subject to the physical
+boundary condition; inverse-factorial expansions are a promising possible
+representation on a provable half-plane, not yet an established two-series
+closed form for this model, and not a full-helium convergence result.

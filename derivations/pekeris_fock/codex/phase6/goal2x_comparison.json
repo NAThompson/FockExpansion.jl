@@ -1,0 +1,31 @@
+{
+  "input_hashes": {
+    "claude6/guess_probe.py": "9d03c07cafec4b7762d771e897ffe9728b82248e5cefd0b4951d384f87c875fb",
+    "claude6/guess_line.py": "54a440a95e5b7c59d4fef17dffadde7f4194eb3b8fd36e37077a46852a5c6524",
+    "claude6/guess_line2.py": "6daab6bf8b620ff4ac4d7f83d1acb63223b14799e27942a6fb16f38ffe91f11e",
+    "claude6/ratrec.py": "16dfd4296fc0575cf61ebfd0e739281b515dcca16949f18ad1b8bddc05578f54",
+    "claude6/guess_line.json": "141bd101cdad601e5810327a2e5301cf9822fe0a0a84c543a901fc844cfe6c73",
+    "claude6/line_a.json": "81c98139da08e93c7969a0bc6ea05966304b6c06579c3e239ed99f008d63f8c8"
+  },
+  "results": [
+    {
+      "u": 174,
+      "point": [
+        177,
+        352
+      ],
+      "entries": 630,
+      "match": true
+    },
+    {
+      "u": 184,
+      "point": [
+        187,
+        372
+      ],
+      "entries": 630,
+      "match": true
+    }
+  ],
+  "note": "No reconstructed bivariate psi30 coefficients were available; cross-checked saved modular solves instead."
+}

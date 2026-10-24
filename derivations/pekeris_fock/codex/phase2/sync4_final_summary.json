@@ -1,0 +1,16 @@
+{
+  "sync4_direct.out": "PASS",
+  "sync4_connection.out": "PASS",
+  "sync4_weakform.out": "PASS",
+  "sync4_ritz24.out": "PASS",
+  "sync4_ritz32.out": "PASS",
+  "sync4_a21_refined.out": "PASS",
+  "exported_state_checks": 32,
+  "input_snapshots": "10 SHA256 matches",
+  "concurrent_protected_changes": [
+    "claude2/run_quadcheck.log",
+    "claude2/run_quadcheck.out",
+    "claude2/states/atoms2_N11.txt"
+  ],
+  "required_deliverables": "PASS"
+}

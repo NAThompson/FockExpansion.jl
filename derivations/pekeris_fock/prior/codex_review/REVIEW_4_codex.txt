@@ -1,0 +1,250 @@
+Review of REQUEST_4_twoseries.txt — 2026-10-19
+
+Verdict
+
+This is a substantial improvement over the previous matching experiment:
+the Fock recurrence, exterior coefficients, determinant, and amplitude solve
+are genuinely evaluated in BigFloat. I found no Float64 bottleneck that
+would force all the reported differences to stop at approximately 1e-16.
+The supplied d=6 experiments support the carefully qualified statement
+"observed energy self-consistency at the approximately 1e-28 absolute level
+under the five tested changes, for the fixed supplied matrices." They do
+not certify a 1e-28 error bound, a 1e-41 total eigenvalue error, or convergence
+of the exterior factorial series. The root finder and reporting need some
+small but important improvements before making stronger claims.
+
+Scope: I read twoseries.jl, exterior_lib.jl, all three twoseries logs and the
+CSV, REVIEW_3, and the underlying cusp_matching.jl implementation, including
+model construction and panel boundary selection. I also prepared a local
+runtime audit, audit4.jl; its results are recorded below. I did not run the
+original script: its top-level driver appends to ../exterior_factorial/
+twoseries.csv. No source changes are proposed or made in that directory.
+
+1. Precision chain
+
+cuspcoeff_big (lines 7–34) faithfully copies the original recurrence,
+including resonant logarithms and independent regular seed columns. It
+constructs T from promoted W and BigFloat E, rather than promoting a
+Float64 W+2E expression. fock_FD evaluates both F and F' with BigFloat
+powers/logarithms. Orders include every retained seed. There is no use of
+the old Float64 evalseries on this path.
+
+riccati_coeffs_bigE (lines 63–85) uses Float64(E) ONLY to obtain a starting
+solvent from cusptail. It then constructs T at the actual BigFloat E and
+Newton-solves Y0^2+2 U Y0+T=0 with the correct Frechet derivative
+ Delta -> (Y0+2U) Delta + Delta Y0.
+Consequently the initial eigensolver does not impose a Float64 floor if
+Newton converges to the intended solvent. Higher Riccati coefficients are
+computed at rprec, using the correct Sylvester recurrence. Add an explicit
+post-loop residual check and failure if 12 iterations are insufficient;
+currently exhaustion silently proceeds. Check solvent branch/spectral gap
+and Sylvester conditioning as well as residual for a reusable solver.
+
+The Stirling table contains exact BigInt integers. factorial_coeffs uses
+the precision of the coefficient entries, hence 1024 bits in the base
+runs. yfactorial_big sums in that precision and avoids the Float64-returning
+helpers in exterior_lib. R* is an exactly representable integer here.
+omega is a Float64 number promoted to BigFloat, so the expansion uses that
+fixed binary value of omega, not an exact decimal .284. This is harmless
+for a convergent representation whose limit is independent of omega;
+it can affect finite truncation and belongs in the convergence checks.
+
+match executes the determinant, column norms and least-squares null solve
+at prec=384. The exterior sum is returned at high precision and converted
+by BigFloat.(...) inside the 384-bit block. Even if the exterior retains
+extra entry bits in an intermediate, its matrix product and subsequent
+operations are governed by the 384-bit block. There is no downcast to
+Float64 in the matching function.
+
+Important qualification: secant_root itself is called OUTSIDE every
+setprecision block (line 146). In an ordinary fresh Julia process its
+iterates, secant updates and returned slope are at the ambient 256 bits,
+not 384 bits. The precision variant changes the matching evaluations to
+512/1536 bits but leaves this root arithmetic unchanged. Approximately
+77 decimal digits at 256 bits are ample for the observed 1e-28 comparisons;
+this is not an explanation for a 1e-28 artificial floor. Nevertheless,
+"the entire calculation is 384-bit" is inaccurate. Wrap the driver/root
+solve and variant corrections in an explicit precision block and record
+precision(Er). Float64 h=1e-9 and tol=1e-24 are merely fixed initial step
+and stopping parameters, not rounding of each iterate to Float64.
+
+The displayed energies/a21 and the CSV values are explicitly Float64.
+Crucially, differences are formed BEFORE casting, so their nonzero tiny
+values are not manufactured by subtracting rounded doubles. However the
+CSV cannot reconstruct the high-precision roots, slopes or residuals.
+Save full decimal roots, amplitudes, f, f_E and residual-based corrections.
+
+2. Frozen model versus intended angular model
+
+The supplied U,D,W were assembled in Float64, using Float64 quadrature,
+normalizations and algebra. Their promotion defines a perfectly legitimate
+fixed matrix ODE to arbitrary numerical precision. Both interior and
+exterior use these SAME entries, and form their energy dependence in
+BigFloat, so this shared input does not fake agreement for that fixed ODE.
+It does mean every variant is blind to the common model-construction
+error. Arbitrary-precision integration cannot establish 28 digits of the
+ideal projected operator, the exact angular integrals, or the untruncated
+physical problem. Define the finite model explicitly as the frozen binary
+matrices if making a high-precision claim about it; otherwise rebuild the
+matrices and quadrature at increasing precision/order independently.
+
+For the supplied defaults Z=2, g=1, the Float64 scalar products in the a21
+conversion are exact (including g^2/8=1/8), and big(pi) supplies a
+high-precision pi. This formula has no observed Float64 floor here. For
+arbitrary Z/g, products such as b.Z*b.g and b.g^2/8 would be evaluated in
+Float64 before meeting BigFloat, so promote those scalars first in a
+general-purpose implementation.
+
+3. What the stability tests establish
+
+The d=6 CSV gives absolute dE:
+ R*+1, with Fock order also +25:   -4.5500972275e-36
+ K+60:                           -3.6240386289e-31
+ omega*1.25:                     -3.0727175718e-29
+ Fock+30:                        -2.9080817655e-41
+ precision 384/1024 -> 512/1536:  -2.9080817655e-41.
+The corresponding largest |delta a21| is 2.1717075509e-31. Thus "roughly
+1e-28 observed absolute self-consistency" is a fair conservative numerical
+description. Strictly, "all changes <=3e-29" rounds the largest result
+down: it is 3.073e-29. This d=6 conclusion does not extend to d=2 or d=4;
+their omega changes move E by about 5.79e-20 and 3.59e-22 respectively.
+
+These are five finite comparisons sharing a recurrence and frozen model,
+not five independent error bounds. One K increment and one omega change
+cannot exclude a shared truncation bias, long transient or eventual
+divergence. Several increasing K values at multiple omega, plus a jointly
+strengthened run, would make the numerical convergence case stronger.
+Compare exterior matrices/term blocks and full normalized amplitude
+vectors too: an eigenvalue can be insensitive to boundary-map errors in
+other directions. A matrix Riccati ODE residual is another useful check,
+but also needs conditioning information to become an error estimate.
+
+Each variant uses only ONE correction Ev=Er-f_variant(Er)/slope_base
+(lines 153–158). Column-normalized determinants have the same zeros but
+their slopes can change under changes of R and truncation. In particular,
+there is no radius-invariance theorem for their normalized slopes. Tiny
+raw residuals alone do not bound errors in energy; divide by that
+variant's checked nonzero derivative. Solve each variant independently
+or iterate using its own derivative until its estimated residual error
+is much smaller than the quoted difference. This is especially important
+for the R* comparison. At a simple root the arbitrary normalization does
+not obstruct differentiating f on the real energy line.
+
+The nearly identical Fock and precision shifts are naturally explained
+by the common remaining base-root error. The default secant tolerance
+is 1e-24 in step size, and no residual/slope test is enforced. Superlinear
+convergence can overshoot this to a remaining correction of approximately
+1e-41, but that must be measured, not inferred as a total accuracy bound.
+The variants' extra correction then removes this error in both cases.
+At most call 1e-41 an estimated root-iteration correction for the truncated
+base determinant after checking f/f_E. Its exterior truncation uncertainty
+is a separate, much larger issue, as the K/omega variations demonstrate.
+
+Check the returned slope for finiteness: if the last step rounds to zero,
+line 111 divides by zero. Also report failure on maxit exhaustion, and
+verify simple-root separation/conditioning. The constrained least-squares
+amplitude solve is correct at a simple root with a[1] nonzero; report its
+normalized residual and conditioning, and check all components rather
+than a21 alone. A fixed amplitude normalization is part of the definition.
+
+4. Is it the panels' exterior branch?
+
+Yes, at the level of asymptotic branch selection. cusptail explicitly
+selects the m pencil eigenvalues with smallest real parts, checks a gap
+above 0.1, and forms their graph Y0. Both methods invoke that same
+routine. Newton refinement should preserve that branch locally; verify
+its invariant-subspace spectrum against the separated pencil groups.
+"Slow" means this entire m-dimensional group, not just modes with negative
+real exponent. Some selected exponents can be positive in the cusp gauge.
+
+The panel boundary itself is NOT exactly the factorial boundary: panels
+start at rmax=24 with Y0+Y1/rmax and integrate inward with finite Taylor
+panels in Float64. The factorial construction targets the all-orders
+asymptotic boundary at infinity. They implement the same intended
+subdominant selection, with different finite approximations. Agreement
+in E and a21 at roughly 1e-16 is a useful cross-check of this interpretation,
+not a proof that the panel boundary or root is correct to every double
+precision digit. Panel matching also selects an eigenvalue of D/F-Yo;
+the determinant can have other roots. Establish isolation of the chosen
+nearby root rather than identifying every determinant zero with the
+panel-selected state.
+
+5. What remains before the convergent-series assertion
+
+The determinant formulation is sound. For the frozen ODE let F be the
+regular origin frame with the stated logarithmic seed normalization and
+G the selected exterior frame. The invariant matching condition is
+ det [F G; F' G']=0.
+Where the top block of G is invertible, it is equivalent to
+ det(F'-Y F)=0.
+Exact zeros are independent of matching radius. The Y chart must remain
+valid at the chosen radius; use the full frame/exterior pairing if it
+fails. Frame determinant prefactors need not be constant with radius.
+
+The regular generalized Frobenius/Fock construction has no other finite
+ODE coefficient singularity beyond R=0. Its logarithms require a chosen
+sheet; do not call it an entire power series at zero. Supply a convergence
+statement for that regular frame, including local uniformity in E near
+the root and validity of termwise differentiation.
+
+The missing major theorem is still convergence of the nonlinear Y-chart
+inverse factorial expansion at these radii, to the selected exterior
+boundary map. Formal recurrence plus exact Stirling conversion plus
+finite stability do not prove it. Establish transformed-Borel analyticity
+and growth (or another appropriate factorial-series theorem), a sufficient
+half-plane of convergence for the chosen omega, and identification of
+its sum with the selected asymptotic solution. Account for chart poles;
+a bounded pole scan does not locate all poles or prove the abscissa.
+Convergence must hold locally uniformly in E near the desired root for
+a clean passage from truncated determinants to the exact isolated root.
+The earlier linear Plucker Borel argument is a possible alternative
+route; it does not automatically prove the Y-chart claim.
+
+Finally specify the frozen matrices, channel set, regular seed convention,
+exterior branch, admissible matching radius, and which isolated root is
+called E. With the convergence and identification hypotheses stated,
+"two convergent series and one determinant define E of the finite-channel
+model" is mathematically legitimate. At present the accurate unconditional
+wording is: "a BigFloat two-series matching computation, numerically
+consistent with the panel root and internally stable at about 1e-28 in
+energy for the tested d=6 variations; convergence of the exterior
+factorial representation remains to be established."
+
+6. Independent runtime audit
+
+I ran audit4.jl with Julia --startup-file=no, loading the function definitions
+without the output-writing driver. The completed run (audit4.log) confirmed:
+
+* Ambient/root precision is 256 bits; solvent coefficients have 1024 bits.
+* At the supplied approximate energies, solvent residual norms for d=2,4,6
+  were approximately 8.08e-309, 2.62e-308 and 5.50e-308 respectively.
+  These are arithmetic-floor residuals, not certified forward-error bounds.
+* Spectra of the refined solvents (converted to Float64 only for this branch
+  diagnostic) agree with the slow pencil group. For d=6 the selected range
+  is [-.280964,.574732], with the fast group starting at 3.377559.
+* Reproducing the d=2 base solve gave f=-4.1715103488e-48,
+  slope=-6.1322612648e-4, and f/slope=+6.8025646147e-45.
+  Its negative is exactly the supplied precision-variant shift. This
+  directly supports the remaining-base-iteration-error interpretation.
+* For the d=2 R*=5 variant, the derivative at the corrected energy divided
+  by the base slope is 0.1498098621. Its remaining f/f_E correction is
+  +4.4863876920e-22, whereas the reported one-step dE is -7.9053507176e-23.
+  Thus this radius test demonstrably does not give a fully solved variant
+  root, despite its tiny raw determinant residual. This does not threaten
+  the panel-level agreement, but it must be corrected before interpreting
+  all variant shifts as actual root differences.
+
+The additional completed audit4_d6.jl run (audit4_d6.log) estimated the
+energy derivatives at the supplied Float64 panel energy using a BigFloat
+forward difference h=1e-20. It found
+ base R*=10 slope:  -4.6845268511e-54
+ R*=11 slope:       -5.8552075950e-59
+ ratio:              1.2499037322e-5.
+Thus the reported radius step understates the estimated root displacement
+by about 80,006. Using this ratio, its remaining energy correction is
+approximately -3.6403e-31, rather than an energy error on the scale of its
+raw residual 2.1e-89. This is a local derivative estimate near the root,
+not a new independently converged variant solve or certified bound. It
+nevertheless remains smaller than the omega-induced shift 3.0727e-29,
+so this check does not overturn the qualified 1e-28 self-consistency
+assessment. It strongly confirms why the variant-slope check is necessary.

@@ -1,0 +1,42 @@
+{
+  "reference_sha256": "8f648889ab04d4d202096c76d9c42e754fd419c8aefc5034cc9af4c92e188987",
+  "comparisons": {
+    "P_general": {
+      "ours_count": 57,
+      "reference_count": 57,
+      "union_count": 57,
+      "nonzero_differences": 0
+    },
+    "P_fixed": {
+      "ours_count": 33,
+      "reference_count": 33,
+      "union_count": 33,
+      "nonzero_differences": 0
+    },
+    "S2P_fixed": {
+      "ours_count": 177,
+      "reference_count": 177,
+      "union_count": 177,
+      "nonzero_differences": 0
+    },
+    "C1_fixed": {
+      "ours_count": 117,
+      "reference_count": 117,
+      "union_count": 117,
+      "nonzero_differences": 0
+    },
+    "C2_fixed": {
+      "ours_count": 57,
+      "reference_count": 57,
+      "union_count": 57,
+      "nonzero_differences": 0
+    }
+  },
+  "differences": {
+    "P_general": {},
+    "P_fixed": {},
+    "S2P_fixed": {},
+    "C1_fixed": {},
+    "C2_fixed": {}
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "claude3/atoms3.jl": "00a6580c5b987a8b128f91ad7494efacb798cc7c6dbc254f077c7e7c3fd17616",
+  "claude3/run3.jl": "4d7acf1c933f03a46fd08259a55e12043a76a87c1e5b964dff1946925d606317",
+  "claude3/check3.out": "7c51aff9016f1f4b7511ab35a965f8dca4b339041dac9917b9b21fc6fe2fa312",
+  "claude3/param_check.out": "31054093e497c4d1c20f976bf30c652b4be658fc2928b9dc213e9c27d6d2eec2",
+  "claude3/run3_a2psi.out": "a7d4fb660d369120074b046cc1c6c892fd792140bec3f550461e74daef4ee063",
+  "claude3/run3_min5.out": "b7125ef1725148ed84ecdc88d0a5d1cb728404c436dc28d648d66cbd2f1d3127",
+  "claude3/run3_min5_h24.out": "05934a1420fab5919764c50ad227ad7e6d93a8471285b631945bfc73276511f6",
+  "claude3/run3_min5psi.out": "b53680f9fad9d79c54cc1c7edb15216c404c08202eeefe689c9e910519b5b230",
+  "claude3/a21_a2psi.out": "ef5d93e3207170c63cc7b5897b8f834307b0bd6c85d5e60a9e6a71aa23182200",
+  "claude3/a21_min5.out": "70efa178e0d7551b5a3a2bd97fa64f83d70c42fa6d5051b28c347a5c5984edb9",
+  "claude3/a21_min5psi.out": "e7397d67276fb0af107dbb62a5ee7924f904d6692cd2fea96b42db1f2846710e",
+  "claude3/states/min5_N4.txt": "675094b109d2b734c136618943fb54bfe1f990d01997622eeda1fab126cee70e",
+  "claude3/states/min5_N8.txt": "01ccc61aa57cb7f0a086ae0b338d44ea1eecd2738ef2cf6d4298e3dd7dc82daa"
+}

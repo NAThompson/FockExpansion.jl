@@ -1,0 +1,40 @@
+TASK_codex_3 — independent phase-two handoff, 2026-10-21
+
+A, B and D are written in codex/phase2/. This is an independent handoff,
+not a review/co-signature of Claude's phase-two work: claude2/ and julia/
+were not read. The later cross-check requested by the task remains later.
+
+A: distance-coordinate polynomial pieces and explicit special-function /
+definite-integral remainders through order four; closed versus numerical
+content is labelled. Twelve polynomial homogenizations pass exactly.
+
+B: the smallest rational differential module containing 1 and chi has
+rank five: 1,L,alpha,h*(beta+pi/2),U. For the physical log(sigma) order-two
+coefficient replace L by Ltilde=L-(pi-2)/pi*log((r1+r2)/R). It also has
+rank five. A six-atom audit system retains both logs separately.
+minimal_rank.md gives the actual-function monodromy independence proof
+and the exact generation witness -4096*pi/21021.
+
+Full audit stencils: 13/12/6 nonzero atom blocks for S2P/C1/C2.
+Minimal physical stencils: 11/10/5. Every offset and coefficient is
+specified in codex_recurrence.json plus minimal_sigma_corrections.json
+and the explicit row-scale/delete/rename prescription. Clearing is
+deliberately conservative; shell half-bandwidth is 11 general / 10 fixed
+energy. Counts depend on clearing; no stencil-optimality claim is made.
+
+Verification: 108 exact connection flatness entries, 36 actual-function
+first derivatives and two source-chi comparisons (max error 1.93e-45),
+three full random Hamiltonian/log/Laguerre actions (max relative error
+1.93e-40; one E=-eps^2), all 31 audit blocks and both minimal replacement
+blocks checked exactly against independent polynomial differentiation
+and Laguerre moment projection. Logs are in codex/phase2/*.out.
+
+D: physical admissibility and the conditional resolvent/minimality
+picture do not change; atom gauges, chart/face cancellations, and dense
+physical Gram matrices need explicit treatment. No new global convergence
+or growing-block Pincherle theorem follows.
+
+Limits: order-three elliptic panels and fourth-order Green/Feynman
+inverses are explicit integral-defined content, not proved to reduce to
+a minimal finite classical differential alphabet. No new physical
+numerics or a21 accuracy claim is made. No repository files were changed.
