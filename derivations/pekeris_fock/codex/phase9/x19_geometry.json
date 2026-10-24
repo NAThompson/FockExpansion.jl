@@ -1,0 +1,109 @@
+{
+  "checks": {
+    "unit_circle": true,
+    "panel1_line_charge": true,
+    "panel2_line_charge": true,
+    "panel3_line_charge": true,
+    "panel4_line_charge": true,
+    "v0_e2_Q_norm": true,
+    "v0_e2_Q_discriminant": true,
+    "v0_e2_gram_elimination": true,
+    "v0_e2_quartic_discriminant": true,
+    "v0_e2_cubic_change": true,
+    "v0_e2_Weierstrass_discriminant": true,
+    "v0_e2_nonisotrivial": true,
+    "v0_e2_eight_simple_C_roots": true,
+    "v0_e2_no_C_cross_collision": true,
+    "v1_e1_Q_norm": true,
+    "v1_e1_Q_discriminant": true,
+    "v1_e1_gram_elimination": true,
+    "v1_e1_quartic_discriminant": true,
+    "v1_e1_cubic_change": true,
+    "v1_e1_Weierstrass_discriminant": true,
+    "v1_e1_nonisotrivial": true,
+    "v1_e1_eight_simple_C_roots": true,
+    "v1_e1_no_C_cross_collision": true,
+    "v1_me1_Q_norm": true,
+    "v1_me1_Q_discriminant": true,
+    "v1_me1_gram_elimination": true,
+    "v1_me1_quartic_discriminant": true,
+    "v1_me1_cubic_change": true,
+    "v1_me1_Weierstrass_discriminant": true,
+    "v1_me1_nonisotrivial": true,
+    "v1_me1_eight_simple_C_roots": true,
+    "v1_me1_no_C_cross_collision": true,
+    "density_double_parameter_kernel": true,
+    "all_92_row_clearings_divide_control": true
+  },
+  "surfaces": {
+    "v0_e2": {
+      "A": "1 - v**2",
+      "B": "-q**4*u*v - 2*q**2*v**2 + 2*q**2 + u*v",
+      "C": "-(q**4*u - q**4 + 2*q**2*v - u - 1)*(q**4*u + q**4 + 2*q**2*v - u + 1)",
+      "N": "(q - 1)**2*(q + 1)**2",
+      "cross": "1 - q**4",
+      "Q": "-q**8*t**2*u**2 + 2*q**8*t**2*u*v - q**8*t**2*v**2 + 2*q**8*t**2 + 2*q**8*t*u**2 - 2*q**8*t*u*v - 2*q**8*t - q**8*u**2 + q**8 - 4*q**6*t**2*u*v + 4*q**6*t**2*v**2 - 4*q**6*t**2 + 8*q**6*t*u*v - 4*q**6*t*v**2 + 4*q**6*t - 4*q**6*u*v + 2*q**4*t**2*u**2 - 6*q**4*t**2*v**2 + 4*q**4*t**2 - 4*q**4*t*u**2 + 8*q**4*t*v**2 - 4*q**4*t + 2*q**4*u**2 - 4*q**4*v**2 + 2*q**4 + 4*q**2*t**2*u*v + 4*q**2*t**2*v**2 - 4*q**2*t**2 - 8*q**2*t*u*v - 4*q**2*t*v**2 + 4*q**2*t + 4*q**2*u*v - t**2*u**2 - 2*t**2*u*v - t**2*v**2 + 2*t**2 + 2*t*u**2 + 2*t*u*v - 2*t - u**2 + 1",
+      "Weierstrass": "X**3 + X**2*(4*q**2 - 2*v*(2*q**2*v + u*(q**4 - 1))) + X*(1 - v**2)*((q**4 + 1)**2 - (2*q**2*v + u*(q**4 - 1))**2)",
+      "j_samples": [
+        "85184/153",
+        "19110239696/589565457"
+      ],
+      "q_degrees_a2_a4": [
+        "4",
+        "8"
+      ],
+      "z_degrees_a2_a4": [
+        "2",
+        "4"
+      ]
+    },
+    "v1_e1": {
+      "A": "1 - u**2",
+      "B": "-q**4*u**2 + q**4 - 2*q**2*u*v + u**2 - 1",
+      "C": "-(q**4*u - q**4 + 2*q**2*v - u - 1)*(q**4*u + q**4 + 2*q**2*v - u + 1)",
+      "N": "2",
+      "cross": "2*q**2",
+      "Q": "-q**8*u**2 + q**8 + 4*q**6*t*u*v - 4*q**6*u*v - 4*q**4*t**2*v**2 + 4*q**4*t**2 - 4*q**4*t*u**2 + 8*q**4*t*v**2 - 4*q**4*t + 2*q**4*u**2 - 4*q**4*v**2 + 2*q**4 + 8*q**2*t**2*u*v - 12*q**2*t*u*v + 4*q**2*u*v - 4*t**2*u**2 + 4*t**2 + 4*t*u**2 - 4*t - u**2 + 1",
+      "Weierstrass": "X**3 + X**2*(2*q**4 - 2*u*(2*q**2*v + u*(q**4 - 1)) - 2) + X*(1 - u**2)*((q**4 + 1)**2 - (2*q**2*v + u*(q**4 - 1))**2)",
+      "j_samples": [
+        "-432/425",
+        "1025643795908/7064319825"
+      ],
+      "q_degrees_a2_a4": [
+        "4",
+        "8"
+      ],
+      "z_degrees_a2_a4": [
+        "2",
+        "4"
+      ]
+    },
+    "v1_me1": {
+      "A": "1 - u**2",
+      "B": "q**4*u**2 - q**4 + 2*q**2*u*v - u**2 + 1",
+      "C": "-(q**4*u - q**4 + 2*q**2*v - u - 1)*(q**4*u + q**4 + 2*q**2*v - u + 1)",
+      "N": "2*q**4",
+      "cross": "-2*q**2",
+      "Q": "-4*q**8*t**2*u**2 + 4*q**8*t**2 + 4*q**8*t*u**2 - 4*q**8*t - q**8*u**2 + q**8 - 8*q**6*t**2*u*v + 12*q**6*t*u*v - 4*q**6*u*v - 4*q**4*t**2*v**2 + 4*q**4*t**2 - 4*q**4*t*u**2 + 8*q**4*t*v**2 - 4*q**4*t + 2*q**4*u**2 - 4*q**4*v**2 + 2*q**4 - 4*q**2*t*u*v + 4*q**2*u*v - u**2 + 1",
+      "Weierstrass": "X**3 + X**2*(-2*q**4 + 2*u*(2*q**2*v + u*(q**4 - 1)) + 2) + X*(1 - u**2)*((q**4 + 1)**2 - (2*q**2*v + u*(q**4 - 1))**2)",
+      "j_samples": [
+        "-432/425",
+        "1025643795908/7064319825"
+      ],
+      "q_degrees_a2_a4": [
+        "4",
+        "8"
+      ],
+      "z_degrees_a2_a4": [
+        "2",
+        "4"
+      ]
+    }
+  },
+  "old_target_curve": "q**4 - 2*q**2*v - u*(q**4 - 1) + 1",
+  "normalized_measure_surface": "Y0^2=D*t*(1-t)*Q(q,t)",
+  "cubic": "Y^2=X^3+2*B(q)*X^2+A*C(q)*X",
+  "geometry_qualification": "Generic auxiliary K3 elliptic surface over q; necessity of its H2 periods in the final physical answer is NOT proved. Full source-dependent weight-two density needs additional parameters.",
+  "elapsed_seconds": 9.01037311553955,
+  "peak_rss_bytes": 75644928
+}

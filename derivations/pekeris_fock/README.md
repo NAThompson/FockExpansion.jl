@@ -17,6 +17,7 @@ Each phase has two folders, `claudeN/` (Claude's derivations and numerics) and `
 | 4 | Fock-constrained basis and the a21 readout |
 | 5–6 | Zero-tail backward theorem; the order-3 degree blow-up in the cyclic basis |
 | 7–8 | Structured order-3 basis: the classical block and four elliptic panels, giving 2,577,274 stencil terms |
+| 9 | Order 4: closed form of the Z² part of ψ41 in the order-2 module (PSLQ); ψ40 function class open, with a K3 candidate |
 
 The compiled stencil generator is `claude8/stencil3.jl`. It regenerates the order-3 stencils from `claude8/*_terms.txt` and the row-factor files; the expanded stencils, about 6 GB per panel, are not stored here.
 

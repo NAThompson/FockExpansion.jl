@@ -1,0 +1,29 @@
+{
+  "exact_PDE_residuals": [
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0"
+  ],
+  "homogeneity_residuals": [
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0"
+  ],
+  "integer_relations_match": true,
+  "rank_upper_bound": 5,
+  "qualification": "Membership and upper bound; this check does not assert the single function generates rank exactly five.",
+  "elapsed_seconds": 53.469929218292236,
+  "peak_rss_bytes": 172310528,
+  "inputs": {
+    "claude9/closed41.pkl": "6c39d85e4b4c989f6307b4631d8ff556ba463f9bed338bca1ff299fde42f7ba4",
+    "claude9/coef5_ident.txt": "6753fa539fa6b34dcd2b3606786df61273c9165e3409e63a378f0c7a4a177c78",
+    "claude9/coef5.txt": "fddf8800caf6ab5111f5505386d40b01206a45fd16b4e13161b428d06f39d175",
+    "codex/phase2/order2.py": "be86c86f8e131b8ffb557e194751856946e7dafa2b90e4c065ddd1344ae894b8"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "checks": {
+    "kernel_off_diagonal": true,
+    "iterated_kernel": true,
+    "delta_flux": true,
+    "panel_discriminant": true,
+    "panel_j": true,
+    "kernel_discriminant": true,
+    "ten_spectral_moments": true,
+    "two_ff_smooth_fibres": true
+  },
+  "max_moment_error": 8.758115402030107e-47,
+  "finite_field_smoothness": [
+    {
+      "a": "1/5",
+      "d": "1/7",
+      "prime": 1000003,
+      "gcd_degree": 0
+    },
+    {
+      "a": "2/9",
+      "d": "1/6",
+      "prime": 1000003,
+      "gcd_degree": 0
+    }
+  ],
+  "rank_measured": false,
+  "elapsed_seconds": 0.5934698581695557,
+  "peak_rss_native": 66322432,
+  "input_sha256": {
+    "/Users/nathompson7/FockExpansion.jl/src/green_k4.jl": "427c22def66283b8459902cf2ce07f9344ada02e20a8233de6359f8e05c5bc09",
+    "/Users/nathompson7/FockExpansion.jl/src/fourth_order.jl": "2a14ccabfef5b5aeb32365cf5a3fcf6cf1558702cb8e7fb73c0dc997327aa4ce",
+    "/Users/nathompson7/FockExpansion.jl/src/feynman_k4.jl": "3a0469c4223f0b661ece9fe3c13b62afaabe60aed4baaea46e29861fc71e8084",
+    "/Users/nathompson7/FockExpansion.jl/derivations/k4/README.md": "ee23253e849e296f2dae6146c3bf0f36baee44562df3f1625c591d942cda83a2",
+    "/private/tmp/claude-501/-Users-nathompson7-FockExpansion-jl/c3429e35-aac3-4d1b-82ce-cf1182656503/scratchpad/pekeris/codex/phase3/structure.md": "4dff4a41685199ff226baf11b6df97b1a605bce1dde8c414d38839d26597c91d"
+  }
+}
