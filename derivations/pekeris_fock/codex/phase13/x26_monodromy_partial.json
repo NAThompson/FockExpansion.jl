@@ -1,0 +1,35 @@
+{
+  "Q2": {
+    "rank_singular_values": [
+      "1447.173",
+      "7.4880793",
+      "1.2826584e-25",
+      "3.9420292e-29",
+      "7.6173273e-33"
+    ],
+    "involution_residual": "2894.3847",
+    "nilpotent_square_residual": "4.5099389e-20"
+  },
+  "R_u_minus": {
+    "rank_singular_values": [
+      "1396.6105",
+      "1.234593e-23",
+      "1.3608439e-25",
+      "2.8977323e-27",
+      "6.0272449e-30"
+    ],
+    "involution_residual": "1.2478524e-20",
+    "nilpotent_square_residual": "2793.2209"
+  },
+  "U_v_plus": {
+    "rank_singular_values": [
+      "760.46325",
+      "41.887319",
+      "5.8510235e-24",
+      "2.1134974e-28",
+      "1.2016897e-38"
+    ],
+    "involution_residual": "1523.232",
+    "nilpotent_square_residual": "1.651738e-19"
+  }
+}

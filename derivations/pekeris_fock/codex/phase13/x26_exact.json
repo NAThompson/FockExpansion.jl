@@ -1,0 +1,114 @@
+{
+  "checks": {
+    "guessed_ODE_annihilates_rational_fit": true,
+    "fit_is_rational_so_order3_not_minimal": true,
+    "harmonic_P40_H_zero": true,
+    "boundary_fit_minus_H_is_2delta_over9": true,
+    "typeII_A_square_zero": true,
+    "typeII_B_square_zero": true,
+    "typeII_A_orthogonal": true,
+    "typeII_B_orthogonal": true,
+    "distinct_images_double_nonzero": true,
+    "distinct_images_triple_zero": true,
+    "both_rank2_images_distinct": true,
+    "positive_log_cross_zero_order_is_minus_cos": true,
+    "u_minus1_exact_indicial": true,
+    "v_plus1_exact_indicial": true
+  },
+  "facts": {
+    "rational_fit": "1/9-(56/45)*t*(1-t^2)*(1-6*t^2+t^4)/(1+t^2)^4",
+    "harmonic_extension": "H=(2/9)*(u^2+v^2)-1/9-(14/45)*u*v = H40/27-7*H41/90+4*H42/27",
+    "counterexample": {
+      "A": [
+        [
+          "0",
+          "0",
+          "0",
+          "1",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "-1",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "B": [
+        [
+          "0",
+          "1",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "-1",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    "log_cross_term": "positive log: -2*sin(X)*A_prime-cos(X)*A; code uses the opposite, hence negative log",
+    "u_minus1_exponents": [
+      "0",
+      "1/2",
+      "1",
+      "2",
+      "3"
+    ],
+    "v_plus1_exponents": [
+      "0",
+      "0",
+      "1",
+      "1",
+      "2"
+    ]
+  },
+  "peak_rss_bytes": 18841600
+}

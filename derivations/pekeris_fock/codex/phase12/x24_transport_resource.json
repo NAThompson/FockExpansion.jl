@@ -1,0 +1,9 @@
+{
+  "script": "x24_transport.py",
+  "exit_code": 0,
+  "reason": null,
+  "peak_rss_bytes": 59572224,
+  "elapsed_seconds": 6.0862510204315186,
+  "guard": "single scientific process; SIGALRM checks ru_maxrss every 0.1 s and stops at 1 GB; CPU limit 600 s; wall stop 650 s; exclusive scientific lock",
+  "limits_note": "Darwin rejects lowering RLIMIT_AS/DATA/RSS; sandbox forbids ps. RSS guard runs within the scientific process and does not spawn a monitoring job."
+}

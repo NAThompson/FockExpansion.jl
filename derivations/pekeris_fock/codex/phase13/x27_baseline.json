@@ -1,0 +1,38 @@
+{
+  "COLLAB.md": {
+    "size": 137316,
+    "sha256": "b0a2d7274907071cf2c60f147e953c84cc30a3aad56b7a8084d493aba1e3e025"
+  },
+  "THEORY.md": {
+    "size": 47503,
+    "sha256": "7b6ecbee6d10a49ddf010cc9181ba061dd3d82349434d0c950867a4e4450bcdb"
+  },
+  "claude11/chain.jl": {
+    "size": 10726,
+    "sha256": "a4a4e75efd547b32b4ba5f8b2d4d40afe98b87cb8580ed9b495b2047f6e1322e"
+  },
+  "claude11/lad_B1.jls": {
+    "size": 23585,
+    "sha256": "cc22fdc466cbbf7ce0454afd76b76172bd827228def04942eed58b42c7636f72"
+  },
+  "claude11/lad_B1_low.jls": {
+    "size": 23545,
+    "sha256": "14d4773511299857e7218bbf14399aa5e9a5e2ff18c071eb71196708ef949bd4"
+  },
+  "claude11/op_A3.txt": {
+    "size": 3299,
+    "sha256": "bbd2e276236bb8ecf83c6a4cb92fccac1721592ef2b6dc2c88361e2d20b7786d"
+  },
+  "claude11/fac_A3.sage": {
+    "size": 531,
+    "sha256": "417c52e33ad2bc93d65a4050cefadc1f7bd117b724a4c6cfb2dbff651bad4e38"
+  },
+  "claude11/NOTES.md": {
+    "size": 2836,
+    "sha256": "c024d520726a7d49ad8d953afeab357c81a54400be9fa6ad05abf596ba13bb9b"
+  },
+  "claude11/claim_chain.md": {
+    "size": 709,
+    "sha256": "a13ca3531134b326769683af78f9cbe0c80781e6db6b93527824ae0ce893ba1d"
+  }
+}

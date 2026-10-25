@@ -1,0 +1,210 @@
+{
+  "checks": {
+    "no_baseline_files_missing": true,
+    "task_and_static_scientific_inputs_unchanged": true,
+    "COLLAB.md_append_only": true,
+    "COLLAB.md_x22_entry_present": true,
+    "THEORY.md_append_only": true,
+    "THEORY.md_x22_entry_present": true,
+    "all_49_scientific_checks": true,
+    "scientific_peak_under_2GB": true,
+    "final_scientific_stderr_empty": true,
+    "final_log_reports_49_passes": true,
+    "all_outputs_x22_namespace": true,
+    "positive_and_open_claims_distinguished": true,
+    "ledger_completion_present": true,
+    "audit_peak_under_2GB": true
+  },
+  "baseline_changes": [
+    {
+      "path": "THEORY.md",
+      "initial_sha256": "18e5e461fd48bc2ac053ae66e75c1333ef88512737defdf51d30714f1bb70565",
+      "current_sha256": "0cb0cbaf53cf5ff7be89bd013f2409ccb3377aa6d164b8ce10c920fa31606be4",
+      "classification": "authorized append-only shared file"
+    },
+    {
+      "path": "COLLAB.md",
+      "initial_sha256": "eab431b98d2dbdaca60a6e184a1213bdac9a79cf8fafc23e17abb2bc3cc24afa",
+      "current_sha256": "29921eb2d910b1017cd847122d6adf07309ef9f0b41fead4e36f94ccafe07c39",
+      "classification": "authorized append-only shared file"
+    },
+    {
+      "path": "codex_22.log",
+      "initial_sha256": "2f781d11bab4ccaf16c514a0d8abcd539f721f5b33b26eae839ff9aef3b94980",
+      "current_sha256": "1a948fcea67aeb43c3f6dd596fc89c5b7e1a09667689aa6c35f5aee9b5d911eb",
+      "classification": "observed concurrent or harness change; no x22 command writes this path"
+    },
+    {
+      "path": "claude10/v_eD_2147483647_0.txt",
+      "initial_sha256": "8b9845640ede85472ff9ba1653cd9005ea282c3eb415e6e5a5fe38625858106d",
+      "current_sha256": "481f8bc568a6ffb87868451c920240610cfd9dcaf0eb25237b96fc0d7f66ebf2",
+      "classification": "observed concurrent or harness change; no x22 command writes this path"
+    },
+    {
+      "path": "claude10/jets_2147483549.txt",
+      "initial_sha256": "f68c915bb7999d31e08f28a17cae644028923e957ca3bc1cadbae4febd498624",
+      "current_sha256": "d0b36db1490a1dcb794c4155dafb5aa867eaa0508af9544e63b7e9a3a4c2d545",
+      "classification": "observed concurrent or harness change; no x22 command writes this path"
+    },
+    {
+      "path": "claude10/v_eD_2147483587_0.txt",
+      "initial_sha256": "0c65f3172fa9ccfab6d00194eae867fc29502fe4b08614bebe52488346751ef9",
+      "current_sha256": "7ec1a71d8bbf61494a4fffc9834bc66a2abeb5808aa540405d9ed028d66f2589",
+      "classification": "observed concurrent or harness change; no x22 command writes this path"
+    },
+    {
+      "path": "claude10/v_eC_2147483629_0.txt",
+      "initial_sha256": "179f7bcdb9d1a184d37a3fcfafcd5310023cc52faf3344bcd7db9bb89331099b",
+      "current_sha256": "2330b8a657e9fb2708e24cce0d8cf578e624d745023baff6e43668e32f8c47f1",
+      "classification": "observed concurrent or harness change; no x22 command writes this path"
+    },
+    {
+      "path": "claude10/v_eC_2147483629_1.txt",
+      "initial_sha256": "a576f2817c4d1fd91d3c2f4094296c72b6227e458bab7972036797be2499ca05",
+      "current_sha256": "5a856211c84695771923b89fe9499d0a35a1395c42a7044bd3eb5f3a0f9622c5",
+      "classification": "observed concurrent or harness change; no x22 command writes this path"
+    },
+    {
+      "path": "claude10/v_eC_2147483587_1.txt",
+      "initial_sha256": "fd23685e0e228dd720f92ef029532c70be996fdf1dba2972f84ef222c9807442",
+      "current_sha256": "b73d8c071830a837f7d10a1c52392f2e55da211a49a10c76a055e2c44e1afc35",
+      "classification": "observed concurrent or harness change; no x22 command writes this path"
+    },
+    {
+      "path": "claude10/v_eC_2147483587_0.txt",
+      "initial_sha256": "d34fad3fdb99af6ec8e8e3d3b9ee1892a6adce62876f4974299e33708ad90e2f",
+      "current_sha256": "2034c0019dad2644190b4caa8f13b6765b3dcecd890d12a59a9591d77453954d",
+      "classification": "observed concurrent or harness change; no x22 command writes this path"
+    },
+    {
+      "path": "claude10/v_eD_2147483629_0.txt",
+      "initial_sha256": "0e044dd053b04231f2199abc18d504a02aaecc39f82016c0836f4c5b8acd8c70",
+      "current_sha256": "47d71ab63bca1863c86d7f99565aae97ccf23fbc186cd9a2bd33a8d4a444328f",
+      "classification": "observed concurrent or harness change; no x22 command writes this path"
+    },
+    {
+      "path": "claude10/v_eC_2147483647_1.txt",
+      "initial_sha256": "2015d18b5f86f9ffefb204df2ff530488d10d5c8a226af11263d6b9ae8674d6c",
+      "current_sha256": "db9e6413193201334eed0effc692c32939f186ace553ba07d5d11298ee50410e",
+      "classification": "observed concurrent or harness change; no x22 command writes this path"
+    },
+    {
+      "path": "claude10/v_eC_2147483647_0.txt",
+      "initial_sha256": "e99b59b9b4f8cffd655c5ef9751c52a41d955e86d2a25b15779abfb7dee36da0",
+      "current_sha256": "d9721f53fb7afaf77cac6d7250e167d93d0a92417ff851423494c49fb38f6149",
+      "classification": "observed concurrent or harness change; no x22 command writes this path"
+    }
+  ],
+  "shared_prefixes": {
+    "COLLAB.md": {
+      "initial_bytes": 118782,
+      "current_bytes": 120957,
+      "initial_sha256": "eab431b98d2dbdaca60a6e184a1213bdac9a79cf8fafc23e17abb2bc3cc24afa",
+      "current_sha256": "29921eb2d910b1017cd847122d6adf07309ef9f0b41fead4e36f94ccafe07c39"
+    },
+    "THEORY.md": {
+      "initial_bytes": 38700,
+      "current_bytes": 40073,
+      "initial_sha256": "18e5e461fd48bc2ac053ae66e75c1333ef88512737defdf51d30714f1bb70565",
+      "current_sha256": "0cb0cbaf53cf5ff7be89bd013f2409ccb3377aa6d164b8ce10c920fa31606be4"
+    }
+  },
+  "scientific_check_count": 49,
+  "scientific_elapsed_seconds": 8.375099182128906,
+  "scientific_peak_rss_bytes": 70467584,
+  "audit_peak_rss_bytes": 22249472,
+  "audit_elapsed_seconds": 0.04071617126464844,
+  "static_scientific_inputs": {
+    "TASK_codex_22.md": {
+      "bytes": 1005,
+      "sha256": "549a96c83904d9e46aa8b3845af5c75d5c49779ee5a1d4f71c458b42cf40d85a"
+    },
+    "codex/phase3/structure.md": {
+      "bytes": 5393,
+      "sha256": "4dff4a41685199ff226baf11b6df97b1a605bce1dde8c414d38839d26597c91d"
+    },
+    "codex/phase9/x18_report.md": {
+      "bytes": 14075,
+      "sha256": "b26f904f496a816353a4fbb84ffe50cb592c4bafb4cc4c235a409f284d73a901"
+    },
+    "codex/phase9/x19_report.md": {
+      "bytes": 21957,
+      "sha256": "a52e1d27ef6c5659d6aae538b2a75dddf77e7b47bdba7d54204171328e505f63"
+    },
+    "codex/phase10/x20_report.md": {
+      "bytes": 24125,
+      "sha256": "f0a18ed6be7fa935a3324d9e6b34cb5173c773ff1a1a742ebf6ba2f6050535a5"
+    },
+    "codex/phase11/x21_report.md": {
+      "bytes": 22951,
+      "sha256": "03d407f7dc55505e8e82bd46860ea3991dabf4a064ead0bd33d7ef325de9928c"
+    }
+  },
+  "read_only_repository_inputs_final_hashes": {
+    "/Users/nathompson7/FockExpansion.jl/src/feynman_k4.jl": {
+      "bytes": 6608,
+      "sha256": "06859209c9eb84227175180755c5cbb8da4bdea209a4f23d81ef3481bca88251"
+    },
+    "/Users/nathompson7/FockExpansion.jl/derivations/k4/README.md": {
+      "bytes": 13451,
+      "sha256": "ee23253e849e296f2dae6146c3bf0f36baee44562df3f1625c591d942cda83a2"
+    }
+  },
+  "outputs": {
+    "x22_audit.py": {
+      "bytes": 5170,
+      "sha256": "7d8f7098a3ad0ca6c90d7f76e550807b1d37cd47b6751f605e7287a0393b3ef8"
+    },
+    "x22_baseline.json": {
+      "bytes": 24809,
+      "sha256": "f8319931231a0081456081a14a9740e53fdc47161406da0db2e1d6d65b4c1b31"
+    },
+    "x22_plan.md": {
+      "bytes": 2393,
+      "sha256": "1d68236d39ecfaac7bfa0e1a48efd0b58ffcb35cfd4b7f83f20a7c0c7021ff6d"
+    },
+    "x22_prefix_COLLAB.txt": {
+      "bytes": 118782,
+      "sha256": "eab431b98d2dbdaca60a6e184a1213bdac9a79cf8fafc23e17abb2bc3cc24afa"
+    },
+    "x22_prefix_THEORY.txt": {
+      "bytes": 38700,
+      "sha256": "18e5e461fd48bc2ac053ae66e75c1333ef88512737defdf51d30714f1bb70565"
+    },
+    "x22_report.md": {
+      "bytes": 21509,
+      "sha256": "77db59def3df69ed8b721e4ca706a95ddbf1f13e1df9d99659b34695d5b7e49d"
+    },
+    "x22_verify.err": {
+      "bytes": 1095,
+      "sha256": "b5f68a6a8184f2ceb47b3aca37b707faba5c206d83a4f73b947e3c147f67bd45"
+    },
+    "x22_verify.json": {
+      "bytes": 9291,
+      "sha256": "1ec4b4e90b8c4f73a971645967eddf8192845a331794e1b4e430fba368d54377"
+    },
+    "x22_verify.out": {
+      "bytes": 5079,
+      "sha256": "9e566e0b06f824333acc29902a7dd2b89f334992a38a744c391097dbb1aaf812"
+    },
+    "x22_verify.py": {
+      "bytes": 12938,
+      "sha256": "e3fffecf245eee8d0e229f1313f550d80c5c3937f2cf25e7c1bc2ca5d38cb93b"
+    },
+    "x22_verify_final.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "x22_verify_final.out": {
+      "bytes": 1911,
+      "sha256": "dbb99c3967f52698d221da7ce99e1d4fd3b188ead669ba2aa0e2754ce763796c"
+    }
+  },
+  "agents_used": false,
+  "concurrent_scientific_jobs": false,
+  "initial_hashing_overlap": "Baseline input hashing briefly overlapped an abandoned symbolic primitive exploration; no two scientific jobs ran together.",
+  "write_scope": "x22_* in codex/phase11; authorized append-only COLLAB.md and THEORY.md; no Claude-owned or outside-directory writes in any x22 command.",
+  "audit_limits": "Hash audit and command inventory, not an OS syscall trace. Concurrent protected outputs can change; used static inputs are checked separately. The abandoned exploration and initial failed JSON-export run did not save their own peak RSS; all successful measured checks are about 70 MB.",
+  "source_independent_C3_T5": "PROVED excluded under the cited Hodge inputs, exact algebra VERIFIED",
+  "full_density_physical_T5_cut": "OPEN; step 1 not certified, task-authorized fallback used"
+}

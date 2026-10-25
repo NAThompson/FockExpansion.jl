@@ -1,0 +1,20 @@
+{
+  "checks": {
+    "COLLAB.md_prefix_unchanged": true,
+    "COLLAB.md_entry_present": true,
+    "THEORY.md_prefix_unchanged": true,
+    "THEORY.md_entry_present": true,
+    "codex/TASK_codex_28.md_unchanged": true,
+    "codex/phase9/x18_report.md_unchanged": true,
+    "codex/phase13/x27_report.md_unchanged": true,
+    "claude9/fock_spectral_copy.jl_unchanged": true,
+    "codex/phase12/x24_report.md_unchanged": true,
+    "scientific_checks_pass": true,
+    "checker_stderr_empty": true,
+    "rss_below_2GB": true,
+    "final_summary_in_log": true
+  },
+  "all_pass": true,
+  "peak_rss_bytes": 384122880,
+  "scope": "Task commands write x28_* files and append shared logs only; no full-tree before/after baseline was captured."
+}

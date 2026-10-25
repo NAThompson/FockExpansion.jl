@@ -201,3 +201,7 @@ a polynomial span of weighted atoms remain OPEN. No panel1_* artifact is
 available in claude8, so its conditional cross-check is PENDING. No Claude
 file/outside-directory file modified; all research computations small,
 no agents or energy/stencil jobs.
+
+
+### 2026-10-24 — TASK_codex_24 phase-12 attempt
+See codex/phase12/x24_report.md. Proved B-density six-to-four parameter reduction, exported actual charge/panel rational kernel and cap rows, verified physical-germ transport at eight fibres and all rows at two primes, and identified an exact S_e2 chart on the q=1 electron boundary. Full limiting relative/exceptional boundary map, log transgression, five-state physical pairing and R psi40 remain OPEN; no quotient/middle decision. Nonzero cap quadratures are not T5 pairings. Serial scientific peak 394,018,816 bytes; no Claude-owned edits or outside-directory writes. Exact handoff: x24_exact.txt, x24_cut.txt, x24_boundaries.txt, x24_q1.txt.

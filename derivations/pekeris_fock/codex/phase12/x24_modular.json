@@ -1,0 +1,76 @@
+{
+  "checks": {
+    "p1000033_monomial_0_0": true,
+    "p1000033_monomial_0_1": true,
+    "p1000033_monomial_1_0": true,
+    "p1000033_monomial_0_2": true,
+    "p1000033_monomial_1_1": true,
+    "p1000033_monomial_2_0": true,
+    "p1000033_monomial_0_3": true,
+    "p1000033_monomial_1_2": true,
+    "p1000033_monomial_2_1": true,
+    "p1000033_monomial_3_0": true,
+    "p1000033_actual_term_0": true,
+    "p1000033_actual_term_1": true,
+    "p1000033_actual_term_2": true,
+    "p1000033_actual_term_3": true,
+    "p1000033_actual_term_4": true,
+    "p1000033_actual_term_5": true,
+    "p1000033_actual_term_6": true,
+    "p1000033_actual_term_7": true,
+    "p1000037_monomial_0_0": true,
+    "p1000037_monomial_0_1": true,
+    "p1000037_monomial_1_0": true,
+    "p1000037_monomial_0_2": true,
+    "p1000037_monomial_1_1": true,
+    "p1000037_monomial_2_0": true,
+    "p1000037_monomial_0_3": true,
+    "p1000037_monomial_1_2": true,
+    "p1000037_monomial_2_1": true,
+    "p1000037_monomial_3_0": true,
+    "p1000037_actual_term_0": true,
+    "p1000037_actual_term_1": true,
+    "p1000037_actual_term_2": true,
+    "p1000037_actual_term_3": true,
+    "p1000037_actual_term_4": true,
+    "p1000037_actual_term_5": true,
+    "p1000037_actual_term_6": true,
+    "p1000037_actual_term_7": true
+  },
+  "records": [
+    {
+      "prime": 1000033,
+      "point": {
+        "n": "41/50",
+        "z": "11/10",
+        "R1": "1/10",
+        "R2": "9/10",
+        "u": "1/5",
+        "v": "6/5",
+        "q": "1/2"
+      },
+      "monomial_rows": 10,
+      "actual_term_rows": 8,
+      "mismatches": 0
+    },
+    {
+      "prime": 1000037,
+      "point": {
+        "n": "41/50",
+        "z": "11/10",
+        "R1": "1/10",
+        "R2": "9/10",
+        "u": "1/5",
+        "v": "6/5",
+        "q": "1/2"
+      },
+      "monomial_rows": 10,
+      "actual_term_rows": 8,
+      "mismatches": 0
+    }
+  ],
+  "method": "degree-three bivariate truncated polynomial jets over Fp, independent of symbolic differentiation; sqrt-state normalized by its constant character",
+  "status": "verifies exported local rational rows, not a T5 reduction or cycle pairing",
+  "elapsed_seconds": 6.131868124008179,
+  "peak_rss_bytes": 82690048
+}

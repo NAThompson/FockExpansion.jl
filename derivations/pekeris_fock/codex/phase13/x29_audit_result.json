@@ -1,0 +1,88 @@
+{
+  "checks": {
+    "COLLAB.md": true,
+    "THEORY.md": true,
+    "codex/TASK_codex_29.md": true,
+    "claude11/guess_hi.jl": true,
+    "x29_exact.json": true,
+    "x29_guess.json": true,
+    "x29_controls.json": true,
+    "x29_samples.json": true,
+    "minimal_order_degree": true,
+    "exact_reconstruction": true,
+    "210_digits": true,
+    "automatic_left_E": true,
+    "resource_recorded_runs": true,
+    "final_summary_line": true
+  },
+  "artifacts": {
+    "x29_audit.json": {
+      "bytes": 517,
+      "sha256": "65e5ea53dabc6e9027268926fb35c558ab77b92fcd610387d92795fe95f43834"
+    },
+    "x29_audit.py": {
+      "bytes": 1620,
+      "sha256": "89ff640f14fee28c874f632ca97999d4d14052c1c2ec44af755b2037264fff56"
+    },
+    "x29_calibrate.sage": {
+      "bytes": 2540,
+      "sha256": "e5b62cc05b8472b7d0725c5d1038098095c92293de912860eb20e36a33c02789"
+    },
+    "x29_calibrate.sage.py": {
+      "bytes": 3432,
+      "sha256": "d713d283f245a899dfbf56f5cf3a67ebb537d502b67207e22fee0b5fd51ba26b"
+    },
+    "x29_controls.json": {
+      "bytes": 1179,
+      "sha256": "88bab0527a29eea816af3911f67fc45430a498089ddec62bc04077bda3fee4a8"
+    },
+    "x29_controls.log": {
+      "bytes": 1280,
+      "sha256": "8ea4da2818205b8b161bc723526739e9bae430e8642fe09f9b00ab7666717237"
+    },
+    "x29_controls.sage": {
+      "bytes": 1820,
+      "sha256": "95777f3799cf8163f4c61f52d3a97ff38b97f4aa7714fee1f5e55c39fb78c729"
+    },
+    "x29_controls.sage.py": {
+      "bytes": 2334,
+      "sha256": "628480b774769f7e37335e196ad81a67c26812c04e9fbb477334438c2ef093eb"
+    },
+    "x29_exact.json": {
+      "bytes": 23346,
+      "sha256": "62d063f094e572c71adf2a7817be9104323e023f60ed2910a669bf9e83522f10"
+    },
+    "x29_exact.log": {
+      "bytes": 4776,
+      "sha256": "e8b668a83de416031d7bde9f5749853d18df044d78cb83149e4e517d9091cc7a"
+    },
+    "x29_ftest.sage": {
+      "bytes": 3289,
+      "sha256": "fdef99039fd96a47cba2c81757882435f15c1f9c4038a9e81f7ea598cd5fd258"
+    },
+    "x29_guess.json": {
+      "bytes": 3269,
+      "sha256": "60f689e9b86972f523623af7b862caccab0e9db50364fd56c9313fa964ad8794"
+    },
+    "x29_guess.log": {
+      "bytes": 2540,
+      "sha256": "8d1be814e14ce46c4e8df439306462a86262596920530f1348dd2b842f67b8e8"
+    },
+    "x29_guess.py": {
+      "bytes": 3810,
+      "sha256": "65825eed31afc80b277894f1fa9ef678ab658f825134800d96bde9d012ad9cd1"
+    },
+    "x29_log.md": {
+      "bytes": 1505,
+      "sha256": "44946a20c3eeb60e1183443d991ea1c1d83010ab9269566d20cb366ac2fa181c"
+    },
+    "x29_report.md": {
+      "bytes": 10501,
+      "sha256": "0a2246e54572bf97b237b8d9c0c5876447d90fc13504b62ae1e4713b1694d051"
+    },
+    "x29_samples.json": {
+      "bytes": 318991,
+      "sha256": "0ff10d7216ae2a33ef8e06e49ab541930000a8ee3dceaed6a4490f18de7dbd75"
+    }
+  }
+}

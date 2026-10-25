@@ -1,0 +1,78 @@
+{
+  "checks": {
+    "discriminant_identity": true,
+    "circle_factorization": true,
+    "central_normalization": true,
+    "isogeny_equation": true,
+    "lambda_ratio": true,
+    "tangential_PF_gauge_a": true,
+    "tangential_PF_gauge_b": true,
+    "isogenous_not_generically_isomorphic": true,
+    "panel_discriminant_1": true,
+    "panel_square_on_circle_1": true,
+    "panel_discriminant_2": true,
+    "panel_square_on_circle_2": true,
+    "panel_discriminant_3": true,
+    "panel_square_on_circle_3": true,
+    "panel_discriminant_4": true,
+    "panel_square_on_circle_4": true,
+    "sobj_matches_plain_text_exactly": true,
+    "indicial": true,
+    "two_single_log_solutions": true,
+    "three_analytic_two_log_basis": true
+  },
+  "facts": {
+    "residue_curve": "y^2=uv*q^4-2*(1-v^2)*q^2-uv; u^2+v^2=1",
+    "quotient_curve": "Z^2=r*(uv*r^2-2*(1-v^2)*r-uv), r=q^2,Z=q*y; dr/Z=2*dq/y",
+    "j_quartic_on_circle": "64*(4*u**2 - 3)**3/((u - 1)*(u + 1))",
+    "j_quotient": "64*(u**2 + 3)**3/((u - 1)**2*(u + 1)**2)",
+    "tangential_PF": "4*u^2*(u^2-1)*D_u^2+4*u*(3*u^2-1)*D_u+(4*u^2+1)",
+    "panel_quartics": [
+      "q**4*(1 - u) - 2*q**2*v + u + 1",
+      "q**4*(u + 1) - 2*q**2*v - u + 1",
+      "q**4*(v + 1) + 2*q**2*u - v + 1",
+      "q**4*(v + 1) - 2*q**2*u - v + 1"
+    ],
+    "indicial": "-32768*rho**2*(rho - 2)*(rho - 1)**2/9",
+    "analytic_pivot": "-32768*(n + 1)*(n + 2)**2*(n + 3)**2/9",
+    "log_obstructions": {
+      "-1": "2*(23571*a0 + 195840*a1 - 65536*a2)/9"
+    },
+    "log_coefficient_seed_basis": [
+      [
+        "-21760/2619",
+        "1",
+        "0"
+      ],
+      [
+        "65536/23571",
+        "0",
+        "1"
+      ]
+    ],
+    "log_constraint": [
+      "5238",
+      "43520",
+      "-131072/9"
+    ],
+    "analytic_series": [
+      "a0",
+      "a1",
+      "a2",
+      "(8505*a0 + 373590*a1 + 550912*a2)/131072",
+      "405*(103761*a0 + 4823910*a1 + 8488448*a2)/134217728",
+      "243*(297241245*a0 + 13647365550*a1 + 23430311936*a2)/34359738368",
+      "5103*(62072126307*a0 + 2855284549650*a1 + 4917599307520*a2)/21990232555520",
+      "531441*(3064839617907*a0 + 140943566170290*a1 + 242645856667648*a2)/15762598695796736"
+    ],
+    "Jordan_blocks": [
+      2,
+      2,
+      1
+    ],
+    "Chebyshev_log10_rho": "0.76555137067572615663879904838401223",
+    "Chebyshev_log_model_slope_40_70": "0.77365263896526930464829033068880056"
+  },
+  "elapsed_seconds": 0.34169673919677734,
+  "peak_rss_bytes": 64536576
+}

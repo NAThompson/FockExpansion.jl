@@ -1,0 +1,48 @@
+{
+  "checks": {
+    "COLLAB.md_append_only": true,
+    "THEORY.md_append_only": true,
+    "codex/TASK_codex_25.md_unchanged": true,
+    "claude10/op_e2_Q.sobj_unchanged": true,
+    "claude10/op_e2_A.txt_unchanged": true,
+    "codex/phase9/x19_atoms.jl_unchanged": true,
+    "codex/phase8/x16_connection.txt_unchanged": true,
+    "exact_all_scientific_checks": true,
+    "exact_under_2GB": true,
+    "periods_all_scientific_checks": true,
+    "periods_under_2GB": true,
+    "all_phase13_artifacts_authorized": true,
+    "report_exists": true,
+    "summary_log_exists": true
+  },
+  "details": {
+    "COLLAB.md_appended_bytes": 2692,
+    "THEORY.md_appended_bytes": 2088,
+    "exact_check_count": 20,
+    "exact_peak_rss_bytes": 64536576,
+    "periods_check_count": 9,
+    "periods_peak_rss_bytes": 22577152,
+    "claude11_final_inventory": [
+      "cheb_decay.out"
+    ],
+    "missing_audit_inputs": [
+      "NOTES.md",
+      "claim_*.md"
+    ],
+    "artifact_sha256": {
+      "x25_audit.py": "74d8737217f2a1a350c6cb9f7199befa5ef5fefdae4a5ea5295634cd29834a31",
+      "x25_baseline.json": "20481e4c4f8fee562359757bf9e0f9739577feefc2140bd04509706706398b01",
+      "x25_baseline.py": "bfd314448a27e9209ac44ef76f0ffc95332a28d7de1617ca0ddd8a92bbd6d5e6",
+      "x25_exact.json": "fa106fd73fb3448b6577daad7f6ebffa7ea2f1dd51c200b75627172904027013",
+      "x25_exact.py": "eb459eaa745bff7a79bf11899c779bfc5aa0c9940cf3f96ec1b4828a1376e936",
+      "x25_log.md": "cc6a6c4f40a9c65a1f6ee2c452301f662834684f3dc46f6a2fbf21f987975936",
+      "x25_periods.json": "8d33ad7c08e9669e7acbfb78588c4218fd10cca755e9b5b312ab54e4c4b5df76",
+      "x25_periods.py": "fa83c92d74b89f06ee9ed85d69e5a77e4bc62a5535a3e1529d3fc4e41f8c20b5",
+      "x25_plan.md": "e35a108e519dfbc5aa8bddada75e7909fad7e4c88b3592a8b3ac28f564d18b0f",
+      "x25_prefix_COLLAB.txt": "51adeacf4ff0e1405dd767283b3bbad69e38a575f909c4c69acc0f2685243309",
+      "x25_prefix_THEORY.txt": "3e78e84df7a51c843dca71bb15e4983f507257addeb7e813e78d25144abc7ee2",
+      "x25_report.md": "060329556bc29076d2f7b23fc48c274aaef4b01d3f79104c5ae08c6a27c996e2"
+    }
+  },
+  "scope": "Input hash and append-prefix audit; no git repository available, no OS syscall trace."
+}

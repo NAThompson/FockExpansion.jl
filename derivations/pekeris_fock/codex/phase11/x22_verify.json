@@ -1,0 +1,259 @@
+{
+  "checks": {
+    "rank3_full_connection_flat": true,
+    "top_character_is_Q_only": true,
+    "bottom_character_is_omega_only": true,
+    "rank4_full_connection_flat": true,
+    "inv_nonpolynomial_PDE_terms_cancel": true,
+    "inv_PDE_remainder_target_polynomial": true,
+    "log_nonpolynomial_PDE_terms_cancel": true,
+    "log_PDE_remainder_target_polynomial": true,
+    "xlog_nonpolynomial_PDE_terms_cancel": true,
+    "xlog_PDE_remainder_target_polynomial": true,
+    "inv_resonant_rational_gamma_cancels": true,
+    "log_resonant_rational_gamma_cancels": true,
+    "xlog_resonant_rational_gamma_cancels": true,
+    "inv_actual_regular_zonal_mod_polynomial": true,
+    "log_actual_regular_zonal_mod_polynomial": true,
+    "xlog_actual_regular_zonal_mod_polynomial": true,
+    "panel3_unit_P": true,
+    "panel3_actual_A_numerator": true,
+    "panel3_centre1_N_square": true,
+    "panel3_centre1_omega_beta": true,
+    "panel3_centre1_measure_cancel": true,
+    "panel3_centre1_Q_split_discriminant": true,
+    "panel3_centre-1_N_square": true,
+    "panel3_centre-1_omega_beta": true,
+    "panel3_centre-1_measure_cancel": true,
+    "panel3_centre-1_Q_split_discriminant": true,
+    "panel4_unit_P": true,
+    "panel4_actual_A_numerator": true,
+    "panel4_centre1_N_square": true,
+    "panel4_centre1_omega_beta": true,
+    "panel4_centre1_measure_cancel": true,
+    "panel4_centre1_Q_split_discriminant": true,
+    "panel4_centre-1_N_square": true,
+    "panel4_centre-1_omega_beta": true,
+    "panel4_centre-1_measure_cancel": true,
+    "panel4_centre-1_Q_split_discriminant": true,
+    "omega_cover_rational_parametrization": true,
+    "Q_cover_rational_parametrization": true,
+    "linear_numerator_derivative": true,
+    "quadratic_numerator_derivative": true,
+    "intercept_derivatives_commute": true,
+    "panel3_source_arc_h_equals_q_squared": true,
+    "panel3_full_density_source_arc_numerator_cancels": true,
+    "panel4_source_arc_h_equals_q_squared": true,
+    "panel4_full_density_source_arc_numerator_cancels": true,
+    "actual_angle_both_parameter_derivatives": true,
+    "source_arc_actual_A_equals_B": true,
+    "actual_beta_integral_identity": true,
+    "actual_C3_panel_A_B_split": true
+  },
+  "facts": {
+    "basis": [
+      "J=(gamma-theta)/sqrt(n-z^2)",
+      "1",
+      "h=sqrt(1-n)"
+    ],
+    "connection_dz": [
+      [
+        "z/(n - z**2)",
+        "-1/(n - z**2)",
+        "1/((1 - z)*(n - z**2))"
+      ],
+      [
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0"
+      ]
+    ],
+    "connection_dn": [
+      [
+        "-1/(2*n - 2*z**2)",
+        "z/(2*n*(n - z**2))",
+        "(-n - z)/(2*n*(1 - n)*(n - z**2))"
+      ],
+      [
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "-1/(2 - 2*n)"
+      ]
+    ],
+    "graded_characters": [
+      "1",
+      "sqrt(1-n)",
+      "1/sqrt(n-z^2)"
+    ],
+    "rank4_basis": [
+      "J",
+      "h*log(1-z)",
+      "1",
+      "h"
+    ],
+    "rank4_dz": [
+      [
+        "z/(n - z**2)",
+        "0",
+        "-1/(n - z**2)",
+        "1/((1 - z)*(n - z**2))"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "-1/(1 - z)"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    ],
+    "rank4_dn": [
+      [
+        "-1/(2*n - 2*z**2)",
+        "0",
+        "z/(2*n*(n - z**2))",
+        "(-n - z)/(2*n*(1 - n)*(n - z**2))"
+      ],
+      [
+        "0",
+        "-1/(2 - 2*n)",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "-1/(2 - 2*n)"
+      ]
+    ],
+    "q_density_basis": [
+      "1",
+      "A=pi/2-atan(q)",
+      "A^2"
+    ],
+    "q_density_connection": [
+      [
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "-1/(1+q^2)",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "-2/(1+q^2)",
+        "0"
+      ]
+    ],
+    "tensor_integrand_upper_bound": 12,
+    "inv_log_coefficient": "(-n + 4*z**2)*(3*n - 4)/(12*n**3)",
+    "inv_hJ_coefficient": "-z*(-3*n + 4*z**2)*(n - 4)/(12*n**3)",
+    "inv_PDE_polynomial_remainder": "-2*(-3*h*n**2 + 12*h*n*z**2 + 12*h*n - 48*h*z**2 - 10*n**2*z + 13*n**2 - 36*n*z**2 + 20*n*z - 12*n + 48*z**2)/(3*n**3)",
+    "log_log_coefficient": "-(3*n**2*z**2 + 3*n**2 - 12*n*z**2 - 2*n + 8*z**2)/(24*n**3)",
+    "log_hJ_coefficient": "-z*(-3*n + 4*z**2)*(n - 1)/(12*n**3)",
+    "log_PDE_polynomial_remainder": "-(-12*h*n**2 + 48*h*n*z**2 + 12*h*n - 48*h*z**2 - 9*n**3 + 18*n**2*z**2 - 25*n**2*z + 22*n**2 - 72*n*z**2 + 20*n*z - 12*n + 48*z**2)/(6*n**3)",
+    "xlog_log_coefficient": "-(-6*n**3*z + 15*n**2*z**2 + 5*n**2 - 20*n*z**2 - 2*n + 8*z**2)/(120*n**3)",
+    "xlog_hJ_coefficient": "z*(-3*n + 4*z**2)*(n - 1)**2/(60*n**3)",
+    "xlog_PDE_polynomial_remainder": "(-12*h*n**3 + 48*h*n**2*z**2 + 24*h*n**2 - 96*h*n*z**2 - 12*h*n + 48*h*z**2 - 16*n**3*z + 31*n**3 - 90*n**2*z**2 + 45*n**2*z - 34*n**2 + 120*n*z**2 - 20*n*z + 12*n - 48*z**2)/(30*n**3)",
+    "inv_raw_trig_gamma_coefficient": "-(3*rho**2 - 4)/rho**4",
+    "log_raw_trig_gamma_coefficient": "-(3*rho**4 - 12*rho**2 + 8)/(8*rho**5)",
+    "xlog_raw_trig_gamma_coefficient": "-(15*rho**4 - 20*rho**2 + 8)/(40*rho**5)",
+    "inv_actual_zonal_polynomial_difference": "-(36*c**2*log_one_minus_rho*rho**2 - 48*c**2*log_one_minus_rho + 20*c**2*rho**3 - 4*c**2*rho**2*sqrt_omega - 48*c**2*rho + 16*c**2*sqrt_omega - 16*c**2 - 12*c*rho**3 + 24*c*rho - 9*log_one_minus_rho*rho**2 + 12*log_one_minus_rho - 5*rho**3 + rho**2*sqrt_omega + 3*rho**2 + 12*rho - 4*sqrt_omega + 4)/(36*rho**4)",
+    "inv_polynomial_target_degree": 2,
+    "log_actual_zonal_polynomial_difference": "(48*c**2*log_one_minus_rho*rho**4 - 144*c**2*log_one_minus_rho*rho**2 + 96*c**2*log_one_minus_rho - 9*c**2*rho**4 - 112*c**2*rho**3 + 32*c**2*rho**2*sqrt_omega - 24*c**2*rho**2 + 96*c**2*rho - 32*c**2*sqrt_omega + 32*c**2 + 60*c*rho**3 - 48*c*rho - 12*log_one_minus_rho*rho**4 + 36*log_one_minus_rho*rho**2 - 24*log_one_minus_rho + 9*rho**4 + 28*rho**3 - 8*rho**2*sqrt_omega - 24*rho + 8*sqrt_omega - 8)/(288*rho**4)",
+    "log_polynomial_target_degree": 2,
+    "xlog_actual_zonal_polynomial_difference": "-(480*c**2*log_one_minus_rho*rho**5 - 1200*c**2*log_one_minus_rho*rho**4 + 1200*c**2*log_one_minus_rho*rho**2 - 480*c**2*log_one_minus_rho - 416*c**2*rho**5 + 160*c**2*rho**4*sqrt_omega - 75*c**2*rho**4 + 1040*c**2*rho**3 - 320*c**2*rho**2*sqrt_omega + 280*c**2*rho**2 - 480*c**2*rho + 160*c**2*sqrt_omega - 160*c**2 + 192*c*rho**5 - 540*c*rho**3 + 240*c*rho - 120*log_one_minus_rho*rho**5 + 300*log_one_minus_rho*rho**4 - 300*log_one_minus_rho*rho**2 + 120*log_one_minus_rho + 104*rho**5 - 40*rho**4*sqrt_omega - 45*rho**4 - 260*rho**3 + 80*rho**2*sqrt_omega - 40*rho**2 + 120*rho - 40*sqrt_omega + 40)/(7200*rho**4)",
+    "xlog_polynomial_target_degree": 2,
+    "panel3_A_numerator": "(v + 1)*(4*q**2*u - v + 1)/18",
+    "panel4_A_numerator": "-(v + 1)*(4*q**2*u + v - 1)/18",
+    "omega_rational_map": {
+      "t": "k/(a**2 + k)",
+      "h": "a*k/(a**2 + k)"
+    },
+    "Q_rational_map": {
+      "t": "(a**2*rplus - a2*rminus)/(a**2 - a2)",
+      "sqrtQ": "a*a2*(-rminus + rplus)/(a**2 - a2)"
+    },
+    "actual_angle_max_error": "2.088097429759527848547294114962095217824372562582069e-53",
+    "source_arc_angle_complement_error": "0.0",
+    "beta_identity_max_error": "0.0",
+    "panel_split_max_error": "8.156630584998155658387867636570684444626455322586208e-55",
+    "panel_split_samples": [
+      {
+        "target_of_panel_source": [
+          "0.27",
+          "0.31"
+        ],
+        "panel": 3,
+        "A_piece": "0.05869395192923251313891827789498202917504294109932922",
+        "B_piece": "-0.05021392500874686728113023893628969351578121508213255",
+        "sum": "0.008480026920485645857788038958692335659261726017196675"
+      },
+      {
+        "target_of_panel_source": [
+          "0.27",
+          "0.31"
+        ],
+        "panel": 4,
+        "A_piece": "0.03419019144125749903859844472425989477371433618240033",
+        "B_piece": "0.0314375420405399457339716154916895554575091861024238",
+        "sum": "0.06562773348179744477257006021594945023122352228482413"
+      },
+      {
+        "target_of_panel_source": [
+          "-0.34",
+          "-0.22"
+        ],
+        "panel": 3,
+        "A_piece": "0.03117751855531744799576122637911141345702708597164005",
+        "B_piece": "0.0256837201128961526669998998441272614806052133869728",
+        "sum": "0.05686123866821360066276112622323867493763229935861285"
+      },
+      {
+        "target_of_panel_source": [
+          "-0.34",
+          "-0.22"
+        ],
+        "panel": 4,
+        "A_piece": "0.0461149234915028729055556910341068734726250823781832",
+        "B_piece": "-0.03144883004850030762606653530265307482937900366223419",
+        "sum": "0.01466609344300256527948915573145379864324607871594901"
+      }
+    ]
+  },
+  "elapsed_seconds": 8.375099182128906,
+  "peak_rss_bytes": 70467584,
+  "scope": "Exact algebra and independent quadratures, not a computation of the physical full-density target cut.",
+  "source_independent_T5": "excluded by the filtered rational-surface argument in x22_report.md",
+  "full_density_T5": "OPEN"
+}

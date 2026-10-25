@@ -1,0 +1,91 @@
+{
+  "panels": [
+    {
+      "panel": 1,
+      "density_direction": [
+        "-1",
+        "0"
+      ],
+      "pminus": [
+        "(xi - 1)*(xi + 1)*(xi**2 + 1)/(xi**4 + 1)",
+        "-2*xi**2/(xi**4 + 1)"
+      ],
+      "R": [
+        "-(T - 1)*(xi - 1)*(xi + 1)*(xi**2 + 1)/(xi**4 + 1)",
+        "(T*xi**4 + 2*T*xi**2 + T - 2*xi**2)/(xi**4 + 1)"
+      ],
+      "n": "(2*T**2*xi**4 + 4*T**2*xi**2 + 2*T**2 - 2*T*xi**4 - 4*T*xi**2 - 2*T + xi**4 + 1)/(xi**4 + 1)",
+      "z": "u*(1 - T)*(xi**4 - 1)/(xi**4 + 1) + v*(T - 2*xi**2*(1 - T)/(xi**4 + 1))",
+      "Q0": "-(T**2*u**2*xi**8 - 2*T**2*u**2*xi**4 + T**2*u**2 - 2*T**2*u*v*xi**8 - 4*T**2*u*v*xi**6 + 4*T**2*u*v*xi**2 + 2*T**2*u*v + T**2*v**2*xi**8 + 4*T**2*v**2*xi**6 + 6*T**2*v**2*xi**4 + 4*T**2*v**2*xi**2 + T**2*v**2 - 2*T**2*xi**8 - 4*T**2*xi**6 - 4*T**2*xi**4 - 4*T**2*xi**2 - 2*T**2 - 2*T*u**2*xi**8 + 4*T*u**2*xi**4 - 2*T*u**2 + 2*T*u*v*xi**8 + 8*T*u*v*xi**6 - 8*T*u*v*xi**2 - 2*T*u*v - 4*T*v**2*xi**6 - 8*T*v**2*xi**4 - 4*T*v**2*xi**2 + 2*T*xi**8 + 4*T*xi**6 + 4*T*xi**4 + 4*T*xi**2 + 2*T + u**2*xi**8 - 2*u**2*xi**4 + u**2 - 4*u*v*xi**6 + 4*u*v*xi**2 + 4*v**2*xi**4 - xi**8 - 2*xi**4 - 1)/(xi**4 + 1)**2",
+      "weierstrass": "Y^2=X^3+2*B*X^2+A*C*X",
+      "A": "1 - v**2",
+      "B": "-u*v*xi**4 + u*v + 2*v**2*xi**2 - 2*xi**2",
+      "C": "-(u*xi**4 - u - 2*v*xi**2 - xi**4 - 1)*(u*xi**4 - u - 2*v*xi**2 + xi**4 + 1)",
+      "standard_identification": "standard q=i*xi",
+      "physical_chain": "0<xi<1; 2*xi^2/(1+xi^2)^2<T<1; retain z>1 for the target cap",
+      "face_density": "log((1+xi)/(1-xi))*C_actual(n,z,R,u,v,q=1)*i*M*omega_K3, plus the rational cut character",
+      "M": "T*xi*(1 - T)*(xi**2 + 1)**2/(xi**4 + 1)"
+    },
+    {
+      "panel": 2,
+      "density_direction": [
+        "1",
+        "0"
+      ],
+      "pminus": [
+        "-(xi - 1)*(xi + 1)*(xi**2 + 1)/(xi**4 + 1)",
+        "-2*xi**2/(xi**4 + 1)"
+      ],
+      "R": [
+        "(T - 1)*(xi - 1)*(xi + 1)*(xi**2 + 1)/(xi**4 + 1)",
+        "(T*xi**4 + 2*T*xi**2 + T - 2*xi**2)/(xi**4 + 1)"
+      ],
+      "n": "(2*T**2*xi**4 + 4*T**2*xi**2 + 2*T**2 - 2*T*xi**4 - 4*T*xi**2 - 2*T + xi**4 + 1)/(xi**4 + 1)",
+      "z": "u*(1 - T)*(1 - xi**4)/(xi**4 + 1) + v*(T - 2*xi**2*(1 - T)/(xi**4 + 1))",
+      "Q0": "-(T**2*u**2*xi**8 - 2*T**2*u**2*xi**4 + T**2*u**2 + 2*T**2*u*v*xi**8 + 4*T**2*u*v*xi**6 - 4*T**2*u*v*xi**2 - 2*T**2*u*v + T**2*v**2*xi**8 + 4*T**2*v**2*xi**6 + 6*T**2*v**2*xi**4 + 4*T**2*v**2*xi**2 + T**2*v**2 - 2*T**2*xi**8 - 4*T**2*xi**6 - 4*T**2*xi**4 - 4*T**2*xi**2 - 2*T**2 - 2*T*u**2*xi**8 + 4*T*u**2*xi**4 - 2*T*u**2 - 2*T*u*v*xi**8 - 8*T*u*v*xi**6 + 8*T*u*v*xi**2 + 2*T*u*v - 4*T*v**2*xi**6 - 8*T*v**2*xi**4 - 4*T*v**2*xi**2 + 2*T*xi**8 + 4*T*xi**6 + 4*T*xi**4 + 4*T*xi**2 + 2*T + u**2*xi**8 - 2*u**2*xi**4 + u**2 + 4*u*v*xi**6 - 4*u*v*xi**2 + 4*v**2*xi**4 - xi**8 - 2*xi**4 - 1)/(xi**4 + 1)**2",
+      "weierstrass": "Y^2=X^3+2*B*X^2+A*C*X",
+      "A": "1 - v**2",
+      "B": "u*v*xi**4 - u*v + 2*v**2*xi**2 - 2*xi**2",
+      "C": "-(u*xi**4 - u + 2*v*xi**2 - xi**4 - 1)*(u*xi**4 - u + 2*v*xi**2 + xi**4 + 1)",
+      "standard_identification": "P=-P_standard(xi), then X->-X,Y->iY",
+      "physical_chain": "0<xi<1; 2*xi^2/(1+xi^2)^2<T<1; retain z>1 for the target cap",
+      "face_density": "log((1+xi)/(1-xi))*C_actual(n,z,R,u,v,q=1)*i*M*omega_K3, plus the rational cut character",
+      "M": "T*xi*(1 - T)*(xi**2 + 1)**2/(xi**4 + 1)"
+    }
+  ],
+  "variables": [
+    "xi",
+    "tau",
+    "T",
+    "u",
+    "v"
+  ],
+  "tau_minus": "-2*xi**2/(xi**4 + 1)",
+  "map": "tau=tau_minus+(1-tau_minus)*T",
+  "jacobian": "(xi**2 + 1)**2/(xi**4 + 1)",
+  "T_min": "2*xi**2/(xi**2 + 1)**2",
+  "omega_K3": "d_xi wedge d_T/sqrt((1+xi^4)*T*(1-T)*(n-z^2))",
+  "measure_identity": "[xi/(sqrt(2)*(1+xi^2))]*sqrt((1-n)/(z^2-n))*d_xi wedge d_tau = i*M*omega_K3; choose sqrt(n-z^2)=i*sqrt(z^2-n) on the cap",
+  "old_beta_integral": "Integral(dt/sqrt(t*(1-t)),0,1)=pi; R is independent of old t on this face",
+  "known_input": "This is the same bare S_e2 K3 family, after the explicitly stated complex base changes. Rank five/irreducibility are CITED x20 inputs, not recomputed here.",
+  "parity_warning": "M is odd in xi and omega_K3 is odd under xi->-xi. Without the density log this component descends to the rational quotient. The log is odd too and its derivative can couple the graded pieces. Parity does not exclude a middle T5 factor of the log extension.",
+  "physical_warning": "q=1 is a boundary of the four-dimensional cap, not by itself a physical target variation or closed Betti cycle. No boundary/Gysin coefficient from the full relative mapping cone and no nonzero T5 pairing is asserted.",
+  "next_obstruction": "Need a characteristic-zero certificate for the log-extension transgression and relative q=1/cap boundary pairing, including the other faces and electron sum. Identifying this boundary surface alone does not supply that map.",
+  "checks": {
+    "panel1_second_unit_intersection": true,
+    "panel1_unit_pminus": true,
+    "panel1_affine_chord_map": true,
+    "panel1_H_beta": true,
+    "panel1_form_ratio_square": true,
+    "panel1_odd_multiplier": true,
+    "panel2_second_unit_intersection": true,
+    "panel2_unit_pminus": true,
+    "panel2_affine_chord_map": true,
+    "panel2_H_beta": true,
+    "panel2_form_ratio_square": true,
+    "panel2_odd_multiplier": true,
+    "physical_T_lower_endpoint": true
+  },
+  "elapsed_seconds": 0.22824788093566895,
+  "peak_rss_bytes": 61784064
+}

@@ -1,0 +1,29 @@
+{
+  "warning": "Saved 50-digit experiment, no rigorous error enclosure. Based line-A pair, not the X-strip pair.",
+  "Nplus_square_norm": "5.383612832e-21",
+  "Nminus_square_norm": "6.360225411e-20",
+  "images_concatenated_singular_values": [
+    "1447.934627",
+    "99.12074454",
+    "5.903301108",
+    "0.1714122386",
+    "9.657001497e-24"
+  ],
+  "Nplus_Nminus_singular_values": [
+    "900.7893764",
+    "15.64308116",
+    "5.306270913e-44",
+    "2.383920012e-50",
+    "1.858414593e-50"
+  ],
+  "Nminus_Nplus_Nminus_singular_values": [
+    "5788.691931",
+    "29.95231714",
+    "5.003526342e-49",
+    "7.51803175e-50",
+    "4.042088187e-50"
+  ],
+  "alternating4_norm": "3603.700779",
+  "alternating6_norm": "14414.80312",
+  "peak_rss_bytes": 25149440
+}

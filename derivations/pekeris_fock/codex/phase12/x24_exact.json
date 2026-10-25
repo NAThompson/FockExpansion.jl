@@ -1,0 +1,501 @@
+{
+  "density": {
+    "variables": [
+      "b",
+      "q"
+    ],
+    "basis": [
+      "B^2",
+      "h*B",
+      "1"
+    ],
+    "definitions": {
+      "h^2": "(1+b)/(1-b)",
+      "B": "atan(q/h)"
+    },
+    "d_b": [
+      [
+        "0",
+        "2*q/((b + 1)*(b*q**2 - b - q**2 - 1))",
+        "0"
+      ],
+      [
+        "0",
+        "-1/((b - 1)*(b + 1))",
+        "-q/((b - 1)*(b*q**2 - b - q**2 - 1))"
+      ],
+      [
+        "0",
+        "0",
+        "0"
+      ]
+    ],
+    "d_q": [
+      [
+        "0",
+        "2*(b - 1)/(b*q**2 - b - q**2 - 1)",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "-(b + 1)/(b*q**2 - b - q**2 - 1)"
+      ],
+      [
+        "0",
+        "0",
+        "0"
+      ]
+    ],
+    "graded_characters": [
+      "1",
+      "h",
+      "1"
+    ]
+  },
+  "density_reduction": {
+    "exact_identity": "atan(q/h)^2 = (1-b)*q^2*Integral(xi*log((1+xi)/(1-xi))/(1+b+(1-b)*q^2*xi^2), (xi,0,1))",
+    "proof": "Integrate by parts after subtracting log(1+a^2), a=q/h. Differentiate in a: 2*atan(a)/(1+a^2); value at a=0 is zero.",
+    "endpoint_warning": "Do not split the two-term partial fraction into unsubtracted principal values: the corner r=s=0 carries a missing contribution."
+  },
+  "zonal": {
+    "basis": [
+      "K=sqrt(1-n)*J",
+      "log(1-z)",
+      "1",
+      "sqrt(1-n)"
+    ],
+    "J": "(gamma-theta)/sqrt(n-z^2)",
+    "gamma": "acos(z/sqrt(n))",
+    "theta": "acos((z-n)/(sqrt(n)*(1-z))) with physical continuous branches",
+    "d_n": [
+      [
+        "(z - 1)*(z + 1)/(2*(-n + z**2)*(n - 1))",
+        "0",
+        "(n + z)/(2*n*(-n + z**2))",
+        "-z/(2*n*(-n + z**2))"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "1/(2*(n - 1))"
+      ]
+    ],
+    "d_z": [
+      [
+        "-z/(-n + z**2)",
+        "0",
+        "-(n - 1)/((-n + z**2)*(z - 1))",
+        "1/(-n + z**2)"
+      ],
+      [
+        "0",
+        "0",
+        "1/(z - 1)",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    ],
+    "graded_characters": [
+      "sqrt((1-n)/(n-z^2))",
+      "1",
+      "1",
+      "sqrt(1-n)"
+    ],
+    "qualification": "All inverse rows below are modulo target polynomials of degree <=2; the actual regular pure inverse fixes these. Polynomials have no target cut."
+  },
+  "inverse_rows": {
+    "inverse1": [
+      "-z*(-3*n + 4*z**2)*(n - 4)/(12*n**3)",
+      "(-n + 4*z**2)*(3*n - 4)/(12*n**3)",
+      "0",
+      "0"
+    ],
+    "inverse2": [
+      "-z*(-3*n + 4*z**2)*(3*n - 4)/(4*n**3*(n - 1))",
+      "-(-n + 4*z**2)*(n - 4)/(4*n**3)",
+      "2*z*(z + 1)/(3*n**2)",
+      "0"
+    ],
+    "inverse3": [
+      "z*(-3*n + 4*z**2)*(3*n**2 - 12*n + 8)/(8*n**3*(n - 1)**2)",
+      "-(-n + 4*z**2)/n**3",
+      "-z*(-3*n**2 + 12*n*z**2 + 8*n*z - 20*n - 24*z**2 - 8*z + 32)/(24*n**2*(n - 1)*(z - 1))",
+      "0"
+    ],
+    "log": [
+      "-z*(-3*n + 4*z**2)*(n - 1)/(12*n**3)",
+      "-(3*n**2*z**2 + 3*n**2 - 12*n*z**2 - 2*n + 8*z**2)/(24*n**3)",
+      "0",
+      "0"
+    ],
+    "ell_log": [
+      "z*(-3*n + 4*z**2)*(n - 1)**2/(60*n**3)",
+      "-(-6*n**3*z + 15*n**2*z**2 + 5*n**2 - 20*n*z**2 - 2*n + 8*z**2)/(120*n**3)",
+      "0",
+      "0"
+    ]
+  },
+  "physical_terms": [
+    {
+      "panel": 1,
+      "psi30_charge": 1,
+      "psi40_sector": 1,
+      "a": [
+        "0",
+        "1"
+      ],
+      "d": [
+        "-1",
+        "0"
+      ],
+      "P": [
+        "q**4 - 1",
+        "2*q**2"
+      ],
+      "b": "Y1",
+      "c0_rational": "Y1**2/72 - 1/72",
+      "c2_rational": "(1 - Y1)*(9*Y1 - 8*Y2)/144",
+      "four_numerator": "(Y1 - 1)*(Y1 + 1)*(2*Y1*q**2 - 9*Y1 + 8*Y2 - 2*q**2)/144",
+      "six_numerator": "(Y1 - 1)*(Y1 + 1)**2*(2*Y1*q**2 - 9*Y1 + 8*Y2 - 2*q**2)/(144*q**2)",
+      "four_prefactor": "-4*sqrt(2)/pi^2",
+      "six_prefactor": "-8*sqrt(2)/pi^2"
+    },
+    {
+      "panel": 1,
+      "psi30_charge": 2,
+      "psi40_sector": 2,
+      "a": [
+        "0",
+        "1"
+      ],
+      "d": [
+        "-1",
+        "0"
+      ],
+      "P": [
+        "q**4 - 1",
+        "2*q**2"
+      ],
+      "b": "Y1",
+      "c0_rational": "1/32 - Y1**2/64",
+      "c2_rational": "Y2*(5 - 5*Y1)/32",
+      "four_numerator": "-(Y1 - 1)*(Y1**2*q**2 + 10*Y1*Y2 + 10*Y2 - 2*q**2)/64",
+      "six_numerator": "-(Y1 - 1)*(Y1 + 1)*(Y1**2*q**2 + 10*Y1*Y2 + 10*Y2 - 2*q**2)/(64*q**2)",
+      "four_prefactor": "-4*sqrt(2)/pi^2",
+      "six_prefactor": "-8*sqrt(2)/pi^2"
+    },
+    {
+      "panel": 2,
+      "psi30_charge": 1,
+      "psi40_sector": 1,
+      "a": [
+        "0",
+        "1"
+      ],
+      "d": [
+        "1",
+        "0"
+      ],
+      "P": [
+        "1 - q**4",
+        "2*q**2"
+      ],
+      "b": "-Y1",
+      "c0_rational": "Y1**2/72 - 1/72",
+      "c2_rational": "(-9*Y1 - 8*Y2)*(Y1 + 1)/144",
+      "four_numerator": "-(Y1 - 1)*(Y1 + 1)*(2*Y1*q**2 - 9*Y1 - 8*Y2 + 2*q**2)/144",
+      "six_numerator": "(Y1 - 1)**2*(Y1 + 1)*(2*Y1*q**2 - 9*Y1 - 8*Y2 + 2*q**2)/(144*q**2)",
+      "four_prefactor": "-4*sqrt(2)/pi^2",
+      "six_prefactor": "-8*sqrt(2)/pi^2"
+    },
+    {
+      "panel": 2,
+      "psi30_charge": 2,
+      "psi40_sector": 2,
+      "a": [
+        "0",
+        "1"
+      ],
+      "d": [
+        "1",
+        "0"
+      ],
+      "P": [
+        "1 - q**4",
+        "2*q**2"
+      ],
+      "b": "-Y1",
+      "c0_rational": "1/32 - Y1**2/64",
+      "c2_rational": "Y2*(5*Y1 + 5)/32",
+      "four_numerator": "(Y1 + 1)*(Y1**2*q**2 - 10*Y1*Y2 + 10*Y2 - 2*q**2)/64",
+      "six_numerator": "-(Y1 - 1)*(Y1 + 1)*(Y1**2*q**2 - 10*Y1*Y2 + 10*Y2 - 2*q**2)/(64*q**2)",
+      "four_prefactor": "-4*sqrt(2)/pi^2",
+      "six_prefactor": "-8*sqrt(2)/pi^2"
+    },
+    {
+      "panel": 3,
+      "psi30_charge": 2,
+      "psi40_sector": 3,
+      "a": [
+        "1",
+        "0"
+      ],
+      "d": [
+        "0",
+        "1"
+      ],
+      "P": [
+        "-2*q**2",
+        "1 - q**4"
+      ],
+      "b": "-Y2",
+      "c0_rational": "1/18 - Y2**2/18",
+      "c2_rational": "Y1*(-2*Y2 - 2)/9",
+      "four_numerator": "(Y2 - 1)*(Y2 + 1)*(4*Y1 + Y2*q**2 + q**2)/18",
+      "six_numerator": "-(Y2 - 1)**2*(Y2 + 1)*(4*Y1 + Y2*q**2 + q**2)/(18*q**2)",
+      "four_prefactor": "4*sqrt(2)/pi^2",
+      "six_prefactor": "8*sqrt(2)/pi^2"
+    },
+    {
+      "panel": 3,
+      "psi30_charge": 2,
+      "psi40_sector": 3,
+      "a": [
+        "-1",
+        "0"
+      ],
+      "d": [
+        "0",
+        "1"
+      ],
+      "P": [
+        "-2*q**2",
+        "1 - q**4"
+      ],
+      "b": "-Y2",
+      "c0_rational": "1/18 - Y2**2/18",
+      "c2_rational": "Y1*(-2*Y2 - 2)/9",
+      "four_numerator": "(Y2 - 1)*(Y2 + 1)*(4*Y1 + Y2*q**2 + q**2)/18",
+      "six_numerator": "-(Y2 - 1)**2*(Y2 + 1)*(4*Y1 + Y2*q**2 + q**2)/(18*q**2)",
+      "four_prefactor": "4*sqrt(2)/pi^2",
+      "six_prefactor": "8*sqrt(2)/pi^2"
+    },
+    {
+      "panel": 4,
+      "psi30_charge": 2,
+      "psi40_sector": 3,
+      "a": [
+        "1",
+        "0"
+      ],
+      "d": [
+        "0",
+        "1"
+      ],
+      "P": [
+        "2*q**2",
+        "1 - q**4"
+      ],
+      "b": "-Y2",
+      "c0_rational": "1/18 - Y2**2/18",
+      "c2_rational": "Y1*(2*Y2 + 2)/9",
+      "four_numerator": "(Y2 - 1)*(Y2 + 1)*(-4*Y1 + Y2*q**2 + q**2)/18",
+      "six_numerator": "-(Y2 - 1)**2*(Y2 + 1)*(-4*Y1 + Y2*q**2 + q**2)/(18*q**2)",
+      "four_prefactor": "4*sqrt(2)/pi^2",
+      "six_prefactor": "8*sqrt(2)/pi^2"
+    },
+    {
+      "panel": 4,
+      "psi30_charge": 2,
+      "psi40_sector": 3,
+      "a": [
+        "-1",
+        "0"
+      ],
+      "d": [
+        "0",
+        "1"
+      ],
+      "P": [
+        "2*q**2",
+        "1 - q**4"
+      ],
+      "b": "-Y2",
+      "c0_rational": "1/18 - Y2**2/18",
+      "c2_rational": "Y1*(2*Y2 + 2)/9",
+      "four_numerator": "(Y2 - 1)*(Y2 + 1)*(-4*Y1 + Y2*q**2 + q**2)/18",
+      "six_numerator": "-(Y2 - 1)**2*(Y2 + 1)*(-4*Y1 + Y2*q**2 + q**2)/(18*q**2)",
+      "four_prefactor": "4*sqrt(2)/pi^2",
+      "six_prefactor": "8*sqrt(2)/pi^2"
+    }
+  ],
+  "chain_six": {
+    "domain": "0<q,xi_r,xi_s,t,tau,eta<1; r=q*xi_r,s=q*xi_s",
+    "R": "tau*(t*a+(1-t)*P/D)+(1-tau)*(eta*kappa(r)+(1-eta)*kappa(s))*d",
+    "kappa": "kappa(s)=(1-s^2)/(1+s^2)",
+    "measure": "q^2*(1-tau)/(sqrt(D*t*(1-t))*(1+r^2)*(1+s^2))",
+    "source_kernel": "F6(y)/(1-R.y)^3",
+    "faces": [
+      "q=0",
+      "q=1",
+      "xi_r=0",
+      "xi_r=1",
+      "xi_s=0",
+      "xi_s=1",
+      "t=0",
+      "t=1",
+      "tau=0",
+      "tau=1",
+      "eta=0",
+      "eta=1"
+    ]
+  },
+  "chain_four": {
+    "domain": "0<q,xi,t,tau<1",
+    "R": "tau*(t*a+(1-t)*P/D)+(1-tau)*kappa(q*xi)*d",
+    "measure": "xi*log((1+xi)/(1-xi))/(sqrt(D*t*(1-t))*(1+q^2*xi^2))",
+    "source_kernel": "F4(y)/(1-R.y)^2",
+    "faces": [
+      "q=0",
+      "q=1",
+      "xi=0",
+      "xi=1",
+      "t=0",
+      "t=1",
+      "tau=0",
+      "tau=1"
+    ]
+  },
+  "candidate_target_cut": {
+    "path": "base (u,v)=(1/5,1/3); vary v to 6/5 in upper/lower half planes, fix u=1/5. This is a prescription, not certified global chain transport.",
+    "slice": "z_d=kappa(q*xi)*(d.x), z_0=(t*a+(1-t)*P/D).x",
+    "cap_boundary": "tau_c=(1-z_d)/(z_0-z_d), when 0<tau_c<1",
+    "delta_face_factor": "delta(z-1) d_tau -> 1/abs(z_0-z_d), if transversal",
+    "status": "Local jump and cap incidence verified; endpoint regularization, complete global winding chain and T5 pushforward remain OPEN."
+  },
+  "local_jump": {
+    "orientation": "upper z+i0 minus lower z-i0; 0<n<1; z>1; sqrt(z^2-n)>0",
+    "U1_jump": "-2*pi*i*Theta(z-1)*G1",
+    "G1": "A1(n,z)+C1(n,z)*sqrt(1-n)/sqrt(z^2-n)",
+    "U2_jump": "-2*pi*i*Theta(z-1)*(1+E)*G1",
+    "U3_jump": "-2*pi*i*(Theta(z-1)*(1+E/2)*(1+E)*G1-delta(z-1)/(8*(1-n)))",
+    "E": "2*n*d_n+z*d_z",
+    "log_jump": "-2*pi*i*Theta(z-1)*(Alog+Clog*sqrt(1-n)/sqrt(z^2-n))",
+    "ell_log_jump": "-2*pi*i*Theta(z-1)*(Axlog+Cxlog*sqrt(1-n)/sqrt(z^2-n))",
+    "polynomial_numerators": "Apply the exported parameter derivative recipes DISTRIBUTIONALLY. Moving-cap faces and delta terms must not be dropped.",
+    "scope": "These are local kernel jumps at fixed parameters, not a certified global physical cut or a five-state T5 vector."
+  },
+  "geometry": {
+    "variables": [
+      "q",
+      "xi",
+      "t",
+      "tau",
+      "u",
+      "v"
+    ],
+    "D": "1+q^4",
+    "p": "P/D",
+    "c": "(1-q^2*xi^2)/(1+q^2*xi^2)",
+    "R": "tau*(t*a+(1-t)*p)+(1-tau)*c*d",
+    "n": "R1^2+R2^2",
+    "z": "R1*u+R2*v",
+    "top_cover": "W^2=D*t*(1-t)*(1-n)*(n-z^2)",
+    "top_character": "mu*sqrt((1-n)/(n-z^2)) with mu=1/sqrt(D*t*(1-t)); rational factors omitted",
+    "warning": "The cover is FOUR-dimensional. It has not been identified with S_e2 or reduced to its T5 quotient."
+  },
+  "checks": {
+    "density_rank3_flat": true,
+    "one_density_parameter_derivative": true,
+    "density_partial_fraction_identity": true,
+    "density_subtracted_endpoint_identity": true,
+    "zonal_rank4_flat": true,
+    "four_parameter_numerator_order_0": true,
+    "four_parameter_numerator_order_1": true,
+    "four_parameter_numerator_order_2": true,
+    "four_parameter_numerator_order_3": true,
+    "six_parameter_numerator_order_0": true,
+    "six_parameter_numerator_order_1": true,
+    "six_parameter_numerator_order_2": true,
+    "six_parameter_numerator_order_3": true,
+    "six_parameter_numerator_order_4": true,
+    "panel1_b_direction": true,
+    "panel1_unit_arc": true,
+    "panel1_charge1_density_numerator": true,
+    "panel1_charge1_four_numerator_degree": true,
+    "panel1_charge1_six_numerator_degree": true,
+    "panel1_charge2_density_numerator": true,
+    "panel1_charge2_four_numerator_degree": true,
+    "panel1_charge2_six_numerator_degree": true,
+    "panel2_b_direction": true,
+    "panel2_unit_arc": true,
+    "panel2_charge1_density_numerator": true,
+    "panel2_charge1_four_numerator_degree": true,
+    "panel2_charge1_six_numerator_degree": true,
+    "panel2_charge2_density_numerator": true,
+    "panel2_charge2_four_numerator_degree": true,
+    "panel2_charge2_six_numerator_degree": true,
+    "panel3_b_direction": true,
+    "panel3_unit_arc": true,
+    "panel3_charge2_density_numerator": true,
+    "panel3_charge2_four_numerator_degree": true,
+    "panel3_charge2_six_numerator_degree": true,
+    "panel4_b_direction": true,
+    "panel4_unit_arc": true,
+    "panel4_charge2_density_numerator": true,
+    "panel4_charge2_four_numerator_degree": true,
+    "panel4_charge2_six_numerator_degree": true,
+    "electron_exchange_electron_sector_1": true,
+    "electron_exchange_electron_sector_2": true,
+    "electron_exchange_nuclear_sector": true,
+    "six_simplex_jacobian": true,
+    "four_simplex_jacobian": true,
+    "cap_simplex_intersection": true,
+    "inverse1_jump_zero_at_pole": true,
+    "inverse1_jump_normal_derivative": true,
+    "inverse1_local_jump_homogeneous": true,
+    "term0_tau1_radical_cancellation": true,
+    "term0_tau0_h_square": true,
+    "term1_tau1_radical_cancellation": true,
+    "term1_tau0_h_square": true,
+    "term2_tau1_radical_cancellation": true,
+    "term2_tau0_h_square": true,
+    "term3_tau1_radical_cancellation": true,
+    "term3_tau0_h_square": true,
+    "term4_tau1_radical_cancellation": true,
+    "term4_tau0_h_square": true,
+    "term5_tau1_radical_cancellation": true,
+    "term5_tau0_h_square": true,
+    "term6_tau1_radical_cancellation": true,
+    "term6_tau0_h_square": true,
+    "term7_tau1_radical_cancellation": true,
+    "term7_tau0_h_square": true
+  },
+  "elapsed_seconds": 0.804102897644043,
+  "peak_rss_bytes": 64651264
+}

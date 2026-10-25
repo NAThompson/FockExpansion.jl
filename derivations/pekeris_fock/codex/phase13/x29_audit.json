@@ -1,0 +1,18 @@
+{
+  "COLLAB.md": {
+    "bytes": 143617,
+    "sha256": "b4ea30e26c3245e8a4e48e0fbea58557f928c83461bc21bc5780f2aab5ceb3c6"
+  },
+  "THEORY.md": {
+    "bytes": 53963,
+    "sha256": "b5af2dc3b624c725751c23d16005c605da9dfa2dac25b5afc563f6ab65ca582d"
+  },
+  "codex/TASK_codex_29.md": {
+    "bytes": 1943,
+    "sha256": "f9b842fd99255fd951c44bed8fe301e96e7ebcf1b1cb6333a3da73650c4099b2"
+  },
+  "claude11/guess_hi.jl": {
+    "bytes": 1411,
+    "sha256": "b76f52b5f0fff68a3d936390097f77d0c9ab92cf216f702896fab104188d7301"
+  }
+}

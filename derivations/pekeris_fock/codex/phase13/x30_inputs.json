@@ -1,0 +1,38 @@
+{
+  "COLLAB.md": {
+    "size": 146992,
+    "sha256": "8e35f090a46d6cdd4256cc9d82cfff2e5b53cf91a09af85c30591d469b1f7640"
+  },
+  "THEORY.md": {
+    "size": 56325,
+    "sha256": "71d3542bcc9d4d92bbedbaa77279b6072ba1214a48986080a788d8542bf43d8e"
+  },
+  "claude11/fit_phi3e.jl": {
+    "size": 3477,
+    "sha256": "60a8463919aef617fbc63ec8055ecfa9685b24a76f497c9d2acf5f574cb067bb"
+  },
+  "claude11/fit_phi3f.jl": {
+    "size": 3471,
+    "sha256": "81ec839cfee168a69d9a094bae18aa4ee469574afe0930e349641683dbdda3fe"
+  },
+  "claude11/z1parts.txt": {
+    "size": 419575,
+    "sha256": "72ee4c3581a125b8312e887c6210e1ddfa115254128b7028c2632e66c3bd4f1e"
+  },
+  "claude11/genparts.txt": {
+    "size": 992475,
+    "sha256": "a252ac215c091ab172af117f594af79bfddf6e71179e8d1a1903e0a41e0d6313"
+  },
+  "claude11/genparts34.txt": {
+    "size": 991668,
+    "sha256": "e51f63599e600d5fee8a1fd8fb5ffa9191ed6b94d23d0ab11c9ed7298aad8aeb"
+  },
+  "claude9/fock_spectral_copy.jl": {
+    "size": 4719,
+    "sha256": "71d2c533b579dd766e6f9519258ada46621540dce304cd295b12834812f6aed7"
+  },
+  "codex/phase9/x19_fit40_big_atoms.txt": {
+    "size": 8968223,
+    "sha256": "c7711bd9cf732283cdbe3ebd1385657fbde30e14c7bc93d2f37bd32a714a74ed"
+  }
+}

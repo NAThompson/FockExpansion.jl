@@ -1,0 +1,30 @@
+{
+  "COLLAB.md": {
+    "size": 129872,
+    "sha256": "51adeacf4ff0e1405dd767283b3bbad69e38a575f909c4c69acc0f2685243309"
+  },
+  "THEORY.md": {
+    "size": 43351,
+    "sha256": "3e78e84df7a51c843dca71bb15e4983f507257addeb7e813e78d25144abc7ee2"
+  },
+  "codex/TASK_codex_25.md": {
+    "size": 3976,
+    "sha256": "1e816baaa2b7a21022aea6c59063c4b0831aab3a32aaa47ec882b3d03873ffb8"
+  },
+  "claude10/op_e2_Q.sobj": {
+    "size": 437,
+    "sha256": "be96064e22de715fc4b46278860a639b06f2e19fb09b41dc46b35cf8b6f6f19e"
+  },
+  "claude10/op_e2_A.txt": {
+    "size": 119,
+    "sha256": "d7f03378799fff338e9c37a2693c2c71a884d07965f8a5463a140e9bf10966d7"
+  },
+  "codex/phase9/x19_atoms.jl": {
+    "size": 3051,
+    "sha256": "1e17d594df1b076b5f5e97aba90e04b0ab6e0056fd6208c30cb118824fb023b2"
+  },
+  "codex/phase8/x16_connection.txt": {
+    "size": 135735,
+    "sha256": "58f11f49bad78f134c09e19a4a63f1e06dc834db5913f64258b02f627d9d0c14"
+  }
+}

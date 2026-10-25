@@ -1,0 +1,383 @@
+{
+  "checks": {
+    "Claude_owned_snapshots_unchanged": true,
+    "COLLAB.md_append_only": true,
+    "COLLAB.md_x24_entry_present": true,
+    "THEORY.md_append_only": true,
+    "THEORY.md_x24_entry_present": true,
+    "NOTES_codex.md_append_only": true,
+    "NOTES_codex.md_x24_entry_present": true,
+    "all_used_static_inputs_unchanged": true,
+    "no_baseline_input_missing": true,
+    "all_new_task_outputs_x24_namespace": true,
+    "algebra_all_checks_pass": true,
+    "algebra_exit_zero": true,
+    "algebra_stderr_empty": true,
+    "algebra_peak_below_2GB": true,
+    "cut_all_checks_pass": true,
+    "cut_exit_zero": true,
+    "cut_stderr_empty": true,
+    "cut_peak_below_2GB": true,
+    "numeric_all_checks_pass": true,
+    "numeric_exit_zero": true,
+    "numeric_stderr_empty": true,
+    "numeric_peak_below_2GB": true,
+    "transport_all_checks_pass": true,
+    "transport_exit_zero": true,
+    "transport_stderr_empty": true,
+    "transport_peak_below_2GB": true,
+    "q1_all_checks_pass": true,
+    "q1_exit_zero": true,
+    "q1_stderr_empty": true,
+    "q1_peak_below_2GB": true,
+    "modular_all_checks_pass": true,
+    "modular_exit_zero": true,
+    "modular_stderr_empty": true,
+    "modular_peak_below_2GB": true,
+    "cap_pilot_all_checks_pass": true,
+    "cap_pilot_exit_zero": true,
+    "cap_pilot_stderr_empty": true,
+    "cap_pilot_peak_below_2GB": true,
+    "208_recorded_checks": true,
+    "207_checks_plus_only_one_cap_finiteness_screen": true,
+    "x24_algebra.py_syntax": true,
+    "x24_audit.py_syntax": true,
+    "x24_cap_pilot.py_syntax": true,
+    "x24_cut.py_syntax": true,
+    "x24_modular.py_syntax": true,
+    "x24_numeric.py_syntax": true,
+    "x24_q1.py_syntax": true,
+    "x24_run.py_syntax": true,
+    "x24_transport.py_syntax": true,
+    "no_task_pycache_created": true,
+    "report_preserves_research_gap": true,
+    "plain_text_handoffs_present": true,
+    "ledger_records_open_work": true,
+    "cut_rows_documented_rational_variables": true,
+    "audit_peak_under_2GB": true
+  },
+  "scientific_runs": {
+    "algebra": {
+      "checks": 65,
+      "elapsed_seconds": 0.804102897644043,
+      "peak_rss_bytes": 64684032
+    },
+    "cut": {
+      "checks": 48,
+      "elapsed_seconds": 16.08047890663147,
+      "peak_rss_bytes": 99958784
+    },
+    "numeric": {
+      "checks": 21,
+      "elapsed_seconds": 2.14878511428833,
+      "peak_rss_bytes": 95502336
+    },
+    "transport": {
+      "checks": 24,
+      "elapsed_seconds": 5.816848993301392,
+      "peak_rss_bytes": 59572224
+    },
+    "q1": {
+      "checks": 13,
+      "elapsed_seconds": 0.22824788093566895,
+      "peak_rss_bytes": 61800448
+    },
+    "modular": {
+      "checks": 36,
+      "elapsed_seconds": 6.131868124008179,
+      "peak_rss_bytes": 82690048
+    },
+    "cap_pilot": {
+      "checks": 1,
+      "elapsed_seconds": 17.5829119682312,
+      "peak_rss_bytes": 394018816
+    }
+  },
+  "recorded_check_count": 208,
+  "scientific_peak_rss_bytes": 394018816,
+  "audit_peak_rss_bytes": 87261184,
+  "audit_elapsed_seconds": 4.798299312591553,
+  "shared_prefixes": {
+    "COLLAB.md": {
+      "initial_bytes": 125085,
+      "current_bytes": 129046,
+      "initial_sha256": "c0ffe91d1f2e6ad18ccf35615d324748bf167a702ca1db454d499b8335a89036",
+      "current_sha256": "a394276a65b2173f72fd1e0eadc90af6fafe97c5133c9c9d2ff93a61695cd59a"
+    },
+    "THEORY.md": {
+      "initial_bytes": 41256,
+      "current_bytes": 43351,
+      "initial_sha256": "7cbeed662583bcd351943e709cb428e898494f937de6f84d78ad482db52694af",
+      "current_sha256": "3e78e84df7a51c843dca71bb15e4983f507257addeb7e813e78d25144abc7ee2"
+    },
+    "NOTES_codex.md": {
+      "initial_bytes": 27758,
+      "current_bytes": 28457,
+      "initial_sha256": "b946f8da730b024b44a83352e5f56a2db9071479e5010091992c5f4f0969c6ca",
+      "current_sha256": "9196d802d063b6017c2d1d606d68ad104b0f7d2e84e1563bd70f9ce64095225a"
+    }
+  },
+  "baseline_changes": [
+    {
+      "path": "NOTES_codex.md",
+      "kind": "changed",
+      "initial_sha256": "b946f8da730b024b44a83352e5f56a2db9071479e5010091992c5f4f0969c6ca",
+      "current_sha256": "9196d802d063b6017c2d1d606d68ad104b0f7d2e84e1563bd70f9ce64095225a",
+      "classification": "authorized append-only log"
+    },
+    {
+      "path": "THEORY.md",
+      "kind": "changed",
+      "initial_sha256": "7cbeed662583bcd351943e709cb428e898494f937de6f84d78ad482db52694af",
+      "current_sha256": "3e78e84df7a51c843dca71bb15e4983f507257addeb7e813e78d25144abc7ee2",
+      "classification": "authorized append-only log"
+    },
+    {
+      "path": "COLLAB.md",
+      "kind": "changed",
+      "initial_sha256": "c0ffe91d1f2e6ad18ccf35615d324748bf167a702ca1db454d499b8335a89036",
+      "current_sha256": "a394276a65b2173f72fd1e0eadc90af6fafe97c5133c9c9d2ff93a61695cd59a",
+      "classification": "authorized append-only log"
+    },
+    {
+      "path": "codex_24.log",
+      "kind": "changed",
+      "initial_sha256": "f4321ce0aaab10c019c2d4f8644825a5a9296cbb34fc0c1b2bf50901927ca423",
+      "current_sha256": "e560ea7253247b9691ca40b54e9ef546ec26c252d8526321f4af524a82f74510",
+      "classification": "independent concurrent/harness change; no x24 command writes this path"
+    }
+  ],
+  "new_files_outside_task_namespace": [],
+  "outputs": {
+    "x24_algebra.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "x24_algebra.out": {
+      "bytes": 2302,
+      "sha256": "e26a4a9ff2078c7b312f7ca7636d97b349903855845e1f18dca26fbdc5d2a5bd"
+    },
+    "x24_algebra.py": {
+      "bytes": 12568,
+      "sha256": "7a97cd3103ae1dda9e98323b229bb0d0c570a51b82f3a20aa200b2e6a0efa128"
+    },
+    "x24_algebra_resource.json": {
+      "bytes": 463,
+      "sha256": "015a3400f51b172a8fded2fd644b4d60451e2fc1061a502629459ca91aeeb487"
+    },
+    "x24_baseline.json": {
+      "bytes": 188338,
+      "sha256": "8efa08d1ae5281d909de8393414b591135cffc3c5e1bc0b79a5554c2b0b696e8"
+    },
+    "x24_boundaries.txt": {
+      "bytes": 3169,
+      "sha256": "73f7732cdaee042f47a01a7d18e0755355943113300b82735fa25dd4bb7f69a1"
+    },
+    "x24_cap_pilot.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "x24_cap_pilot.json": {
+      "bytes": 4245,
+      "sha256": "bda48b1ff12b622c2e273de61ef99f9d90fb02f497732334908531b11626eef2"
+    },
+    "x24_cap_pilot.out": {
+      "bytes": 3049,
+      "sha256": "1e46f20971177ceb5b519f945c5f3748f146b337caccc4e81fb3e27e4360856e"
+    },
+    "x24_cap_pilot.py": {
+      "bytes": 4536,
+      "sha256": "e631a0b84bd5f30dec6b71925ebc15a77df8003790de6327d6468ecea842d9dc"
+    },
+    "x24_cap_pilot_resource.json": {
+      "bytes": 466,
+      "sha256": "b8c0b09ff19f01f317797836e8100da18ae0d8951ca441ffbe8643df11008b48"
+    },
+    "x24_cut.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "x24_cut.json": {
+      "bytes": 95279,
+      "sha256": "bf3c5dcd717f76f8898f96caf1a6a692189d4a8d42211d8e75b1f0060ffc44ee"
+    },
+    "x24_cut.out": {
+      "bytes": 1868,
+      "sha256": "2ce7273bbc616b9120a06f31c7689780482f691af1d4c8d454bfb704049aa5a5"
+    },
+    "x24_cut.py": {
+      "bytes": 6741,
+      "sha256": "176f73ebbca9ea46c52fb4ee640c650aebbf8dc16973d6a6bb7f34e61fcc909b"
+    },
+    "x24_cut.txt": {
+      "bytes": 95338,
+      "sha256": "0c9d411c0643ca01bae0d2efdd9a7e321168503f711d690bbeec8d169b0e98de"
+    },
+    "x24_cut_resource.json": {
+      "bytes": 459,
+      "sha256": "0ebda620b68356de84e491ac0c37dde6382e5d47e095ff1a3f4386b028f2fb97"
+    },
+    "x24_exact.json": {
+      "bytes": 13580,
+      "sha256": "0600d9e51342c8e76e66e41dcc84a37fe1b77935d2a9bf60a26f3d03c1440aa9"
+    },
+    "x24_exact.txt": {
+      "bytes": 13715,
+      "sha256": "a880c941811d5ab144958a295e58fa9c6e08f3c6bf49f0e06358ff7c57f34eec"
+    },
+    "x24_ledger.md": {
+      "bytes": 5644,
+      "sha256": "fa9bf692fee35e79d68b1d3b4dad6584c64884a23873f2d7ddcb320146bca777"
+    },
+    "x24_modular.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "x24_modular.json": {
+      "bytes": 2214,
+      "sha256": "dae8fa13c7230f399d6f37299785bed9ed00dc80a6c8861520a2651fc363c568"
+    },
+    "x24_modular.out": {
+      "bytes": 455,
+      "sha256": "4dd79b273b2cb55fd00d1aad5673e6c1b4e4c287631671745ac7411e565d8451"
+    },
+    "x24_modular.py": {
+      "bytes": 4079,
+      "sha256": "3e685926d1a8bb8ebc2e4ba1b73aa3bc7621a57c0d1fe0cb6f6e2f5de59ec02e"
+    },
+    "x24_modular_resource.json": {
+      "bytes": 462,
+      "sha256": "0e8d0385c93c3243d21a06281f4919f481df49511d25f063b69d00ca77661578"
+    },
+    "x24_numeric.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "x24_numeric.json": {
+      "bytes": 3907,
+      "sha256": "b34aab276d114d26df61116ea535c1ac18e75be8ad0b5edf4d89416e0e1a7253"
+    },
+    "x24_numeric.out": {
+      "bytes": 1851,
+      "sha256": "712a62cf76fba26fdf7b95632dcdd78fe2ef9bdf7c8c772d685159b58ec42da9"
+    },
+    "x24_numeric.py": {
+      "bytes": 7121,
+      "sha256": "0b38fd6a1f6b4c7293aa74cb553513618a8edcba986ca67360259cba046829c6"
+    },
+    "x24_numeric_resource.json": {
+      "bytes": 462,
+      "sha256": "efca1018bd9a7d9139b59f22ff45b2518afed09833a6412f422ca2dcae4ce8b5"
+    },
+    "x24_prefix_COLLAB.txt": {
+      "bytes": 125085,
+      "sha256": "c0ffe91d1f2e6ad18ccf35615d324748bf167a702ca1db454d499b8335a89036"
+    },
+    "x24_prefix_NOTES_codex.txt": {
+      "bytes": 27758,
+      "sha256": "b946f8da730b024b44a83352e5f56a2db9071479e5010091992c5f4f0969c6ca"
+    },
+    "x24_prefix_THEORY.txt": {
+      "bytes": 41256,
+      "sha256": "7cbeed662583bcd351943e709cb428e898494f937de6f84d78ad482db52694af"
+    },
+    "x24_q1.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "x24_q1.json": {
+      "bytes": 5447,
+      "sha256": "f3019e1f84bf6e0e0819987fcb35e410a19c71f1b45683672993abdaffc35e33"
+    },
+    "x24_q1.out": {
+      "bytes": 454,
+      "sha256": "17073a9960a530dcb8c5a394702687dc4e77ace230924949af0679563222f8e4"
+    },
+    "x24_q1.py": {
+      "bytes": 4428,
+      "sha256": "1738bef602f747b91096a5f8a7db0724199bd86b3c77c32327a10e04bfa02c14"
+    },
+    "x24_q1.txt": {
+      "bytes": 5514,
+      "sha256": "ada9481c84ae1597efa8fbf6ab48072be8aa3d2a66ad5db690095e6728d2a4b4"
+    },
+    "x24_q1_resource.json": {
+      "bytes": 458,
+      "sha256": "d1db088916b7c4f77984b984db69dae6608dcce5a61d78189dc8b6a59d03e01b"
+    },
+    "x24_report.md": {
+      "bytes": 16748,
+      "sha256": "9e0397159927a6b6a362ada0394dcbf87fe034d55cb665fcf79f49a190c2e58a"
+    },
+    "x24_run.py": {
+      "bytes": 2047,
+      "sha256": "a294e450459097b5794f47d8c768938c9d52290901bbbc9303311a23e393c010"
+    },
+    "x24_science.lock": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "x24_transport.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "x24_transport.json": {
+      "bytes": 6391,
+      "sha256": "29d7fc3d80ea35a38ef68ec80e2e3e9d309a94f6b842e206fb6045a51cd706e7"
+    },
+    "x24_transport.out": {
+      "bytes": 4525,
+      "sha256": "c6a561d7dd39486f9bde7bfecd53d493b5442ca9da3fcab0b8138adb4f5ecedc"
+    },
+    "x24_transport.py": {
+      "bytes": 4729,
+      "sha256": "7fa00d91f0390d64508f7e5815d60ce8916d300514d8c9b6937aebebab013c1d"
+    },
+    "x24_transport_resource.json": {
+      "bytes": 465,
+      "sha256": "10e584f6bc488541fa2077374b9efee7bbd832fcd3ff9066c18091d2396f2df4"
+    }
+  },
+  "static_inputs": {
+    "TASK_codex_24.md": {
+      "sha256": "638420c86c6751fb32c341f5a6693518d384865b8a2cefa1ca1ac723fae49373",
+      "bytes": 1369
+    },
+    "codex/phase3/structure.md": {
+      "sha256": "4dff4a41685199ff226baf11b6df97b1a605bce1dde8c414d38839d26597c91d",
+      "bytes": 5393
+    },
+    "codex/phase9/x18_report.md": {
+      "sha256": "b26f904f496a816353a4fbb84ffe50cb592c4bafb4cc4c235a409f284d73a901",
+      "bytes": 14075
+    },
+    "codex/phase9/x19_report.md": {
+      "sha256": "a52e1d27ef6c5659d6aae538b2a75dddf77e7b47bdba7d54204171328e505f63",
+      "bytes": 21957
+    },
+    "codex/phase10/x20_report.md": {
+      "sha256": "f0a18ed6be7fa935a3324d9e6b34cb5173c773ff1a1a742ebf6ba2f6050535a5",
+      "bytes": 24125
+    },
+    "codex/phase11/x21_report.md": {
+      "sha256": "03d407f7dc55505e8e82bd46860ea3991dabf4a064ead0bd33d7ef325de9928c",
+      "bytes": 22951
+    },
+    "codex/phase11/x22_report.md": {
+      "sha256": "77db59def3df69ed8b721e4ca706a95ddbf1f13e1df9d99659b34695d5b7e49d",
+      "bytes": 21509
+    },
+    "codex/phase11/x22_verify.py": {
+      "sha256": "e3fffecf245eee8d0e229f1313f550d80c5c3937f2cf25e7c1bc2ca5d38cb93b",
+      "bytes": 12938
+    },
+    "codex/phase11/x22_verify.json": {
+      "sha256": "1ec4b4e90b8c4f73a971645967eddf8192845a331794e1b4e430fba368d54377",
+      "bytes": 9291
+    }
+  },
+  "scope": "Task commands write codex/phase12/x24_* and append COLLAB.md, THEORY.md, NOTES_codex.md only. Claude-owned files read only. No outside-directory writes requested by any command.",
+  "limits": "Hash/command-scope audit, not syscall tracing. Large pre-existing files used metadata only. Independent concurrent/harness changes are recorded, not attributed to this task.",
+  "execution": "No agents, concurrent scientific jobs, installs, commits, energies or stencils. Successful scientific runs use one in-process runner with exclusive lock and RSS guard.",
+  "mathematical_result": "Exact six-to-four reduction, rational local cap forms, interior physical-germ transport and q=1 S_e2 boundary chart. Full limiting physical T5 map/pairing, rational R psi40 and quotient/middle survival OPEN."
+}

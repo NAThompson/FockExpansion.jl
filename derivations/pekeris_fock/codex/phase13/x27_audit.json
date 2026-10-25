@@ -1,0 +1,38 @@
+{
+  "COLLAB.md": {
+    "prefix_preserved": true,
+    "appended_bytes": 2775
+  },
+  "THEORY.md": {
+    "prefix_preserved": true,
+    "appended_bytes": 2245
+  },
+  "claude11/chain.jl": {
+    "unchanged": true
+  },
+  "claude11/lad_B1.jls": {
+    "unchanged": true
+  },
+  "claude11/lad_B1_low.jls": {
+    "unchanged": true
+  },
+  "claude11/op_A3.txt": {
+    "unchanged": true
+  },
+  "claude11/fac_A3.sage": {
+    "unchanged": true
+  },
+  "claude11/NOTES.md": {
+    "unchanged": true
+  },
+  "claude11/claim_chain.md": {
+    "unchanged": true
+  },
+  "verification": {
+    "exact_checks": 7,
+    "independent_test_quadrature": "PASS",
+    "saved_input_inspection": "PASS",
+    "julia_peak_rss_bytes": 286425088,
+    "scientific_result": "OPEN; explicit missing-kernel/framing audit, not a B_A identification"
+  }
+}

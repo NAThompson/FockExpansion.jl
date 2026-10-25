@@ -1,0 +1,30 @@
+{
+  "COLLAB.md": {
+    "sha256": "109ef1ef0c92aea4756a35261fd010ec3dcd32f52d5a2107111a7c0c0b7661d8",
+    "bytes": 140963
+  },
+  "THEORY.md": {
+    "sha256": "e979cb2e9f8b5b5fb0a3392e604579875f5f5be1b8b60beed1b4866f2c13ec67",
+    "bytes": 52462
+  },
+  "codex/TASK_codex_28.md": {
+    "sha256": "5bcbcf50f873547b3948e056e2daaff58f594f394affba857f6a3cc3220e96e8",
+    "bytes": 1762
+  },
+  "codex/phase9/x18_report.md": {
+    "sha256": "b26f904f496a816353a4fbb84ffe50cb592c4bafb4cc4c235a409f284d73a901",
+    "bytes": 14075
+  },
+  "codex/phase13/x27_report.md": {
+    "sha256": "57a695c58294c485c9c655ca6bcf169fc76c8f62990f48d041edd14d0ed3eb70",
+    "bytes": 12821
+  },
+  "claude9/fock_spectral_copy.jl": {
+    "sha256": "71d2c533b579dd766e6f9519258ada46621540dce304cd295b12834812f6aed7",
+    "bytes": 4719
+  },
+  "codex/phase12/x24_report.md": {
+    "sha256": "9e0397159927a6b6a362ada0394dcbf87fe034d55cb665fcf79f49a190c2e58a",
+    "bytes": 16748
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "checks": {
+    "lagrange_identity": true,
+    "mode_zero": true,
+    "mode_-1": true,
+    "mode_1": true,
+    "analytic_source_nonzero_flux": true,
+    "sqrt_twist_D": true,
+    "sqrt_twist_0": true
+  },
+  "facts": {
+    "analytic_input_flux_sin_mode": "16*(184 - 191*sqrt(2))/(1575*pi)",
+    "flux_100_digits": "-0.278462873754271960173432866743450823271473591753504473426597545538339426075159985108876453155898188530",
+    "rounded_A3_coefficients": [
+      "6*(t**2 + 2*t - 1)*(t**8 - t**7 - t**5 + 14*t**4 + t**3 + t + 1)",
+      "t*(t - 1)*(t + 1)*(t**2 + 1)*(9*t**6 + 14*t**5 - 35*t**4 - 60*t**3 + 31*t**2 + 6*t - 5)",
+      "2*t**2*(t - 1)**2*(t + 1)**2*(t**2 + 1)**2*(t**2 + 2*t - 1)"
+    ],
+    "sqrt_u_twist": "4*u^2*(u^2-1)*D^2 + 8*u^3*D + u^2",
+    "maxrss_bytes": 62504960
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "checks": {
+    "append_only_COLLAB.md": true,
+    "append_only_THEORY.md": true,
+    "no_baseline_file_removed": true,
+    "all_scientific_checks": true,
+    "claimed_ranks": true,
+    "x20_counts.json_under_2GB": true,
+    "x20_counts_line.json_under_2GB": true,
+    "symbolic_under_2GB": true,
+    "only_x20_files": true,
+    "research_limits_stated": true,
+    "shared_entries_present": true
+  },
+  "scientific_check_count": 86,
+  "input_hashes": {
+    "TASK_codex_20.md": "310eaa1ec96cc77a4f57cefb4782f8d23640156ab5864bbe8b86fbce2d8d1957",
+    "codex/phase9/x19_report.md": "a52e1d27ef6c5659d6aae538b2a75dddf77e7b47bdba7d54204171328e505f63",
+    "codex/phase9/x19_geometry.py": "170df336ec7d71cc5db8252cfb5b687edaa3f16ca482498d7afff85afdd50be3",
+    "codex/phase9/x18_report.md": "b26f904f496a816353a4fbb84ffe50cb592c4bafb4cc4c235a409f284d73a901",
+    "claude10/gd.sage": "60c41db4340fb1b2778babd16897a06e7299d6a639bda02a1b16c937bcba665b",
+    "claude10/gd.sage.py": "2e58df9740d40cf503e2561ee2ac4cc3b00cc395f35ca5d6656181795b875a98",
+    "claude10/pf_ct.sage": "1013e84ec095a2c4199729183f8e16735b8660a868bae3e6d8f2bc351de8c298",
+    "claude10/pf_ct.sage.py": "4a79132871665aacb97e2b4c5a6fbd21efa69c73b60ba2c80e1b6b55854568cf",
+    "claude10/pf_e2.log": "21c804dcb2499228841b3875c11268e8d0ef0e5c1950dee475a952382735626b",
+    "claude10/roots.py": "22da8ca36a12773d0d202db4aecefcc2a0cc3455add416db5f4aa699ebb16cc2"
+  },
+  "shared_prefixes": {
+    "COLLAB.md": {
+      "initial_length": 106198,
+      "current_length": 111543,
+      "initial_sha256": "fb8a617c0a9d5d9e333a339bf4291dbcb0bcd1e3854f7fdccdb0d28cfba226c3",
+      "current_sha256": "d714b86c7ef41bbe91329fb3d86b9066988fce44a10f65b8af366b26a7d1b67a"
+    },
+    "THEORY.md": {
+      "initial_length": 33011,
+      "current_length": 35555,
+      "initial_sha256": "b51a4cf998daebbaa8293aa9278634fe1c4994820a9be2836ee59f4e5570cf44",
+      "current_sha256": "51e9e310032898ea7d6efa3c717e16a6ee3777e1201e7f2bf4c762d84bc3b6c3"
+    }
+  },
+  "baseline_changes": [
+    {
+      "path": "THEORY.md",
+      "old_sha256": "b51a4cf998daebbaa8293aa9278634fe1c4994820a9be2836ee59f4e5570cf44",
+      "new_sha256": "51e9e310032898ea7d6efa3c717e16a6ee3777e1201e7f2bf4c762d84bc3b6c3",
+      "ownership": "authorized shared append"
+    },
+    {
+      "path": "COLLAB.md",
+      "old_sha256": "fb8a617c0a9d5d9e333a339bf4291dbcb0bcd1e3854f7fdccdb0d28cfba226c3",
+      "new_sha256": "d714b86c7ef41bbe91329fb3d86b9066988fce44a10f65b8af366b26a7d1b67a",
+      "ownership": "authorized shared append"
+    },
+    {
+      "path": "codex_20.log",
+      "old_sha256": "d96add717bd1ec11f1da552f5fbf57826b5b207caa95c6fcc3dd4306aa1e45c3",
+      "new_sha256": "657d8811433c85ed2ee34496071863b1e5017f05a4e5440836749c073fb74295",
+      "ownership": "read-only/concurrent artifact; not modified by x20 commands"
+    }
+  ],
+  "baseline_missing": [],
+  "outputs": {
+    "codex/phase10/x20_audit.py": {
+      "bytes": 3692,
+      "sha256": "b348e783591373efef030b3401ae3af2e3b0197a58d0bab35c4197fed7439e4f"
+    },
+    "codex/phase10/x20_baseline.json": {
+      "bytes": 70397,
+      "sha256": "6bb118a3fa7887d4978f18b7c0bf86b78e42f5969162f6558c99988f04b6d915"
+    },
+    "codex/phase10/x20_count": {
+      "bytes": 33784,
+      "sha256": "6d5ff0a778fdfb7ef236604092bdb990bb89fdd1be9c247882e50f3f79f528b3"
+    },
+    "codex/phase10/x20_count.c": {
+      "bytes": 2123,
+      "sha256": "b6250cf798cdb5e753703dc2796884f85fd26ec63d44a47847e9b4142f6871ed"
+    },
+    "codex/phase10/x20_counts.json": {
+      "bytes": 4644,
+      "sha256": "6933bd19b3c5c4158367866fb99b90916426c48b29ca8184246189e4bb8988bf"
+    },
+    "codex/phase10/x20_counts.out": {
+      "bytes": 2363,
+      "sha256": "7278dfbbec703262b531195eb064bcb4d589a14ced7bd95abc1e017fb9fcd4ae"
+    },
+    "codex/phase10/x20_counts.py": {
+      "bytes": 2188,
+      "sha256": "1f0cccd94457f0aad40470fee33000b15a7c986a0325188170938f978a239b35"
+    },
+    "codex/phase10/x20_counts_line.json": {
+      "bytes": 4632,
+      "sha256": "1337c47532d55624d7ee1f22404bb5e4f4178a1ec4087b2805dff1e3eada20e0"
+    },
+    "codex/phase10/x20_counts_line.out": {
+      "bytes": 2351,
+      "sha256": "0f1ac2941b27eb8fc489460fd3c1ab72fa3b7a2292d6e9640f736dfdf07d2abd"
+    },
+    "codex/phase10/x20_prefix_COLLAB.txt": {
+      "bytes": 106198,
+      "sha256": "fb8a617c0a9d5d9e333a339bf4291dbcb0bcd1e3854f7fdccdb0d28cfba226c3"
+    },
+    "codex/phase10/x20_prefix_THEORY.txt": {
+      "bytes": 33011,
+      "sha256": "b51a4cf998daebbaa8293aa9278634fe1c4994820a9be2836ee59f4e5570cf44"
+    },
+    "codex/phase10/x20_report.md": {
+      "bytes": 24125,
+      "sha256": "f0a18ed6be7fa935a3324d9e6b34cb5173c773ff1a1a742ebf6ba2f6050535a5"
+    },
+    "codex/phase10/x20_sources.md": {
+      "bytes": 3303,
+      "sha256": "02496ba5b6bb2bb4845a250d10d0ded585de57b3f3d552d61f855ae7db8a2946"
+    },
+    "codex/phase10/x20_verify.json": {
+      "bytes": 7656,
+      "sha256": "27bd8506f56addd18579895594c4440e6af588ed8445a20457741c43a6088174"
+    },
+    "codex/phase10/x20_verify.out": {
+      "bytes": 8222,
+      "sha256": "02b2ecdca4f601100b155374396b3b8238401c071a3c3c84a98aec817c372f40"
+    },
+    "codex/phase10/x20_verify.py": {
+      "bytes": 7935,
+      "sha256": "f5f229908e54f4bc28b990b6833b44716cd5aa08ede8d3cf7fd38b6e08e2139c"
+    }
+  },
+  "jobs": [
+    {
+      "job": "x20_counts.json",
+      "elapsed_seconds": 8.584271907806396,
+      "peak_child_rss_bytes": 189431808,
+      "peak_python_rss_bytes": 58671104
+    },
+    {
+      "job": "x20_counts_line.json",
+      "elapsed_seconds": 6.942233085632324,
+      "peak_child_rss_bytes": 189415424,
+      "peak_python_rss_bytes": 59555840
+    }
+  ],
+  "symbolic_job": {
+    "elapsed_seconds": 3.0269999504089355,
+    "peak_rss_bytes": 62029824
+  },
+  "write_scope": "x20_* artifacts and append-only COLLAB/THEORY. Claude files read only; concurrent changes attributed separately. Initial compiler TMPDIR was not explicit, so transient external compiler writes are not audited. Subsequent compilation uses in-directory TMPDIR.",
+  "agents_used": false,
+  "serial_jobs": true
+}

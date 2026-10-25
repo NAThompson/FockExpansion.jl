@@ -1,0 +1,214 @@
+{
+  "data": [
+    {
+      "p": 11,
+      "rows": [
+        {
+          "p": 11,
+          "n": 1,
+          "N": 11,
+          "u": 4,
+          "v": 3,
+          "char_sum": -6,
+          "C_roots": 0,
+          "cross_roots": 2,
+          "points": 160,
+          "table_bytes": 484,
+          "MW_trace": -1,
+          "T5_trace": 5,
+          "irreducible_relation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "p": 11,
+          "n": 2,
+          "N": 121,
+          "u": 4,
+          "v": 3,
+          "char_sum": 168,
+          "C_roots": 0,
+          "cross_roots": 4,
+          "points": 15536,
+          "table_bytes": 58564,
+          "MW_trace": 3,
+          "T5_trace": -195,
+          "irreducible_relation": [
+            1,
+            2,
+            0
+          ]
+        },
+        {
+          "p": 11,
+          "n": 3,
+          "N": 1331,
+          "u": 4,
+          "v": 3,
+          "char_sum": -6486,
+          "C_roots": 0,
+          "cross_roots": 2,
+          "points": 1770400,
+          "table_bytes": 7086244,
+          "MW_trace": -1,
+          "T5_trace": -5155,
+          "irreducible_relation": [
+            1,
+            3,
+            0
+          ]
+        }
+      ],
+      "reciprocal_candidates": [
+        {
+          "sign": 1,
+          "polynomial": "161051*T**5 - 6655*T**4 + 1210*T**3 + 110*T**2 - 5*T + 1",
+          "factorization": "(11*T + 1)*(14641*T**4 - 1936*T**3 + 286*T**2 - 16*T + 1)"
+        }
+      ]
+    },
+    {
+      "p": 13,
+      "rows": [
+        {
+          "p": 13,
+          "n": 1,
+          "N": 13,
+          "u": 9,
+          "v": 10,
+          "char_sum": -16,
+          "C_roots": 0,
+          "cross_roots": 4,
+          "points": 232,
+          "table_bytes": 676,
+          "MW_trace": -1,
+          "T5_trace": -3,
+          "irreducible_relation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "p": 13,
+          "n": 2,
+          "N": 169,
+          "u": 9,
+          "v": 10,
+          "char_sum": 672,
+          "C_roots": 0,
+          "cross_roots": 4,
+          "points": 30248,
+          "table_bytes": 114244,
+          "MW_trace": 3,
+          "T5_trace": 165,
+          "irreducible_relation": [
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "p": 13,
+          "n": 3,
+          "N": 2197,
+          "u": 9,
+          "v": 10,
+          "char_sum": -5968,
+          "C_roots": 0,
+          "cross_roots": 4,
+          "points": 4834024,
+          "table_bytes": 19307236,
+          "MW_trace": -1,
+          "T5_trace": -3771,
+          "irreducible_relation": [
+            1,
+            1,
+            0
+          ]
+        }
+      ],
+      "reciprocal_candidates": [
+        {
+          "sign": -1,
+          "polynomial": "-371293*T**5 - 6591*T**4 + 1014*T**3 - 78*T**2 + 3*T + 1",
+          "factorization": "-(13*T - 1)*(28561*T**4 + 2704*T**3 + 130*T**2 + 16*T + 1)"
+        }
+      ]
+    },
+    {
+      "p": 19,
+      "rows": [
+        {
+          "p": 19,
+          "n": 1,
+          "N": 19,
+          "u": 13,
+          "v": 5,
+          "char_sum": -14,
+          "C_roots": 0,
+          "cross_roots": 2,
+          "points": 424,
+          "table_bytes": 1444,
+          "MW_trace": -1,
+          "T5_trace": 5,
+          "irreducible_relation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "p": 19,
+          "n": 2,
+          "N": 361,
+          "u": 13,
+          "v": 5,
+          "char_sum": 1488,
+          "C_roots": 0,
+          "cross_roots": 4,
+          "points": 133976,
+          "table_bytes": 521284,
+          "MW_trace": 3,
+          "T5_trace": 405,
+          "irreducible_relation": [
+            1,
+            2,
+            0
+          ]
+        },
+        {
+          "p": 19,
+          "n": 3,
+          "N": 6859,
+          "u": 13,
+          "v": 5,
+          "char_sum": 6946,
+          "C_roots": 0,
+          "cross_roots": 2,
+          "points": 47080264,
+          "table_bytes": 188183524,
+          "MW_trace": -1,
+          "T5_trace": 13805,
+          "irreducible_relation": [
+            1,
+            4,
+            0
+          ]
+        }
+      ],
+      "reciprocal_candidates": [
+        {
+          "sign": 1,
+          "polynomial": "2476099*T**5 - 34295*T**4 - 3610*T**3 - 190*T**2 - 5*T + 1",
+          "factorization": "(19*T + 1)*(130321*T**4 - 8664*T**3 + 266*T**2 - 24*T + 1)"
+        }
+      ]
+    }
+  ],
+  "elapsed_seconds": 8.584271907806396,
+  "peak_child_rss_bytes": 189431808,
+  "peak_python_rss_bytes": 58671104
+}

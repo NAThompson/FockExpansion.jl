@@ -1,0 +1,64 @@
+TASK_codex_24 — boundary inventory for the four-parameter physical B cap
+Variables/order: (q,xi,t,tau); orientation dq wedge dxi wedge dt wedge dtau.
+D=1+q^4; c=(1-q^2*xi^2)/(1+q^2*xi^2).
+R0=t*a+(1-t)*P/D; R=tau*R0+(1-tau)*c*d.
+n=R.R; z=R.x; x=(u,v), w^2=1-u^2-v^2.
+The cap is z>1. The source is y=(Y1,Y2,...); it is not the target.
+
+Fixed faces and signs in the ordinary boundary:
+  + q=1;   - q=0;
+  - xi=1;  + xi=0;
+  + t=1;   - t=0;
+  - tau=1; + tau=0.
+The t endpoints are best expressed in the ramified chart t=sin(theta)^2,
+where dt/sqrt(t*(1-t))=2*dtheta. They are not dropped.
+The xi=1 logarithm is integrable, but its boundary requires a relative
+logarithmic/tangential regularization. It is not assigned a finite value.
+At xi=0 the ordinary density weight is O(xi^2); this does not compute
+exceptional nearby cycles at intersections with the other faces.
+
+Moving face:
+  z=1, tau_c=(1-zd)/(z0-zd),
+  zd=c*d.x, z0=R0.x, if 0<tau_c<1.
+Its orientation relative to dq wedge dxi wedge dt is sign(z0-zd).
+For z0>zd it is the lower cap boundary; for z0<zd the upper boundary.
+At z0=zd there is no transverse tau chart; use another chart or resolve.
+
+Target paths tested:
+  u=1/5, base v=1/3;
+  upper: 1/3 -> 1/3+i/5 -> 6/5+i/5 -> 6/5;
+  lower: complex conjugate path.
+At every point of the real cap R2>2/3 and n>25/37. Thus the physical
+upper/lower orientation is the same as upper/lower in z on the cap.
+
+Exact local cut:
+  Delta U_k = -2*pi*i*Theta(z-1)*G_k(n,z)
+with the cut rows and all physical numerator operators in x24_cut.txt.
+The degree-d primitive used for the four-parameter numerator vanishes
+to order >=d at z=1, so there are no delta terms in this representation.
+The original exponent-three six-parameter representation DOES have an
+additional delta term; its formula is retained in x24_exact.txt.
+
+Two simplex endpoints:
+  tau=1: 1-n=2*N*t*(1-t)/D, N=D-a.P=(1+q^2)^2 or (1-q^2)^2.
+  The beta radical cancels from mu*sqrt(1-n), as in x22.
+  tau=0: R=c*d and sqrt(1-n)=2*q*xi/(1+q^2*xi^2) on the physical interval.
+  For electron panels d.x=+-u, so this face has no cap at u=1/5.
+These ordinary restrictions do NOT compute exceptional boundary/Gysin maps.
+
+A nontrivial explicit boundary geometry:
+  On q=1 of electron panels 1/2, P/D=a=e2, so R is independent of old t.
+  The old t beta integral equals pi. A rational change tau -> T identifies
+  the remaining radical surface with the bare S_e2 K3 family.
+  Full maps, measures, physical intervals and phase conventions: x24_q1.txt.
+  The logarithmic density must still be retained. No rank-five physical
+  cycle pairing follows just from this boundary-surface identification.
+
+STOP POINT:
+This inventory and the local cap map are not the resolved logarithmic
+mapping cone of the full limiting physical chain. Boundary maps among
+q=0,1, xi=0,1, t=0,1, tau=0,1, z=1, and exceptional intersection divisors
+have not been computed. In particular the q=1 log-extension transgression
+has not been reduced and paired in the T5 quotient. Do not close the cap
+by discarding these faces, equate it with an internal density torus, or
+infer a nonzero T5 projection from the nonzero floating-point cap values.

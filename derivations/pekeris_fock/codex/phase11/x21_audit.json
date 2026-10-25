@@ -1,0 +1,172 @@
+{
+  "checks": {
+    "baseline_files_present": true,
+    "append_only_COLLAB.md": true,
+    "entry_present_COLLAB.md": true,
+    "append_only_THEORY.md": true,
+    "entry_present_THEORY.md": true,
+    "all_25_scientific_checks": true,
+    "scientific_peak_under_2GB": true,
+    "checker_stderr_empty": true,
+    "only_x21_outputs": true,
+    "research_limits_explicit": true,
+    "all_plan_steps_closed": true,
+    "protected_scientific_inputs_unchanged": true,
+    "audit_peak_under_2GB": true
+  },
+  "scientific_check_count": 25,
+  "scientific_elapsed_seconds": 1.618760108947754,
+  "scientific_peak_rss_bytes": 66994176,
+  "audit_peak_rss_bytes": 22315008,
+  "audit_elapsed_seconds": 0.014256000518798828,
+  "shared_prefixes": {
+    "COLLAB.md": {
+      "initial_bytes": 115713,
+      "current_bytes": 117892,
+      "initial_sha256": "a3a6cc3bb85ecfabb1577971c5ae3c88bf238658529a0948ef4b303438b1a43a",
+      "current_sha256": "b376c7e78a7e3d9489677598c6407d230b969885ee9bf95dcca54328486cb0c0"
+    },
+    "THEORY.md": {
+      "initial_bytes": 36684,
+      "current_bytes": 38700,
+      "initial_sha256": "1a11f77263942f116729b7f2c862347409768d7ea65914a4ce742cc16842f0fa",
+      "current_sha256": "18e5e461fd48bc2ac053ae66e75c1333ef88512737defdf51d30714f1bb70565"
+    }
+  },
+  "baseline_changes": [
+    {
+      "path": "THEORY.md",
+      "initial_sha256": "1a11f77263942f116729b7f2c862347409768d7ea65914a4ce742cc16842f0fa",
+      "current_sha256": "18e5e461fd48bc2ac053ae66e75c1333ef88512737defdf51d30714f1bb70565",
+      "classification": "authorized append-only shared file"
+    },
+    {
+      "path": "COLLAB.md",
+      "initial_sha256": "a3a6cc3bb85ecfabb1577971c5ae3c88bf238658529a0948ef4b303438b1a43a",
+      "current_sha256": "b376c7e78a7e3d9489677598c6407d230b969885ee9bf95dcca54328486cb0c0",
+      "classification": "authorized append-only shared file"
+    },
+    {
+      "path": "codex_21.log",
+      "initial_sha256": "ab94284ecc7b2c0257a55e0fa0f4d840548bbf6ec35937267ddc799847c0bd52",
+      "current_sha256": "c59725fed12407115e4e71d27f6daa3eb1e7f8d0e2d01c9faee312c10d77d493",
+      "classification": "observed concurrent/input change; no x21 tool command writes this path"
+    },
+    {
+      "path": "claude10/jets_p1.txt",
+      "initial_sha256": "a57a456a54b47b7edc40120751074214d3176e22f726c30eb3b2ea7ffcf3a417",
+      "current_sha256": "1d30949455726f56c1a2ba1bad7913ee294509bb3e2358d2646cdca6a3d647f0",
+      "classification": "observed concurrent/input change; no x21 tool command writes this path"
+    }
+  ],
+  "observed_concurrent_protected_output_changes": [
+    {
+      "path": "claude10/jets_p1.txt",
+      "initial_sha256": "a57a456a54b47b7edc40120751074214d3176e22f726c30eb3b2ea7ffcf3a417",
+      "current_sha256": "1d30949455726f56c1a2ba1bad7913ee294509bb3e2358d2646cdca6a3d647f0",
+      "classification": "observed concurrent/input change; no x21 tool command writes this path"
+    }
+  ],
+  "inputs": {
+    "TASK_codex_21.md": {
+      "bytes": 1512,
+      "sha256": "b9a7d87c2856945a94fe5252804f6469ada49882c6b647584067b0f41224e492"
+    },
+    "codex/phase10/x20_report.md": {
+      "bytes": 24125,
+      "sha256": "f0a18ed6be7fa935a3324d9e6b34cb5173c773ff1a1a742ebf6ba2f6050535a5"
+    },
+    "codex/phase9/x19_report.md": {
+      "bytes": 21957,
+      "sha256": "a52e1d27ef6c5659d6aae538b2a75dddf77e7b47bdba7d54204171328e505f63"
+    },
+    "codex/phase9/x18_report.md": {
+      "bytes": 14075,
+      "sha256": "b26f904f496a816353a4fbb84ffe50cb592c4bafb4cc4c235a409f284d73a901"
+    },
+    "codex/phase3/structure.md": {
+      "bytes": 5393,
+      "sha256": "4dff4a41685199ff226baf11b6df97b1a605bce1dde8c414d38839d26597c91d"
+    },
+    "codex/phase7/global_and_domain.md": {
+      "bytes": 9848,
+      "sha256": "9d4ea44dbc48afd2b5aab5bd7b26419e052d4e6e5674fb645dead737c5623291"
+    },
+    "claude9/spec40.txt": {
+      "bytes": 2324619,
+      "sha256": "d890fd58d75d7f68cea30740cea9fcdf1384b240a105908ebe41e00b324deb0f"
+    },
+    "claude9/psi40_big.jl": {
+      "bytes": 1494,
+      "sha256": "183e0f5167ee8ce097d78fabe92240cb4c880bad80452c902d467e4ec9f40864"
+    },
+    "claude9/fock_spectral_copy.jl": {
+      "bytes": 4719,
+      "sha256": "71d2c533b579dd766e6f9519258ada46621540dce304cd295b12834812f6aed7"
+    },
+    "claude10/op_e2_Q.sobj": {
+      "bytes": 437,
+      "sha256": "be96064e22de715fc4b46278860a639b06f2e19fb09b41dc46b35cf8b6f6f19e"
+    },
+    "claude10/gd.sage": {
+      "bytes": 2648,
+      "sha256": "8c3da43e53304a01978c56318e4769eedcdba9a00b3fc61c2849a4261553d67d"
+    },
+    "claude10/analyze.sage": {
+      "bytes": 1215,
+      "sha256": "5908105ba7ff8ab977f36bd372bf46a891a339f22df17d014cf76cfabefc6ba1"
+    }
+  },
+  "outputs": {
+    "x21_audit.py": {
+      "bytes": 4768,
+      "sha256": "2b69887b6745349d75d112b855d0f6bc116d89a732dac7056a2e912d7b466f6c"
+    },
+    "x21_baseline.json": {
+      "bytes": 20819,
+      "sha256": "f3d2b205f8617197236580f27f95a3176924e16dc64627eebf8cbbb82a1a0eea"
+    },
+    "x21_plan.md": {
+      "bytes": 2153,
+      "sha256": "46b362900064116d9ce80bd47a323d274a8df7fbb494e321c6cf1e9b4147688b"
+    },
+    "x21_prefix_COLLAB.txt": {
+      "bytes": 115713,
+      "sha256": "a3a6cc3bb85ecfabb1577971c5ae3c88bf238658529a0948ef4b303438b1a43a"
+    },
+    "x21_prefix_THEORY.txt": {
+      "bytes": 36684,
+      "sha256": "1a11f77263942f116729b7f2c862347409768d7ea65914a4ce742cc16842f0fa"
+    },
+    "x21_report.md": {
+      "bytes": 22951,
+      "sha256": "03d407f7dc55505e8e82bd46860ea3991dabf4a064ead0bd33d7ef325de9928c"
+    },
+    "x21_sources.md": {
+      "bytes": 1905,
+      "sha256": "cbe70f6ddaee288d85730ec833fa499d17677c7ea6194e364b09bcd8a6c04658"
+    },
+    "x21_verify.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "x21_verify.json": {
+      "bytes": 4588,
+      "sha256": "a36cad64f8e5455b9586e5d9507274c9e8749ea1c1daf2706e047e1e750da53b"
+    },
+    "x21_verify.out": {
+      "bytes": 3455,
+      "sha256": "d8e017d9df79a3cf5d6778672a91a93742abbdad610061632021d391427b2724"
+    },
+    "x21_verify.py": {
+      "bytes": 8735,
+      "sha256": "d8a87e0bdf1c52aed7158033a518ffb96a91f2cab736b6aadec5b0418fb53e19"
+    }
+  },
+  "serial_jobs": true,
+  "agents_used": false,
+  "write_scope": "x21_* in codex/phase11; append-only COLLAB.md and THEORY.md Log. No outside-directory or Claude-owned writes requested by any x21 command.",
+  "limits": "Hash audit covers root files and claude9/claude10/sym inputs, not every multi-GB historical Claude output. It does not claim an OS syscall trace. The first optional OS time wrapper returned a sandbox sysctl error; the final direct checker exits successfully with empty stderr.",
+  "conjecture_A": "OPEN",
+  "full_relative_GrW": "OPEN"
+}

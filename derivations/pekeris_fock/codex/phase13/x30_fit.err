@@ -1,0 +1,2 @@
+┌ Warning: Assignment to `Y` in soft scope is ambiguous because a global variable by the same name exists: `Y` will be treated as a new local. Disambiguate by using `local Y` to suppress this warning or `global Y` to assign to the existing global variable.
+└ @ /private/tmp/claude-501/-Users-nathompson7-FockExpansion-jl/c3429e35-aac3-4d1b-82ce-cf1182656503/scratchpad/pekeris/codex/phase13/x30_check.jl:38
